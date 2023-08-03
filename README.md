@@ -16,3 +16,27 @@ The application developed in teams of three:
 
 **Run**
 - $ npm install 
+
+
+**Start develompent**
+- $ npm run start
+
+
+**Build**
+- $ npm run build
+
+
+**Fix lint**
+- $ npm run lint
+
+
+**Run tests**
+- $ npm run test
+
+
+**Fix prettier**
+- $ npm run fix:prettier
+
+
+
+
