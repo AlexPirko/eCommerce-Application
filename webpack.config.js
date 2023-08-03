@@ -10,7 +10,7 @@ const baseConfig = {
     rules: [
       { test: /\.ts$/i, use: 'ts-loader' },
       {
-        test: /\.s[ac]ss$/i,
+        test: /\.scss$/i,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
@@ -47,7 +47,6 @@ const baseConfig = {
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
-    // hashFunction: 'xxhash64',
   },
   plugins: [
     new HtmlWebpackPlugin({
