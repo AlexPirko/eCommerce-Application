@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const ESLintPlugin = require('eslint-webpack-plugin');
 const path = require('path');
 const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -52,7 +50,6 @@ const baseConfig = {
     // hashFunction: 'xxhash64',
   },
   plugins: [
-    new ESLintPlugin({ extensions: 'ts' }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './src/index.html'),
       filename: 'index.html',
