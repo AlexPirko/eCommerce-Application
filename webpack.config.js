@@ -10,8 +10,8 @@ const baseConfig = {
     rules: [
       { test: /\.ts$/i, use: 'ts-loader' },
       {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        test: /\.scss$/i,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -47,7 +47,6 @@ const baseConfig = {
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
-    // hashFunction: 'xxhash64',
   },
   plugins: [
     new HtmlWebpackPlugin({
