@@ -13,7 +13,8 @@ The application is powered by CommerceTools, a leading provider of commerce solu
  - Eslint
  - Prettier
  - Husky
- - Jest.
+ - Jest
+ - Materialize
 
 ### Key pages of the application:
   - Login and Registration pages
