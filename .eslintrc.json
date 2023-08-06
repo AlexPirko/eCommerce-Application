@@ -25,6 +25,12 @@
     "@typescript-eslint/no-explicit-any": "error",
     "no-debugger": "off",
     "no-console": 0,
-    "class-methods-use-this": "off"
+    "max-lines-per-function": ["error", 40],
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
   }
 }

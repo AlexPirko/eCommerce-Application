@@ -1,3 +1,4 @@
+webpack.prod.config.js
 webpack.dev.config.js
 webpack.config.js
 jest.config.js

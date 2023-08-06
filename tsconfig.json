@@ -1,5 +1,15 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@src/*" : ["./src/"],
+      "@components/*" : ["./src/components/*"],
+      "@layouts/*" : ["./src/layouts/*"],
+      "@lib/*" : ["./src/layouts/*"],
+      "@pages/*" : ["./src/pages/*"],
+      "@assets/*" : ["./src/assets/*"],
+    },
     "lib": [
       "ES2021",
       "DOM"
