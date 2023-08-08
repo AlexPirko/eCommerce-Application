@@ -19,4 +19,8 @@ export default abstract class ComponentContainer {
   protected setContent(components: HTMLElement[]): void {
     components.forEach((component) => this._element.append(component));
   }
+
+  public get element(): HTMLElement {
+    return this._element;
+  }
 }
