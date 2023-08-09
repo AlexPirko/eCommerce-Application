@@ -8,7 +8,15 @@ export default class ElementBuilder {
     this.setElement(params);
   }
 
-  protected setElement(params: Params) {
+  addInnerElement(element: ElementBuilder) {
+    if (element instanceof ElementBuilder) {
+      this._element?.append(element.getElement() as HTMLElement);
+    } else {
+      this._element?.append(element);
+    }
+  }
+
+  protected setElement(params: Params): void {
     this._element = document.createElement(params.tagName);
     this._element.classList.add(...params.classNames);
     if (params.callback) {
@@ -18,7 +26,8 @@ export default class ElementBuilder {
       this._element.innerHTML = params.text;
     }
   }
-  public get element(): HTMLElement | null {
+
+  public getElement(): HTMLElement | null {
     return this._element;
   }
 }
