@@ -1,6 +1,7 @@
 export interface Params {
   tagName: string;
   classNames: string[];
-  components: HTMLElement[];
+  text?: '';
+  components?: HTMLElement[];
   callback?: () => void;
 }

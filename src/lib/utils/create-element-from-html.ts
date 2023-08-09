@@ -1,6 +1,6 @@
-export default function createElementFromHtml(innerHtml: string): HTMLDivElement {
+export default function createElementFromHtml(innerHtml: string): HTMLElement {
   const tempContainer: HTMLTemplateElement = document.createElement('template');
   tempContainer.innerHTML = innerHtml;
-  const template: HTMLDivElement = tempContainer.content.firstChild as HTMLDivElement;
+  const template: HTMLElement = tempContainer.content.firstChild as HTMLElement;
   return template;
 }

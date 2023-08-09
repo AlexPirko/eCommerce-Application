@@ -4,11 +4,7 @@ export default abstract class ComponentFromHtmlTemplate {
   protected readonly _element: HTMLElement;
 
   constructor(htmlTeamplate: string) {
-    this._element = ComponentFromHtmlTemplate.createElemntFrom(htmlTeamplate);
-  }
-
-  private static createElemntFrom(template: string): HTMLElement {
-    return createElementFromHtml(template);
+    this._element = createElementFromHtml(htmlTeamplate);
   }
 
   public get element(): HTMLElement {

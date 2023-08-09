@@ -5,7 +5,7 @@ export default abstract class ComponentContainer {
   constructor(params: Params) {
     this._element = ComponentContainer.createElement(params.tagName);
     this.setClasses(params.classNames);
-    this.setContent(params.components);
+    this.addComponents(params.components);
   }
 
   protected static createElement(tagName: string): HTMLElement {
@@ -16,8 +16,8 @@ export default abstract class ComponentContainer {
     this._element.classList.add(...classNames);
   }
 
-  protected setContent(components: HTMLElement[]): void {
-    components.forEach((component) => this._element.append(component));
+  protected addComponents(components: HTMLElement[] | undefined): void {
+    if (components) components.forEach((component) => this._element.append(component));
   }
 
   public get element(): HTMLElement {
