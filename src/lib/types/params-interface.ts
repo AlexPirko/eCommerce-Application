@@ -1,7 +1,7 @@
 export interface Params {
   tagName: string;
   classNames: string[];
-  text?: '';
+  text?: '' | string;
   components?: HTMLElement[];
   callback?: () => void;
 }

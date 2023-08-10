@@ -1,6 +1,6 @@
 import '@assets/styles/global.scss';
 import Header from '@layouts/header/header';
-// import createElementFromHtml from '@lib/utils/create-element-from-html';
+import Main from '@pages/main/main';
 
 export default class App {
   private static container: HTMLElement = document.getElementById('body') as HTMLElement;
@@ -11,7 +11,8 @@ export default class App {
 
   createView(): void {
     const header: Header = new Header();
-    App.container.append(header.getHtmlElement() as HTMLElement);
+    const main: Main = new Main();
+    App.container.append(header.getHtmlElement() as HTMLElement, main.getHtmlElement() as HTMLElement);
   }
 
   public run(): void {}

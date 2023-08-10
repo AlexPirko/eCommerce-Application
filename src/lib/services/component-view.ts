@@ -2,25 +2,25 @@ import { Params } from '@lib/types/params-interface';
 import ElementBuilder from './element-builder';
 
 export default abstract class ComponentView {
-  elementBuilder: ElementBuilder;
+  public viewElement: ElementBuilder;
 
   constructor(params: Params) {
-    this.elementBuilder = this.createView(params);
+    this.viewElement = this.createView(params);
   }
 
-  getHtmlElement(): HTMLElement | null {
-    return this.elementBuilder.getElement();
+  public getHtmlElement(): HTMLElement | null {
+    return this.viewElement.getElement();
   }
 
-  createView(params: Params) {
-    const elParams = {
+  public createView(params: Params): ElementBuilder {
+    const elParams: Params = {
       tagName: params.tagName,
       classNames: params.classNames,
       callback: params.callback,
       text: params.text,
     };
-    this.elementBuilder = new ElementBuilder(elParams);
+    this.viewElement = new ElementBuilder(elParams);
 
-    return this.elementBuilder;
+    return this.viewElement;
   }
 }
