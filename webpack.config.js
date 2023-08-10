@@ -58,6 +58,11 @@ const baseConfig = {
     new CleanWebpackPlugin(),
   ],
 };
+module.exports = {
+  externals: {
+      'node:util': 'commonjs util'
+  }
+}
 
 module.exports = ({ mode }) => {
   const isProductionMode = mode === 'prod';

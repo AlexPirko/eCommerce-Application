@@ -5,7 +5,7 @@ export default class App {
 
   constructor() {}
 
-  public run(): void {
+  public async run(): Promise<void> {
     /* example */ const example = new ExampleContainer();
     /* example */ App.container.append(example.element);
     console.log(App.container);
