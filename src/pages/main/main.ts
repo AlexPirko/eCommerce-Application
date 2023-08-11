@@ -19,8 +19,8 @@ export default class Main extends ComponentView {
       classNames: ['main-title'],
       text: 'Main',
     };
-    const creatorTitle: ElementBuilder = new ElementBuilder(titleParams);
+    const titleElementBuilder: ElementBuilder = new ElementBuilder(titleParams);
 
-    this.viewElement.addInnerElement(creatorTitle);
+    this.viewElementBuilder.addInnerElement(titleElementBuilder);
   }
 }
