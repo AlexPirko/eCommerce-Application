@@ -18,11 +18,11 @@ export default class ElementBuilder {
     }
   }
 
-  public addInnerElement(element: ElementBuilder): void {
-    if (element instanceof ElementBuilder) {
-      this._element?.append(element.getElement() as HTMLElement);
+  public addInnerElement(_element: ElementBuilder | HTMLElement): void {
+    if (_element instanceof ElementBuilder) {
+      this._element.append(_element.getElement() as HTMLElement);
     } else {
-      this._element?.append(element);
+      this._element.append(_element);
     }
   }
 

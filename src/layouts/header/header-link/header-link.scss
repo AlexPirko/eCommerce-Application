@@ -1,0 +1,8 @@
+@import '/src/assets/styles/constants';
+
+.nav-item {
+  color: $color-seven;
+  &__selected {
+    color: $color-three;
+  }
+}
