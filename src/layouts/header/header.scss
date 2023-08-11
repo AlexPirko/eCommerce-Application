@@ -1,0 +1,16 @@
+@import '/src/assets/styles/constants';
+
+.nav {
+  background-color: $color-one;
+  height: 74px;
+  line-height: 74px;
+  color: $color-seven;
+  padding: 0 18rem;
+  box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 2px 1px 1px rgba(0, 0, 0, 0.02),
+    0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  @include desctop {
+    padding: 0 10rem;
+  }
+}
