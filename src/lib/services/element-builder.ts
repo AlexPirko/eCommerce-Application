@@ -8,10 +8,10 @@ export default class ElementBuilder {
     this.setElement(params);
   }
 
-  private setElement(params: Params): void {
+  protected setElement(params: Params): void {
     this._element.classList.add(...params.classNames);
     if (params.callback) {
-      this._element.addEventListener('click', params.callback);
+      this._element.addEventListener('click', () => params.callback?.());
     }
     if (params.text) {
       this._element.innerHTML = params.text;

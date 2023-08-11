@@ -1,15 +1,16 @@
 import './header-link.scss';
-import { Params } from '@lib/types/params-interface';
+import { Params, PageParams } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
 
 export default class HeaderLink extends ComponentView {
   linkElements: HeaderLink[];
 
-  constructor(text: string, linkElements: HeaderLink[]) {
+  constructor(pageParams: PageParams, linkElements: HeaderLink[]) {
     const params: Params = {
       tagName: 'a',
       classNames: ['nav-item'],
-      text: text,
+      text: pageParams.name,
+      callback: pageParams.callback,
     };
     super(params);
 

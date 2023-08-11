@@ -3,5 +3,10 @@ export interface Params {
   classNames: string[];
   text?: '' | string;
   components?: HTMLElement[];
-  callback?: () => void;
+  callback?: (() => void) | null;
+}
+
+export interface PageParams {
+  name: string;
+  callback: (() => void) | null;
 }
