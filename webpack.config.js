@@ -3,6 +3,8 @@ const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
+const webpack = require('webpack');
 
 const baseConfig = {
   entry: path.resolve(__dirname, './src/index'),
@@ -59,9 +61,12 @@ const baseConfig = {
   ],
 };
 module.exports = {
-  externals: {
-      'node:util': 'commonjs util'
-  }
+  plugins: [
+    new Dotenv({path: './.env'}),
+    new webpack.DefinePlugin({
+      'process.env.CTP_API_URL': JSON.stringify(process.env.CTP_API_URL),
+    })
+  ]
 }
 
 module.exports = ({ mode }) => {

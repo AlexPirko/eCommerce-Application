@@ -5,11 +5,11 @@ import { Customer, CustomerSignInResult, createApiBuilderFromCtpClient } from '@
 export default class ApiServices {
   private static _instance: ApiServices;
   private _ctpClient: Client;
-  private static _apiRoot: ByProjectKeyRequestBuilder;
+  private _apiRoot: ByProjectKeyRequestBuilder;
 
   private constructor() {
     this._ctpClient = this.getCtpClient();
-    ApiServices._apiRoot = this.getApiRoot();
+    this._apiRoot = this.getApiRoot();
   }
 
   public static getInstance() {
