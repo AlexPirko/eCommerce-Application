@@ -15,3 +15,8 @@ export interface RouteParams {
   path: string;
   callback: (() => void) | null;
 }
+
+export interface RequestParams {
+  path: '' | string;
+  resource: '' | string;
+}

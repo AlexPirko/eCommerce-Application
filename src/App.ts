@@ -8,6 +8,7 @@ import Login from '@pages/login/login';
 import Main from '@pages/main/main';
 import NotFound from '@pages/not-found/not-found';
 import PageContainer from '@pages/page-container';
+import SignUp from '@pages/sign-up/sign-up';
 
 export default class App {
   private static container: HTMLElement = document.getElementById('body') as HTMLElement;
@@ -69,7 +70,9 @@ export default class App {
       },
       {
         path: `${Paths.SIGNUP}`,
-        callback: () => {},
+        callback: () => {
+          this.setContent(Paths.LOGIN, new SignUp());
+        },
       },
       {
         path: `${Paths.NOT_FOUND}`,

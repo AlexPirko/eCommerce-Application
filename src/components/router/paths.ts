@@ -1,7 +1,7 @@
 import { HeaderTitle } from '@lib/types/header-interface';
 
 const Paths: HeaderTitle = {
-  MAIN: 'index',
+  MAIN: 'main',
   CATALOG: 'catalog',
   ACCOUNT: 'account',
   ABOUT: 'about',
