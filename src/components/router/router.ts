@@ -5,9 +5,20 @@ export default class Router {
   routes: RouteParams[];
   constructor(routes: RouteParams[]) {
     this.routes = routes;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const url = this.getCurrentUrl();
+      this.navigate(url);
+    });
+    window.addEventListener('popstate', this.changeUrlHandler.bind(this));
+    window.addEventListener('hashchange', this.changeUrlHandler.bind(this));
   }
 
   navigate(url: string) {
+    if (typeof url === 'string') {
+      this.setHistoryUrl(url);
+    }
+
     const request = this.parseUrl(url);
 
     const currentUrl = request.resource === '' ? request.path : `${request.path}/${request.resource}`;
@@ -37,5 +48,22 @@ export default class Router {
     if (routeNotFound) {
       this.navigate(routeNotFound.path);
     }
+  }
+
+  changeUrlHandler() {
+    const url = this.getCurrentUrl();
+    this.navigate(url);
+  }
+
+  getCurrentUrl() {
+    if (window.location.hash) {
+      return window.location.hash.slice(1);
+    } else {
+      return window.location.pathname.slice(1);
+    }
+  }
+
+  setHistoryUrl(url: string) {
+    window.history.pushState({}, '', `/${url}`);
   }
 }
