@@ -1,8 +1,5 @@
 import { Input } from './Input';
-
-import EmailValidate from 'src/lib/utils/emailValidate';
-import PasswordValidate from 'src/lib/utils/passwordValiate';
-
+import './input.scss';
 interface IInput {
   type: string;
   id: number;
@@ -19,9 +16,7 @@ export default class InputBlock extends Input implements IInput {
   classNames: string[];
   placeholder: string;
   value: string;
-  create: DocumentFragment;
-  input: HTMLInputElement | null;
-  labelEl: HTMLLabelElement | null;
+  create: HTMLDivElement;
 
   constructor(type: string, id: number, label: string, classNames: string[], placeholder: string, value: string) {
     super(type, id, classNames, value, placeholder);
@@ -32,15 +27,12 @@ export default class InputBlock extends Input implements IInput {
     this.placeholder = placeholder;
     this.value = value;
     this.create = this.createInputBlock();
-    this.input = null;
-    this.labelEl = null;
   }
 
   createLabel(): HTMLLabelElement {
     const label: HTMLLabelElement = document.createElement('label');
     label.setAttribute('for', this.id.toString());
     label.textContent = this.label;
-    this.labelEl = label;
     return label;
   }
 
@@ -50,45 +42,40 @@ export default class InputBlock extends Input implements IInput {
     return error;
   }
 
-  highlightError(isError: boolean): void {
-    if (this.labelEl !== null) {
-      if (isError) {
-        this.labelEl.classList.add('visible');
-        this.labelEl.textContent = `Incorrect ${this.type.toLowerCase()}`;
-      } else {
-        this.labelEl.classList.remove('visible');
-      }
-    }
-  }
+  createInputBlock(): HTMLDivElement {
+    const wrapper: HTMLDivElement = document.createElement('div');
+    wrapper.classList.add('input-wrapper');
+    const input = super.createInput();
+    input.addEventListener('input', (ev: Event) => {
+      input.classList.remove('error');
+      this.value = (ev.target as HTMLInputElement).value;
+    });
 
-  error(isError: boolean): void {
-    console.log(this.input);
-    isError;
-    // if (this.input !== null) {
-    //   this.input.classList.remove('error');
-    //   this.highlightError(isError);
-    //   if (isError) {
-    //     this.input.classList.add('error');
-    //   }
-    // }
-  }
-
-  validate(value: string) {
-    let isError = false;
-    if (this.type === 'email') {
-      isError = new EmailValidate().validate(value);
+    if (this.type === 'password') {
+      const label = this.passwordInput(input);
+      wrapper.append(this.createLabel(), input, this.createErrorBlock(), label);
     } else {
-      isError = new PasswordValidate().validate(value);
+      wrapper.append(this.createLabel(), input, this.createErrorBlock());
     }
-    this.error(!isError);
-    return !isError;
+
+    return wrapper;
   }
 
-  createInputBlock(): DocumentFragment {
-    const fragment: DocumentFragment = new DocumentFragment();
-    this.input = super.createInput(this.error);
-    console.log(this.input);
-    fragment.append(this.createLabel(), this.input, this.createErrorBlock());
-    return fragment;
+  passwordInput(input: HTMLInputElement): HTMLLabelElement {
+    const label: HTMLLabelElement = document.createElement('label');
+    const span: HTMLSpanElement = document.createElement('span');
+    span.textContent = 'Show password';
+    const checkbox = document.createElement('input');
+    checkbox.setAttribute('type', 'checkbox');
+    checkbox.classList.add('password-checkbox');
+    checkbox.addEventListener('click', () => {
+      if (input.type === 'password') {
+        input.type = 'text';
+      } else {
+        input.type = 'password';
+      }
+    });
+    label.append(checkbox, span);
+    return label;
   }
 }

@@ -1,0 +1,28 @@
+ * {
+   box-sizing: border-box;
+ }
+
+ .input-wrapper {
+   position: relative;
+
+
+   .invalid {
+     &+.error-text {
+
+       &.visible {
+         opacity: 1;
+       }
+     }
+   }
+ }
+
+ .error-text {
+   position: absolute;
+   bottom: 30%;
+   height: 30%;
+   right: 0;
+   transition: .3s ease;
+   opacity: 0;
+   color: red;
+
+ }

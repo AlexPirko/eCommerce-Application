@@ -1,3 +1,6 @@
+import './input.scss';
+import { highlightError } from 'src/lib/utils/validate';
+
 interface IInput {
   type: string;
   id: number;
@@ -21,21 +24,23 @@ export class Input implements IInput {
     this.value = value;
   }
 
-  createInput(errorFunc: (isError: boolean) => void): HTMLInputElement {
+  createInput(): HTMLInputElement {
     const input: HTMLInputElement = document.createElement('input');
     input.setAttribute('type', this.type);
     input.setAttribute('id', this.id.toString());
+    input.setAttribute('autocomplete', 'on');
+
     input.classList.add('validate');
-    // input.classList.add(...this.classNames);
     if (this.placeholder !== undefined) {
       input.setAttribute('placeholder', this.placeholder);
     }
     if (this.value !== undefined) {
       input.setAttribute('value', this.value);
     }
+
     input.addEventListener('input', () => {
-      this.value = input.value;
-      errorFunc(false);
+      input.classList.remove('invalid');
+      highlightError(false, input);
     });
     return input;
   }

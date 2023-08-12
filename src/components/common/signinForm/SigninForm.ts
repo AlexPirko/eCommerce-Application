@@ -1,5 +1,6 @@
 import InputBlock from '../input/InputBlock';
 import './SigninForm.scss';
+import { validate } from 'src/lib/utils/validate';
 
 export class SigninForm {
   titleText: string;
@@ -34,19 +35,25 @@ export class SigninForm {
   createForm(): HTMLFormElement {
     const form: HTMLFormElement = document.createElement('form');
     form.classList.add('form');
+    form.setAttribute('novalidate', '');
     const emailInput = new InputBlock('email', 1, 'Email', [''], 'Enter your email', '');
     const passwordInput = new InputBlock('password', 2, 'Password', [''], 'Enter your password', '');
     form.append(this.createFormTitle(), emailInput.create, passwordInput.create, this.createSubmitBtn());
 
     form.addEventListener('submit', (ev: SubmitEvent) => {
       ev.preventDefault();
-      const emailEr = emailInput.validate(emailInput.value);
-      const paswEr = passwordInput.validate(passwordInput.value);
+      const inputs = form.querySelectorAll('input');
 
-      if (emailEr && paswEr) {
+      inputs.forEach((input: HTMLInputElement) => {
+        validate(input.value, input);
+      });
+      console.log(inputs);
+      const errors = Array.from(inputs).every((input: HTMLInputElement) => !input.classList.contains('invalid'));
+
+      if (errors) {
         console.log('validation complete');
       } else {
-        console.log('validarion incomplete');
+        console.log('validation incomplete');
       }
     });
 
