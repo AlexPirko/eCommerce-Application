@@ -1,14 +1,17 @@
 import './header.scss';
 // import createLogo from '@lib/utils/create-logo';
-import { Params } from '@lib/types/params-interface';
+import { Params, PageParams } from '@lib/types/params-interface';
+import { HeaderTitle } from '@lib/types/header-interface';
 import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';
 import HeaderLink from './header-link/header-link';
-import PageContainer from '@pages/page-container';
-import Main from '@pages/main/main';
-import Login from '@pages/login/login';
+// import PageContainer from '@pages/page-container';
+// import Main from '@pages/main/main';
+// import Login from '@pages/login/login';
+import Router from '@components/router/router';
+// import { Paths } from '@components/router/paths';
 
-const HeaderTitle = {
+const HeaderTitle: HeaderTitle = {
   MAIN: 'Main',
   CATALOG: 'Catalog',
   ACCOUNT: 'My Account',
@@ -18,12 +21,10 @@ const HeaderTitle = {
   LOGIN: 'Log In',
 };
 
-const START_PAGE_ID = 0;
-
 export default class Header extends ComponentView {
-  linkElements: HeaderLink[];
+  headerLinkElements: Map<string, HeaderLink>;
 
-  constructor(container: PageContainer) {
+  constructor(router: Router) {
     const params: Params = {
       tagName: 'header',
       classNames: ['header'],
@@ -31,12 +32,11 @@ export default class Header extends ComponentView {
     };
     super(params);
 
-    this.linkElements = [];
-    this.configureView(container);
+    this.headerLinkElements = new Map();
+    this.configureView(router);
   }
 
-  // eslint-disable-next-line max-lines-per-function
-  private configureView(container: PageContainer): void {
+  private configureView(router: Router): void {
     const navParams: Params = {
       tagName: 'nav',
       classNames: ['nav'],
@@ -45,49 +45,22 @@ export default class Header extends ComponentView {
     const navElementBuilder: ElementBuilder = new ElementBuilder(navParams);
     this.viewElementBuilder.addInnerElement(navElementBuilder);
 
-    const main: ComponentView = new Main();
-
-    const login: ComponentView = new Login();
-
-    const pages = [
-      {
-        name: HeaderTitle.MAIN,
-        callback: () => container.addCurrentPage(main),
-      },
-      {
-        name: HeaderTitle.CATALOG,
-        callback: () => {},
-      },
-      {
-        name: HeaderTitle.ACCOUNT,
-        callback: () => {},
-      },
-      {
-        name: HeaderTitle.ABOUT,
-        callback: () => {},
-      },
-      {
-        name: HeaderTitle.CART,
-        callback: () => {},
-      },
-      {
-        name: HeaderTitle.SIGNUP,
-        callback: () => {},
-      },
-      {
-        name: HeaderTitle.LOGIN,
-        callback: () => container.addCurrentPage(login),
-      },
-    ];
-
-    pages.forEach((page, id) => {
-      const linkElement: HeaderLink = new HeaderLink(page, this.linkElements);
+    Object.keys(HeaderTitle).forEach((key: string) => {
+      const linkParams: PageParams = {
+        name: HeaderTitle[key as keyof HeaderTitle] as string,
+        callback: () =>
+          router.navigate((HeaderTitle[key as keyof HeaderTitle] as string).replace(/ /g, '').toLowerCase()),
+      };
+      const linkElement: HeaderLink = new HeaderLink(linkParams, this.headerLinkElements);
       navElementBuilder.addInnerElement(linkElement.getHtmlElement() as HTMLElement);
-
-      this.linkElements.push(linkElement);
-      if (id === START_PAGE_ID) {
-        linkElement.setSelected();
-      }
+      this.headerLinkElements.set(HeaderTitle[key as keyof HeaderTitle] as string, linkElement);
     });
+  }
+
+  setSelectedLink(namePage: string) {
+    const headerLink = this.headerLinkElements.get(namePage.toUpperCase());
+    if (headerLink instanceof HeaderLink) {
+      headerLink.setSelected();
+    }
   }
 }

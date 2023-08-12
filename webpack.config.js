@@ -44,7 +44,7 @@ const baseConfig = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
-    plugins: [new TsconfigPathsPlugin({})]
+    plugins: [new TsconfigPathsPlugin({})],
   },
   output: {
     filename: 'index.js',

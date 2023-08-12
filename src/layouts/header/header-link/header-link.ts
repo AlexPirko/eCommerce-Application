@@ -3,9 +3,9 @@ import { Params, PageParams } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
 
 export default class HeaderLink extends ComponentView {
-  linkElements: HeaderLink[];
+  linkElements: Map<string, HeaderLink>;
 
-  constructor(pageParams: PageParams, linkElements: HeaderLink[]) {
+  constructor(pageParams: PageParams, linkElements: Map<string, HeaderLink>) {
     const params: Params = {
       tagName: 'a',
       classNames: ['nav-item'],
