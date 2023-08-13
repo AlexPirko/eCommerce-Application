@@ -16,10 +16,10 @@ const baseConfig = {
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/source',
+        type: 'asset/resource',
       },
       {
-        test: /\.(png|jpg|svg)$/,
+        test: /.(png|jpg|svg)$/,
         loader: 'url-loader',
         type: 'javascript/auto',
       },
