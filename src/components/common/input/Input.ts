@@ -1,14 +1,6 @@
 import './input.scss';
-import { highlightError } from 'src/lib/utils/validate';
-
-interface IInput {
-  type: string;
-  id: number;
-  classNames: string[];
-  value: string;
-  placeholder: string;
-}
-
+import { IInput } from 'src/lib/types/interfaces';
+import { validate } from 'src/lib/utils/validate';
 export class Input implements IInput {
   type: string;
   id: number;
@@ -16,7 +8,7 @@ export class Input implements IInput {
   placeholder: string;
   value: string;
 
-  constructor(type: string, id: number, classNames: string[], placeholder: string, value: string) {
+  constructor({ type, id, classNames, placeholder, value }: IInput) {
     this.type = type;
     this.id = id;
     this.classNames = classNames;
@@ -24,24 +16,22 @@ export class Input implements IInput {
     this.value = value;
   }
 
-  createInput(): HTMLInputElement {
+  private createInputElement(): HTMLInputElement {
     const input: HTMLInputElement = document.createElement('input');
     input.setAttribute('type', this.type);
-    input.setAttribute('id', this.id.toString());
+    input.setAttribute('id', `${this.id}`);
     input.setAttribute('autocomplete', 'on');
-
     input.classList.add('validate');
-    if (this.placeholder !== undefined) {
-      input.setAttribute('placeholder', this.placeholder);
-    }
-    if (this.value !== undefined) {
-      input.setAttribute('value', this.value);
-    }
-
+    input.setAttribute('placeholder', this.placeholder ?? '');
+    input.setAttribute('value', this.value ?? '');
     input.addEventListener('input', () => {
-      input.classList.remove('invalid');
-      highlightError(false, input);
+      validate(input.value, input);
     });
+    return input;
+  }
+
+  getInputElement(): HTMLInputElement {
+    const input: HTMLInputElement = this.createInputElement();
     return input;
   }
 }

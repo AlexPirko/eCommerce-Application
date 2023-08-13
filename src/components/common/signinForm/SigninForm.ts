@@ -1,6 +1,5 @@
-import InputBlock from '../input/InputBlock';
 import './SigninForm.scss';
-import { validate } from 'src/lib/utils/validate';
+import InputBlock from '../input/InputBlock';
 
 export class SigninForm {
   titleText: string;
@@ -13,14 +12,14 @@ export class SigninForm {
     this.btnText = btnText;
   }
 
-  createSubmitBtn() {
-    const btn = document.createElement('button');
+  createSubmitBtn(): HTMLButtonElement {
+    const btn: HTMLButtonElement = document.createElement('button');
     btn.classList.add('btn', 'waves-effect', 'waves-light');
     btn.textContent = this.btnText;
     return btn;
   }
 
-  createFormTitle() {
+  createFormTitle(): DocumentFragment {
     const fragment: DocumentFragment = new DocumentFragment();
     const title: HTMLHeadingElement = document.createElement('h3');
     title.textContent = this.titleText;
@@ -32,31 +31,63 @@ export class SigninForm {
     return fragment;
   }
 
+  validateForm(form: HTMLFormElement): boolean {
+    const inputs: NodeListOf<HTMLInputElement> = form.querySelectorAll('input');
+    let valid = true;
+    inputs.forEach((input: HTMLInputElement): void => {
+      if (input.value.trim().length === 0) {
+        input.classList.add('invalid');
+        valid = false;
+      }
+    });
+    return valid;
+  }
+
   createForm(): HTMLFormElement {
     const form: HTMLFormElement = document.createElement('form');
     form.classList.add('form');
     form.setAttribute('novalidate', '');
-    const emailInput = new InputBlock('email', 1, 'Email', [''], 'Enter your email', '');
-    const passwordInput = new InputBlock('password', 2, 'Password', [''], 'Enter your password', '');
-    form.append(this.createFormTitle(), emailInput.create, passwordInput.create, this.createSubmitBtn());
+    const emailInput: InputBlock = new InputBlock({
+      type: 'email',
+      id: 1,
+      label: 'Email',
+      classNames: [''],
+      placeholder: 'Enter your email',
+      value: '',
+    });
+    const passwordInput: InputBlock = new InputBlock({
+      type: 'password',
+      id: 2,
+      label: 'Password',
+      classNames: [''],
+      placeholder: 'Enter your password',
+      value: '',
+    });
+    form.append(
+      this.createFormTitle(),
+      emailInput.create,
+      passwordInput.create,
+      this.createSubmitBtn(),
+      this.registerLink()
+    );
 
-    form.addEventListener('submit', (ev: SubmitEvent) => {
+    form.addEventListener('submit', (ev: SubmitEvent): void => {
       ev.preventDefault();
-      const inputs = form.querySelectorAll('input');
-
-      inputs.forEach((input: HTMLInputElement) => {
-        validate(input.value, input);
-      });
-      console.log(inputs);
-      const errors = Array.from(inputs).every((input: HTMLInputElement) => !input.classList.contains('invalid'));
-
-      if (errors) {
+      const isValid = this.validateForm(form);
+      if (isValid) {
         console.log('validation complete');
-      } else {
-        console.log('validation incomplete');
       }
     });
-
     return form;
+  }
+
+  registerLink(): HTMLParagraphElement {
+    const text: HTMLParagraphElement = document.createElement('p');
+    text.textContent = "Don't have an account ? Register ";
+    const link: HTMLAnchorElement = document.createElement('a');
+    link.setAttribute('href', '#');
+    link.textContent = 'here';
+    text.append(link);
+    return text;
   }
 }
