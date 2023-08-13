@@ -2,10 +2,10 @@ import './input.scss';
 import { IInput } from 'src/lib/types/interfaces';
 import { validate } from 'src/lib/utils/validate';
 export class Input implements IInput {
-  type: string;
-  id: number;
-  classNames: string[];
-  placeholder: string;
+  readonly type: string;
+  readonly id: number;
+  readonly classNames: string[];
+  readonly placeholder: string;
   value: string;
 
   constructor({ type, id, classNames, placeholder, value }: IInput) {
@@ -30,7 +30,7 @@ export class Input implements IInput {
     return input;
   }
 
-  getInputElement(): HTMLInputElement {
+  public getInputElement(): HTMLInputElement {
     const input: HTMLInputElement = this.createInputElement();
     return input;
   }

@@ -2,9 +2,9 @@ import './SigninForm.scss';
 import InputBlock from '../input/InputBlock';
 
 export class SigninForm {
-  titleText: string;
-  descText: string;
-  btnText: string;
+  private titleText: string;
+  private descText: string;
+  private btnText: string;
 
   constructor(titleText: string, descText: string, btnText: string) {
     this.titleText = titleText;
@@ -12,14 +12,14 @@ export class SigninForm {
     this.btnText = btnText;
   }
 
-  createSubmitBtn(): HTMLButtonElement {
+  private createSubmitBtn(): HTMLButtonElement {
     const btn: HTMLButtonElement = document.createElement('button');
     btn.classList.add('btn', 'waves-effect', 'waves-light');
     btn.textContent = this.btnText;
     return btn;
   }
 
-  createFormTitle(): DocumentFragment {
+  private createFormTitle(): DocumentFragment {
     const fragment: DocumentFragment = new DocumentFragment();
     const title: HTMLHeadingElement = document.createElement('h3');
     title.textContent = this.titleText;
@@ -31,7 +31,7 @@ export class SigninForm {
     return fragment;
   }
 
-  validateForm(form: HTMLFormElement): boolean {
+  private validateForm(form: HTMLFormElement): boolean {
     const inputs: NodeListOf<HTMLInputElement> = form.querySelectorAll('input');
     let valid = true;
     inputs.forEach((input: HTMLInputElement): void => {
@@ -43,7 +43,7 @@ export class SigninForm {
     return valid;
   }
 
-  createForm(): HTMLFormElement {
+  public createForm(): HTMLFormElement {
     const form: HTMLFormElement = document.createElement('form');
     form.classList.add('form');
     form.setAttribute('novalidate', '');
@@ -81,7 +81,7 @@ export class SigninForm {
     return form;
   }
 
-  registerLink(): HTMLParagraphElement {
+  private registerLink(): HTMLParagraphElement {
     const text: HTMLParagraphElement = document.createElement('p');
     text.textContent = "Don't have an account ? Register ";
     const link: HTMLAnchorElement = document.createElement('a');

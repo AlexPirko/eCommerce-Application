@@ -3,8 +3,8 @@ import { Input } from './Input';
 import { IInputBlock } from 'src/lib/types/interfaces';
 
 export default class InputBlock extends Input implements IInputBlock {
-  label: string;
-  create: HTMLDivElement;
+  readonly label: string;
+  public create: HTMLDivElement;
 
   constructor({ type, id, label, classNames, placeholder, value }: IInputBlock) {
     super({ type, id, classNames, placeholder, value });
@@ -12,20 +12,20 @@ export default class InputBlock extends Input implements IInputBlock {
     this.create = this.createInputBlock();
   }
 
-  createLabel(): HTMLLabelElement {
+  private createLabel(): HTMLLabelElement {
     const label: HTMLLabelElement = document.createElement('label');
     label.setAttribute('for', this.id.toString());
     label.textContent = this.label;
     return label;
   }
 
-  createErrorBlock(): HTMLSpanElement {
+  private createErrorBlock(): HTMLSpanElement {
     const error: HTMLSpanElement = document.createElement('span');
     error.classList.add('error-text');
     return error;
   }
 
-  createInputBlock(): HTMLDivElement {
+  private createInputBlock(): HTMLDivElement {
     const wrapper: HTMLDivElement = document.createElement('div');
     wrapper.classList.add('input-wrapper');
 
@@ -39,12 +39,12 @@ export default class InputBlock extends Input implements IInputBlock {
     return wrapper;
   }
 
-  handleInput(input: HTMLInputElement) {
+  private handleInput(input: HTMLInputElement) {
     input.classList.remove('error');
     this.value = input.value;
   }
 
-  passwordInput(input: HTMLInputElement): HTMLLabelElement {
+  private passwordInput(input: HTMLInputElement): HTMLLabelElement {
     input.setAttribute('data-type', 'password');
 
     const label: HTMLLabelElement = document.createElement('label');

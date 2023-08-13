@@ -22,9 +22,9 @@ class Validate {
 }
 
 export function validate(value: string, input: HTMLInputElement): boolean {
-  let isError = true;
+  let isError: boolean = true;
 
-  const validator = Validate.getInstance();
+  const validator: Validate = Validate.getInstance();
 
   if (input.type === 'email') {
     isError = !validator.email(value);
