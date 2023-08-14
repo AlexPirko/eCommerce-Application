@@ -13,9 +13,9 @@ import SignUp from '@pages/sign-up/sign-up';
 
 export default class App {
   private static container: HTMLElement = document.getElementById('body') as HTMLElement;
-  router: Router;
-  pageContainer: PageContainer | null;
-  header: Header | null;
+  private router: Router;
+  private pageContainer: PageContainer | null;
+  private header: Header | null;
 
   constructor() {
     this.pageContainer = null;
@@ -26,7 +26,7 @@ export default class App {
     this.createView();
   }
 
-  createView(): void {
+  private createView(): void {
     this.pageContainer = new PageContainer();
     this.header = new Header(this.router);
 
@@ -36,7 +36,7 @@ export default class App {
     );
   }
 
-  createRoutes() {
+  private createRoutes(): RouteParams[] {
     return [
       {
         path: ``,
@@ -85,7 +85,7 @@ export default class App {
     ];
   }
 
-  setContent(page: string, component: ComponentView) {
+  private setContent(page: string, component: ComponentView): void {
     this.header?.setSelectedLink(page);
     this.pageContainer?.addCurrentPage(component);
   }

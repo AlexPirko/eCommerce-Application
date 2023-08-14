@@ -1,23 +1,23 @@
-import { RouteParams } from '@lib/types/params-interface';
+import { RouteParams, RequestParams } from '@lib/types/params-interface';
 import { Paths } from './paths';
 
 export default class Router {
-  routes: RouteParams[];
+  private routes: RouteParams[];
   constructor(routes: RouteParams[]) {
     this.routes = routes;
 
     this.handleListeners();
   }
 
-  navigate(url: string) {
+  public navigate(url: string): void {
     if (typeof url === 'string') {
       this.setHistoryUrl(url);
     }
 
-    const request = this.parseUrl(url);
+    const request: RequestParams = this.parseUrl(url);
 
-    const currentUrl = request.resource === '' ? request.path : `${request.path}/${request.resource}`;
-    const route = this.routes.find((item) => item.path === currentUrl);
+    const currentUrl: string = request.resource === '' ? request.path : `${request.path}/${request.resource}`;
+    const route: RouteParams | undefined = this.routes.find((item) => item.path === currentUrl);
 
     if (!route) {
       this.redirectToNotFound();
@@ -26,8 +26,8 @@ export default class Router {
     route.callback?.();
   }
 
-  parseUrl(url: string) {
-    const result = {
+  private parseUrl(url: string): RequestParams {
+    const result: RequestParams = {
       path: '',
       resource: '',
     };
@@ -38,19 +38,19 @@ export default class Router {
     return result;
   }
 
-  redirectToNotFound() {
-    const routeNotFound = this.routes.find((item) => item.path === Paths.NOT_FOUND);
+  private redirectToNotFound(): void {
+    const routeNotFound: RouteParams | undefined = this.routes.find((item) => item.path === Paths.NOT_FOUND);
     if (routeNotFound) {
       this.navigate(routeNotFound.path);
     }
   }
 
-  changeUrlHandler() {
-    const url = this.getCurrentUrl();
+  private changeUrlHandler(): void {
+    const url: string = this.getCurrentUrl();
     this.navigate(url);
   }
 
-  getCurrentUrl() {
+  private getCurrentUrl(): string {
     if (window.location.hash) {
       return window.location.hash.slice(1);
     } else {
@@ -58,16 +58,16 @@ export default class Router {
     }
   }
 
-  handleListeners() {
+  private handleListeners(): void {
     document.addEventListener('DOMContentLoaded', () => {
-      const url = this.getCurrentUrl();
+      const url: string = this.getCurrentUrl();
       this.navigate(url);
     });
     window.addEventListener('popstate', this.changeUrlHandler.bind(this));
     window.addEventListener('hashchange', this.changeUrlHandler.bind(this));
   }
 
-  setHistoryUrl(url: string) {
+  private setHistoryUrl(url: string): void {
     window.history.pushState({}, '', `/${url}`);
   }
 }
