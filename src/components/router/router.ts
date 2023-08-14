@@ -6,12 +6,7 @@ export default class Router {
   constructor(routes: RouteParams[]) {
     this.routes = routes;
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const url = this.getCurrentUrl();
-      this.navigate(url);
-    });
-    window.addEventListener('popstate', this.changeUrlHandler.bind(this));
-    window.addEventListener('hashchange', this.changeUrlHandler.bind(this));
+    this.handleListeners();
   }
 
   navigate(url: string) {
@@ -61,6 +56,15 @@ export default class Router {
     } else {
       return window.location.pathname.slice(1);
     }
+  }
+
+  handleListeners() {
+    document.addEventListener('DOMContentLoaded', () => {
+      const url = this.getCurrentUrl();
+      this.navigate(url);
+    });
+    window.addEventListener('popstate', this.changeUrlHandler.bind(this));
+    window.addEventListener('hashchange', this.changeUrlHandler.bind(this));
   }
 
   setHistoryUrl(url: string) {

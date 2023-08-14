@@ -4,6 +4,7 @@ import Router from '@components/router/router';
 import Header from '@layouts/header/header';
 import ComponentView from '@lib/services/component-view';
 import { RouteParams } from '@lib/types/params-interface';
+import Catalog from '@pages/catalog/catalog';
 import Login from '@pages/login/login';
 import Main from '@pages/main/main';
 import NotFound from '@pages/not-found/not-found';
@@ -51,7 +52,9 @@ export default class App {
       },
       {
         path: `${Paths.CATALOG}`,
-        callback: () => {},
+        callback: () => {
+          this.setContent(Paths.CATALOG, new Catalog());
+        },
       },
       {
         path: `${Paths.ABOUT}`,
