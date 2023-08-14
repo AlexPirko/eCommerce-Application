@@ -33,7 +33,7 @@ export class SigninForm {
 
   private validateForm(form: HTMLFormElement): boolean {
     const inputs: NodeListOf<HTMLInputElement> = form.querySelectorAll('input');
-    let valid = true;
+    let valid: boolean = true;
     inputs.forEach((input: HTMLInputElement): void => {
       if (input.value.trim().length === 0) {
         input.classList.add('invalid');
@@ -73,7 +73,7 @@ export class SigninForm {
 
     form.addEventListener('submit', (ev: SubmitEvent): void => {
       ev.preventDefault();
-      const isValid = this.validateForm(form);
+      const isValid: boolean = this.validateForm(form);
       if (isValid) {
         console.log('validation complete');
       }

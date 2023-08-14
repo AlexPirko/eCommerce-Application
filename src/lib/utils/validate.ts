@@ -59,10 +59,10 @@ export function highlightError(isError: boolean, input: HTMLInputElement): void 
 }
 
 function inputErrorMsg(value: string): string {
-  const upperLetter = /[A-Z]/;
-  const lowerLetter = /[a-z]/;
-  const number = /\d/;
-  const symbol = /[!@#$%^&*]/;
+  const upperLetter: RegExp = /[A-Z]/;
+  const lowerLetter: RegExp = /[a-z]/;
+  const number: RegExp = /\d/;
+  const symbol: RegExp = /[!@#$%^&*]/;
 
   if (value.length < 8) {
     return 'Password must be at least 8 characters long';

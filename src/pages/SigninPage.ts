@@ -10,3 +10,5 @@ export class SigninPage {
     return wrapper;
   }
 }
+
+// new SigninPage().createWrapper()
