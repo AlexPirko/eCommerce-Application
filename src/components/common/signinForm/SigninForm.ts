@@ -1,25 +1,30 @@
 import './SigninForm.scss';
 import InputBlock from '../input/InputBlock';
+import { IForm } from 'src/lib/types/interfaces';
 
 export class SigninForm {
-  private titleText: string;
-  private descText: string;
-  private btnText: string;
+  protected titleText: string;
+  protected descText: string;
+  protected btnText: string;
+  protected linkText: string;
+  protected onSubmit: () => void;
 
-  constructor(titleText: string, descText: string, btnText: string) {
+  constructor({ titleText, descText, btnText, linkText, onSubmit }: IForm) {
     this.titleText = titleText;
     this.descText = descText;
     this.btnText = btnText;
+    this.linkText = linkText;
+    this.onSubmit = onSubmit;
   }
 
-  private createSubmitBtn(): HTMLButtonElement {
+  protected createSubmitBtn(): HTMLButtonElement {
     const btn: HTMLButtonElement = document.createElement('button');
     btn.classList.add('btn', 'waves-effect', 'waves-light');
     btn.textContent = this.btnText;
     return btn;
   }
 
-  private createFormTitle(): DocumentFragment {
+  protected createFormTitle(): DocumentFragment {
     const fragment: DocumentFragment = new DocumentFragment();
     const title: HTMLHeadingElement = document.createElement('h3');
     title.textContent = this.titleText;
@@ -31,7 +36,7 @@ export class SigninForm {
     return fragment;
   }
 
-  private validateForm(form: HTMLFormElement): boolean {
+  protected validateForm(form: HTMLFormElement): boolean {
     const inputs: NodeListOf<HTMLInputElement> = form.querySelectorAll('input');
     let valid: boolean = true;
     inputs.forEach((input: HTMLInputElement): void => {
@@ -76,14 +81,15 @@ export class SigninForm {
       const isValid: boolean = this.validateForm(form);
       if (isValid) {
         console.log('validation complete');
+        this.onSubmit();
       }
     });
     return form;
   }
 
-  private registerLink(): HTMLParagraphElement {
+  protected registerLink(): HTMLParagraphElement {
     const text: HTMLParagraphElement = document.createElement('p');
-    text.textContent = "Don't have an account ? Register ";
+    text.textContent = this.linkText;
     const link: HTMLAnchorElement = document.createElement('a');
     link.setAttribute('href', '#');
     link.textContent = 'here';

@@ -6,6 +6,14 @@ export interface IInput {
   placeholder: string;
 }
 
+export interface IForm {
+  titleText: string;
+  descText: string;
+  btnText: string;
+  linkText: string;
+  onSubmit: () => void;
+}
+
 export interface IInputBlock extends IInput {
   label: string;
 }
