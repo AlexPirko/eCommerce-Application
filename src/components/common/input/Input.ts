@@ -1,12 +1,12 @@
 import './input.scss';
 import { IInput } from 'src/lib/types/interfaces';
 import { validate } from 'src/lib/utils/validate';
-export class Input implements IInput {
-  readonly type: string;
-  readonly id: number;
-  readonly classNames: string[];
-  readonly placeholder: string;
-  value: string;
+export class Input {
+  protected type: string;
+  protected id: number;
+  private classNames: string[];
+  private placeholder: string;
+  public value: string;
 
   constructor({ type, id, classNames, placeholder, value }: IInput) {
     this.type = type;
@@ -24,7 +24,7 @@ export class Input implements IInput {
     input.classList.add('validate');
     input.setAttribute('placeholder', this.placeholder ?? '');
     input.setAttribute('value', this.value ?? '');
-    input.addEventListener('input', () => {
+    input.addEventListener('input', (): void => {
       validate(input.value, input);
     });
     return input;

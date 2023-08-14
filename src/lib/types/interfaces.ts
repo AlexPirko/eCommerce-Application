@@ -1,9 +1,9 @@
 export interface IInput {
-  readonly type: string;
-  readonly id: number;
-  readonly classNames: string[];
+  type: string;
+  id: number;
+  classNames: string[];
   value: string;
-  readonly placeholder: string;
+  placeholder: string;
 }
 
 export interface IInputBlock extends IInput {

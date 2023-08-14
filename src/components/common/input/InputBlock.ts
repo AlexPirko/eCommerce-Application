@@ -2,8 +2,8 @@ import './input.scss';
 import { Input } from './Input';
 import { IInputBlock } from 'src/lib/types/interfaces';
 
-export default class InputBlock extends Input implements IInputBlock {
-  readonly label: string;
+export default class InputBlock extends Input {
+  private label: string;
   public create: HTMLDivElement;
 
   constructor({ type, id, label, classNames, placeholder, value }: IInputBlock) {
@@ -53,7 +53,7 @@ export default class InputBlock extends Input implements IInputBlock {
     const checkbox: HTMLInputElement = document.createElement('input');
     checkbox.setAttribute('type', 'checkbox');
     checkbox.classList.add('password-checkbox');
-    checkbox.addEventListener('click', () => {
+    checkbox.addEventListener('click', (): void => {
       input.type = input.type === 'password' ? 'text' : 'password';
     });
 
