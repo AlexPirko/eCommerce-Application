@@ -36,6 +36,7 @@ export default class App {
     );
   }
 
+  // eslint-disable-next-line max-lines-per-function
   private createRoutes(): RouteParams[] {
     return [
       {
