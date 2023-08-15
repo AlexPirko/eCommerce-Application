@@ -36,8 +36,8 @@ class Validate {
   public date(value: string): boolean {
     const currentDate: Date = new Date();
     const birthday: Date = new Date(value);
-    const diff = new Date(currentDate.getTime() - birthday.getTime());
-    const age = Math.abs(diff.getUTCFullYear() - 1970);
+    const diff: Date = new Date(currentDate.getTime() - birthday.getTime());
+    const age: number = Math.abs(diff.getUTCFullYear() - 1970);
     return age >= 13;
   }
 
@@ -56,7 +56,7 @@ export function validate(value: string, input: HTMLInputElement): boolean {
   } else if (input.dataset.type === 'password') {
     isError = !validator.password(value);
   } else if (input.dataset.type) {
-    const type = input.dataset.type;
+    const type: string = input.dataset.type;
     if (type === textInputs.FIRST || type === textInputs.LAST || type === textInputs.CITY) {
       isError = !validator.noSpec(value);
     } else if (type === textInputs.POST) {

@@ -31,7 +31,7 @@ export default class InputBlock extends Input {
 
     const input: HTMLInputElement = this.getInputElement();
     if (this.type === 'text') {
-      const atr = this.label.split(' ')[0];
+      const atr: string = this.label.split(' ')[0];
       input.setAttribute('data-type', atr);
     }
 
@@ -43,7 +43,7 @@ export default class InputBlock extends Input {
     return wrapper;
   }
 
-  private handleInput(input: HTMLInputElement) {
+  private handleInput(input: HTMLInputElement): void {
     input.classList.remove('error');
     this.value = input.value;
   }

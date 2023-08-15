@@ -131,7 +131,7 @@ export class RegisterForm extends LoginForm {
     input2.setAttribute('name', 'country');
     input2.setAttribute('type', 'radio');
 
-    function onChange() {
+    function onChange(): void {
       const postInput: Element | null = document.querySelector(`[data-type="${textInputs.POST}"]`);
       if (postInput !== null) {
         validate((<HTMLInputElement>postInput).value, <HTMLInputElement>postInput);
