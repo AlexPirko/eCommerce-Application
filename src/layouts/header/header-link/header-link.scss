@@ -1,0 +1,24 @@
+@import '/src/assets/styles/constants';
+
+.nav-item {
+  font-size: 2rem;
+  cursor: pointer;
+  color: $color-seven;
+  &:not(:last-child) {
+    padding-right: 4rem;
+  }
+  &:hover {
+    color: $color-four;
+  }
+  &__selected {
+    color: $color-nine;
+  }
+}
+
+nav i.menu-logo {
+  font-size: 4rem;
+}
+
+nav i.menu-cart {
+  font-size: 3rem;
+}

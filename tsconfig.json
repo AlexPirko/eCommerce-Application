@@ -3,27 +3,21 @@
     "rootDir": "src",
     "baseUrl": ".",
     "paths": {
-      "@src/*" : ["./src/"],
-      "@components/*" : ["./src/components/*"],
-      "@layouts/*" : ["./src/layouts/*"],
-      "@lib/*" : ["./src/layouts/*"],
-      "@pages/*" : ["./src/pages/*"],
-      "@assets/*" : ["./src/assets/*"],
+      "@src/*": ["./src/"],
+      "@components/*": ["./src/components/*"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@assets/*": ["./src/assets/*"]
     },
-    "lib": [
-      "ES2021",
-      "DOM"
-    ],
+    "lib": ["ES2021", "DOM"],
     "target": "es2016",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
-    "moduleResolution": "node",
+    "moduleResolution": "node"
   },
-  "include": [
-    "src/**/*",
-    "main.ts"
-  ]
+  "include": ["src/**/*", "index.ts"]
 }

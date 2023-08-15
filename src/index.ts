@@ -1,5 +1,4 @@
-import { RegisterPage } from '@pages/RegisterPage';
+import App from './App';
 
-const wrapper = document.querySelector('#root');
-
-wrapper?.append(new RegisterPage().createWrapper());
+const app: App = new App();
+app.run();
