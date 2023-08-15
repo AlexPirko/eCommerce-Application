@@ -48,6 +48,7 @@ export default class Header extends ComponentView {
     const navElementBuilder: ElementBuilder = new ElementBuilder(navParams);
     const leftNavNodeWrapper: HTMLElement = makeElement('div', ['left-node__wrapper']);
     const rightNavNodeWrapper: HTMLElement = makeElement('div', ['right-node__wrapper']);
+    const NUM_OF_LEFT_NAV_TITLE = 4;
     navElementBuilder.addInnerElement(leftNavNodeWrapper);
     navElementBuilder.addInnerElement(rightNavNodeWrapper);
 
@@ -60,7 +61,7 @@ export default class Header extends ComponentView {
           router.navigate((HeaderTitle[key as keyof HeaderTitle] as string).replace(/ /g, '').toLowerCase()),
       };
       const linkElement: HeaderLink = new HeaderLink(linkParams, this.headerLinkElements);
-      if (index < 4) {
+      if (index < NUM_OF_LEFT_NAV_TITLE) {
         leftNavNodeWrapper.append(linkElement.getHtmlElement() as HTMLElement);
       } else {
         rightNavNodeWrapper.append(linkElement.getHtmlElement() as HTMLElement);

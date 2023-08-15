@@ -60,8 +60,7 @@ export default class Router {
 
   private handleListeners(): void {
     document.addEventListener('DOMContentLoaded', () => {
-      const url: string = this.getCurrentUrl();
-      this.navigate(url);
+      this.changeUrlHandler();
     });
     window.addEventListener('popstate', this.changeUrlHandler.bind(this));
     window.addEventListener('hashchange', this.changeUrlHandler.bind(this));
