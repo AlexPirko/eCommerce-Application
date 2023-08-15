@@ -3,33 +3,147 @@ import {
   type AuthMiddlewareOptions,
   type HttpMiddlewareOptions,
   Client,
+  PasswordAuthMiddlewareOptions,
+  RefreshAuthMiddlewareOptions,
 } from '@commercetools/sdk-client-v2';
+import { ctpParams } from './client-credemtials';
 
-const projectKey: string = 'ecommerce-app';
-const scopes: string[] = [
-  'manage_my_shopping_lists:ecommerce-app introspect_oauth_tokens:ecommerce-app manage_customer_groups:ecommerce-app manage_my_payments:ecommerce-app manage_project_settings:ecommerce-app manage_standalone_prices:ecommerce-app manage_my_quotes:ecommerce-app view_messages:ecommerce-app manage_shipping_methods:ecommerce-app manage_shopping_lists:ecommerce-app manage_product_selections:ecommerce-app manage_my_orders:ecommerce-app view_published_products:ecommerce-app manage_my_profile:ecommerce-app manage_states:ecommerce-app manage_orders:ecommerce-app manage_my_business_units:ecommerce-app manage_customers:ecommerce-app manage_products:ecommerce-app manage_payments:ecommerce-app manage_order_edits:ecommerce-app manage_my_quote_requests:ecommerce-app manage_types:ecommerce-app manage_attribute_groups:ecommerce-app create_anonymous_token:ecommerce-app manage_api_clients:ecommerce-app manage_audit_log:ecommerce-app manage_categories:ecommerce-app',
-];
-console.log(scopes);
+export default class CtpClientBuilder {
+  private static _ctpClient: Client | null;
+  constructor() {}
 
-const authMiddlewareOptions: AuthMiddlewareOptions = {
-  host: 'https://auth.europe-west1.gcp.commercetools.com',
-  projectKey: 'ecommerce-app',
-  credentials: {
-    clientId: '6YE3XydLafUyNq_k96zQZeWi',
-    clientSecret: '8W7803UI6jIc-LPS2viA65zXCqX7GSft',
-  },
-  scopes,
-  fetch,
-};
+  public createCtpClient(email: string | null, password: string | null): Client {
+    let ctpClient: Client;
+    const refreshToken: string | null = localStorage.getItem('refreshToken');
 
-const httpMiddlewareOptions: HttpMiddlewareOptions = {
-  host: 'https://api.europe-west1.gcp.commercetools.com',
-  fetch,
-};
+    if (email && password) {
+      ctpClient = this.getCtpClientWithPasswordFlow(email, password);
+    } else if (refreshToken) {
+      ctpClient = this.getCtpClientWithRefrehToken(refreshToken);
+    } else {
+      ctpClient = this.getCtpClientWithCredentialsFlow();
+    }
+    console.log(ctpClient);
+    return ctpClient;
+  }
 
-export const ctpClient: Client = new ClientBuilder()
-  .withProjectKey(projectKey)
-  .withClientCredentialsFlow(authMiddlewareOptions)
-  .withHttpMiddleware(httpMiddlewareOptions)
-  .withLoggerMiddleware()
-  .build();
+  private getCtpClientWithCredentialsFlow(): Client {
+    console.log('withClientCredentials scope:\n');
+
+    const authMiddlewareOptions: AuthMiddlewareOptions = {
+      host: ctpParams.CTP_AUTH_URL,
+      projectKey: ctpParams.CTP_PROJECT_KEY,
+      credentials: {
+        clientId: ctpParams.CTP_CLIENT_ID,
+        clientSecret: ctpParams.CTP_CLIENT_SECRET,
+      },
+      scopes: [ctpParams.CTP_SCOPES],
+      fetch,
+    };
+
+    const httpMiddlewareOptions: HttpMiddlewareOptions = {
+      host: ctpParams.CTP_API_URL,
+      fetch,
+    };
+
+    const ctpClient = new ClientBuilder()
+      .withProjectKey(ctpParams.CTP_PROJECT_KEY)
+      .withClientCredentialsFlow(authMiddlewareOptions)
+      .withHttpMiddleware(httpMiddlewareOptions)
+      .withLoggerMiddleware()
+      .build();
+
+    return ctpClient;
+  }
+
+  private getCtpClientWithRefrehToken(refreshToken: string): Client {
+    console.log('withRefrehToken scope:\n');
+
+    const refreshAuthMiddlewareOptions: RefreshAuthMiddlewareOptions = {
+      host: ctpParams.CTP_AUTH_URL,
+      projectKey: ctpParams.CTP_PROJECT_KEY,
+      credentials: {
+        clientId: ctpParams.CTP_CLIENT_ID,
+        clientSecret: ctpParams.CTP_CLIENT_SECRET,
+      },
+      refreshToken: refreshToken,
+      fetch,
+    };
+
+    const httpMiddlewareOptions: HttpMiddlewareOptions = {
+      host: ctpParams.CTP_API_URL,
+      fetch,
+    };
+
+    const ctpClient: Client = new ClientBuilder()
+      .withRefreshTokenFlow(refreshAuthMiddlewareOptions)
+      .withHttpMiddleware(httpMiddlewareOptions)
+      .withLoggerMiddleware()
+      .build();
+
+    return ctpClient;
+  }
+
+  private getCtpClientWithPasswordFlow(customerEmail: string, customerPassword: string): Client {
+    console.log('withPasswordFlow scope:\n');
+
+    const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
+      host: ctpParams.CTP_AUTH_URL,
+      projectKey: ctpParams.CTP_PROJECT_KEY,
+      credentials: {
+        clientId: ctpParams.CTP_CLIENT_ID,
+        clientSecret: ctpParams.CTP_CLIENT_SECRET,
+        user: {
+          username: customerEmail,
+          password: customerPassword,
+        },
+      },
+      scopes: [ctpParams.CTP_SCOPES],
+      fetch,
+    };
+
+    const httpMiddlewareOptions: HttpMiddlewareOptions = {
+      host: ctpParams.CTP_API_URL,
+      fetch,
+    };
+
+    const ctpClient = new ClientBuilder()
+      .withProjectKey(ctpParams.CTP_PROJECT_KEY)
+      .withPasswordFlow(passwordAuthMiddlewareOptions)
+      .withHttpMiddleware(httpMiddlewareOptions)
+      .withLoggerMiddleware()
+      .build();
+
+    return ctpClient;
+  }
+
+  private getCtpClientWithAnonymousFlow(): Client {
+    console.log('withAnonymousFlow scope:\n');
+
+    const authMiddlewareOptions: AuthMiddlewareOptions = {
+      host: ctpParams.CTP_AUTH_URL,
+      projectKey: ctpParams.CTP_PROJECT_KEY,
+      credentials: {
+        clientId: ctpParams.CTP_CLIENT_ID,
+        clientSecret: ctpParams.CTP_CLIENT_SECRET,
+        anonymousId: 'set-123',
+      },
+      scopes: [ctpParams.CTP_SCOPES],
+      fetch,
+    };
+
+    const httpMiddlewareOptions: HttpMiddlewareOptions = {
+      host: ctpParams.CTP_API_URL,
+      fetch,
+    };
+
+    const ctpClient = new ClientBuilder()
+      .withProjectKey(ctpParams.CTP_PROJECT_KEY)
+      .withAnonymousSessionFlow(authMiddlewareOptions)
+      .withHttpMiddleware(httpMiddlewareOptions)
+      .withLoggerMiddleware()
+      .build();
+
+    return ctpClient;
+  }
+}

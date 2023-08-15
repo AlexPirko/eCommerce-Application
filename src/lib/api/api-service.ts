@@ -1,16 +1,24 @@
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
-import { AuthMiddlewareOptions, Client, ClientBuilder, HttpMiddlewareOptions } from '@commercetools/sdk-client-v2';
-import { Customer, CustomerSignInResult, createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+import { Client } from '@commercetools/sdk-client-v2';
+import {
+  ClientResponse,
+  Customer,
+  CustomerDraft,
+  CustomerSignInResult,
+  ProductPagedQueryResponse,
+  createApiBuilderFromCtpClient,
+} from '@commercetools/platform-sdk';
+import CtpClientBuilder from './api-client-builder';
+import { ctpParams } from './client-credemtials';
+import { generateAnonymousId } from '@lib/utils/create-random-id';
 
 export default class ApiServices {
   private static _instance: ApiServices;
-  private _ctpClient: Client;
-  private _apiRoot: ByProjectKeyRequestBuilder;
+  private static _ctpClient: Client;
+  private static _apiRoot: ByProjectKeyRequestBuilder;
+  private static _token: string;
 
-  private constructor() {
-    this._ctpClient = this.getCtpClient();
-    this._apiRoot = this.getApiRoot();
-  }
+  private constructor() {}
 
   public static getInstance() {
     if (!this._instance) {
@@ -19,74 +27,94 @@ export default class ApiServices {
     return this._instance;
   }
 
-  private getCtpClient(): Client {
-    const projectKey: string = 'ecommerce-app';
-    const scopes: string[] = [
-      'manage_my_shopping_lists:ecommerce-app introspect_oauth_tokens:ecommerce-app manage_customer_groups:ecommerce-app manage_my_payments:ecommerce-app manage_project_settings:ecommerce-app manage_standalone_prices:ecommerce-app manage_my_quotes:ecommerce-app view_messages:ecommerce-app manage_shipping_methods:ecommerce-app manage_shopping_lists:ecommerce-app manage_product_selections:ecommerce-app manage_my_orders:ecommerce-app view_published_products:ecommerce-app manage_my_profile:ecommerce-app manage_states:ecommerce-app manage_orders:ecommerce-app manage_my_business_units:ecommerce-app manage_customers:ecommerce-app manage_products:ecommerce-app manage_payments:ecommerce-app manage_order_edits:ecommerce-app manage_my_quote_requests:ecommerce-app manage_types:ecommerce-app manage_attribute_groups:ecommerce-app create_anonymous_token:ecommerce-app manage_api_clients:ecommerce-app manage_audit_log:ecommerce-app manage_categories:ecommerce-app',
-    ];
-    console.log(scopes);
-
-    const authMiddlewareOptions: AuthMiddlewareOptions = {
-      host: 'https://auth.europe-west1.gcp.commercetools.com',
-      projectKey: 'ecommerce-app',
-      credentials: {
-        clientId: '6YE3XydLafUyNq_k96zQZeWi',
-        clientSecret: '8W7803UI6jIc-LPS2viA65zXCqX7GSft',
-      },
-      scopes,
-      fetch,
-    };
-
-    const httpMiddlewareOptions: HttpMiddlewareOptions = {
-      host: 'https://api.europe-west1.gcp.commercetools.com',
-      fetch,
-    };
-
-    const ctpClient: Client = new ClientBuilder()
-      .withProjectKey(projectKey)
-      .withClientCredentialsFlow(authMiddlewareOptions)
-      .withHttpMiddleware(httpMiddlewareOptions)
-      .withLoggerMiddleware()
-      .build();
-
-    return ctpClient;
-  }
-
-  private getApiRoot(): ByProjectKeyRequestBuilder {
-    const apiRoot: ByProjectKeyRequestBuilder = createApiBuilderFromCtpClient(this._ctpClient).withProjectKey({
+  public setNewApiClient(email: string | null = null, password: string | null = null): ApiServices {
+    const ctpClientBuilder: CtpClientBuilder = new CtpClientBuilder();
+    ApiServices._ctpClient = ctpClientBuilder.createCtpClient(email, password);
+    ApiServices._apiRoot = createApiBuilderFromCtpClient(ApiServices._ctpClient).withProjectKey({
       projectKey: 'ecommerce-app',
     });
-
-    return apiRoot;
+    console.log(ApiServices._apiRoot);
+    console.log(ApiServices._ctpClient);
+    return this;
   }
 
-  public async createCustomer(): Promise<CustomerSignInResult> {
-    const response: Response = await fetch('https://api.europe-west1.gcp.commercetools.com/ecommerce-app/customers', {
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer g2vlBf5IA76_IdLRY2LTH-n2yDrQGeup',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: 'kirill@example.com',
-        firstName: 'Krill',
-        lastName: 'Shrimpy',
-        password: 'myPassword123',
-      }),
-    });
-    return response.json();
+  private setUserToken() {}
+
+  public async createCustomer(body: CustomerDraft): Promise<ClientResponse<CustomerSignInResult> | void> {
+    return ApiServices._apiRoot
+      .customers()
+      .post({
+        body,
+        headers: {
+          Authorization: 'Bearer GkmvS6vmloIJQepAGx7amwVbEdzogaAj',
+          'Content-Type': 'application/json',
+        },
+      })
+      .execute()
+      .catch(console.log);
   }
 
-  public async deleteCustomer(id: string, version: string): Promise<Customer> {
-    const response: Response = await fetch(
-      `https://api.europe-west1.gcp.commercetools.com/ecommerce-app/customers/${id}?version=${version}`,
+  public async deleteCustomer(customerId: string, version: string): Promise<Customer> {
+    const response: Response = (await fetch(
+      `https://${ctpParams.CTP_API_URL}ecommerce-app/customers/${customerId}?version=${version}`,
       {
         method: 'DELETE',
         headers: {
-          Authorization: 'Bearer g2vlBf5IA76_IdLRY2LTH-n2yDrQGeup',
+          Authorization: ApiServices._token, // 'Bearer GkmvS6vmloIJQepAGx7amwVbEdzogaAj',
         },
       }
-    );
+    ).catch(console.log)) as Response;
+
+    return response.json();
+  }
+
+  public getCustommer() {
+    console.log(ApiServices._ctpClient);
+    console.log(ApiServices._apiRoot);
+    return ApiServices._apiRoot
+      .customers()
+      .withId({ ID: '42ac197d-c4be-4075-a766-158dc7f7c630' })
+      .get()
+      .execute()
+      .catch(console.log);
+  }
+
+  public getCurrentCustomer(): Promise<ClientResponse<Customer> | void> {
+    console.log(ApiServices._ctpClient);
+    console.log(ApiServices._apiRoot);
+    return ApiServices._apiRoot.me().get().execute().catch(console.log);
+  }
+
+  public getProducts(): Promise<ClientResponse<ProductPagedQueryResponse> | void> {
+    console.log(ApiServices._ctpClient);
+    console.log(ApiServices._apiRoot);
+    return ApiServices._apiRoot.products().get().execute().catch(console.log);
+  }
+
+  public async getCustomerToken(email: string, password: string): Promise<Response> {
+    const projectKey: string = ctpParams.CTP_PROJECT_KEY;
+    const response = (await fetch(`https://${ctpParams.CTP_AUTH_URL}/oauth/${projectKey}/customers/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: 'Basic ' + btoa(`${ctpParams.CTP_CLIENT_ID}:${ctpParams.CTP_CLIENT_SECRET}`),
+      },
+      body: `grant_type=password&username=${email}&password=${password}&scope=view_published_products:${projectKey} manage_my_orders:${projectKey} manage_my_profile:${projectKey} manage_customers:${projectKey}`,
+    }).catch(console.log)) as Response;
+    return response.json();
+  }
+
+  public async getAnonimousToken(): Promise<Response> {
+    const projectKey: string = ctpParams.CTP_PROJECT_KEY;
+    const anonymousId = generateAnonymousId();
+    const response = (await fetch(`https://${ctpParams.CTP_AUTH_URL}/oauth/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: 'Basic ' + btoa(`${ctpParams.CTP_CLIENT_ID}:${ctpParams.CTP_CLIENT_SECRET}`),
+      },
+      body: `grant_type=client_credentials&scope=view_published_products:${projectKey} manage_my_orders:${projectKey} manage_my_profile:${projectKey} manage_customers:${projectKey}&anonymous_id=${anonymousId}`,
+    }).catch(console.log)) as Response;
     return response.json();
   }
 }
