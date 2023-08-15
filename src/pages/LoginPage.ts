@@ -1,12 +1,12 @@
 import './SigninPage.scss';
-import { SigninForm } from '@components/common/signinForm/SigninForm';
+import { LoginForm } from '@components/common/signinForm/LoginForm';
 
-export class SigninPage {
+export class LoginPage {
   public createWrapper(): HTMLDivElement {
     const wrapper: HTMLDivElement = document.createElement('div');
     wrapper.classList.add('signin-wrapper');
     wrapper.append(
-      new SigninForm({
+      new LoginForm({
         titleText: 'Sign in',
         descText: 'Please enter your email and password',
         btnText: 'sign in',
@@ -19,4 +19,4 @@ export class SigninPage {
   }
 }
 
-// new SigninPage().createWrapper()
+// new LoginPage().createWrapper()

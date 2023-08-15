@@ -1,8 +1,9 @@
-import './SigninForm.scss';
+/* eslint-disable max-lines-per-function */
+import './LoginForm.scss';
 import InputBlock from '../input/InputBlock';
 import { IForm } from 'src/lib/types/interfaces';
 
-export class SigninForm {
+export class LoginForm {
   protected titleText: string;
   protected descText: string;
   protected btnText: string;
@@ -54,7 +55,7 @@ export class SigninForm {
     form.setAttribute('novalidate', '');
     const emailInput: InputBlock = new InputBlock({
       type: 'email',
-      id: 1,
+      id: 3,
       label: 'Email',
       classNames: [''],
       placeholder: 'Enter your email',
@@ -62,12 +63,13 @@ export class SigninForm {
     });
     const passwordInput: InputBlock = new InputBlock({
       type: 'password',
-      id: 2,
+      id: 4,
       label: 'Password',
       classNames: [''],
       placeholder: 'Enter your password',
       value: '',
     });
+
     form.append(
       this.createFormTitle(),
       emailInput.create,

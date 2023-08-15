@@ -30,8 +30,12 @@ export default class InputBlock extends Input {
     wrapper.classList.add('input-wrapper');
 
     const input: HTMLInputElement = this.getInputElement();
-    input.addEventListener('input', this.handleInput.bind(this, input));
+    if (this.type === 'text') {
+      const atr = this.label.split(' ')[0];
+      input.setAttribute('data-type', atr);
+    }
 
+    input.addEventListener('input', this.handleInput.bind(this, input));
     const label: HTMLLabelElement | null = this.type === 'password' ? this.passwordInput(input) : null;
 
     wrapper.append(this.createLabel(), input, this.createErrorBlock());
