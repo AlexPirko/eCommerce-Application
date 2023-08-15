@@ -1,12 +1,13 @@
 import './header.scss';
-// import createLogo from '@lib/utils/create-logo';
-import { Params } from '@lib/types/params-interface';
+import { Params, PageParams } from '@lib/types/params-interface';
+import { HeaderTitle } from '@lib/types/header-interface';
 import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';
 import HeaderLink from './header-link/header-link';
-// import HeaderLink from './header-link/header-link';
+import Router from '@components/router/router';
+import makeElement from '@lib/utils/make-element';
 
-const HeaderTitle = {
+const HeaderTitle: HeaderTitle = {
   MAIN: 'Main',
   CATALOG: 'Catalog',
   ACCOUNT: 'My Account',
@@ -16,73 +17,57 @@ const HeaderTitle = {
   LOGIN: 'Log In',
 };
 
-const START_PAGE_ID = 0;
-
 export default class Header extends ComponentView {
-  linkElements: HeaderLink[];
+  private headerLinkElements: Map<string, HeaderLink>;
 
-  constructor() {
+  constructor(router: Router) {
     const params: Params = {
       tagName: 'header',
       classNames: ['header'],
+      callback: null,
     };
     super(params);
 
-    this.linkElements = [];
-    this.configureView();
+    this.headerLinkElements = new Map();
+    this.configureView(router);
   }
 
-  // eslint-disable-next-line max-lines-per-function
-  private configureView(): void {
+  public setSelectedLink(namePage: string): void {
+    const headerLink: HeaderLink | undefined = this.headerLinkElements.get(namePage.toUpperCase());
+    if (headerLink instanceof HeaderLink) {
+      headerLink.setSelected();
+    }
+  }
+
+  private configureView(router: Router): void {
     const navParams: Params = {
       tagName: 'nav',
       classNames: ['nav'],
+      callback: null,
     };
     const navElementBuilder: ElementBuilder = new ElementBuilder(navParams);
+    const leftNavNodeWrapper: HTMLElement = makeElement('div', ['left-node__wrapper']);
+    const rightNavNodeWrapper: HTMLElement = makeElement('div', ['right-node__wrapper']);
+    const NUM_OF_LEFT_NAV_TITLE = 4;
+    navElementBuilder.addInnerElement(leftNavNodeWrapper);
+    navElementBuilder.addInnerElement(rightNavNodeWrapper);
+
     this.viewElementBuilder.addInnerElement(navElementBuilder);
-    const navWrapper = document.createElement('div');
-    navWrapper.classList.add('nav-wrapper');
-    navElementBuilder.addInnerElement(navWrapper);
 
-    const pages = [
-      {
-        name: HeaderTitle.MAIN,
-        callback: () => {},
-      },
-      {
-        name: HeaderTitle.CATALOG,
-        callback: () => {},
-      },
-      {
-        name: HeaderTitle.ACCOUNT,
-        callback: () => {},
-      },
-      {
-        name: HeaderTitle.ABOUT,
-        callback: () => {},
-      },
-      {
-        name: HeaderTitle.CART,
-        callback: () => {},
-      },
-      {
-        name: HeaderTitle.SIGNUP,
-        callback: () => {},
-      },
-      {
-        name: HeaderTitle.LOGIN,
-        callback: () => {},
-      },
-    ];
-
-    pages.forEach((page, id) => {
-      const linkElement: HeaderLink = new HeaderLink(page.name, this.linkElements);
-      navWrapper.append(linkElement.getHtmlElement() as HTMLElement);
-
-      this.linkElements.push(linkElement);
-      if (id === START_PAGE_ID) {
-        linkElement.setSelected();
+    Object.keys(HeaderTitle).forEach((key: string, index: number) => {
+      const linkParams: PageParams = {
+        name: HeaderTitle[key as keyof HeaderTitle] as string,
+        callback: () =>
+          router.navigate((HeaderTitle[key as keyof HeaderTitle] as string).replace(/ /g, '').toLowerCase()),
+      };
+      const linkElement: HeaderLink = new HeaderLink(linkParams, this.headerLinkElements);
+      if (index < NUM_OF_LEFT_NAV_TITLE) {
+        leftNavNodeWrapper.append(linkElement.getHtmlElement() as HTMLElement);
+      } else {
+        rightNavNodeWrapper.append(linkElement.getHtmlElement() as HTMLElement);
       }
+
+      this.headerLinkElements.set(HeaderTitle[key as keyof HeaderTitle] as string, linkElement);
     });
   }
 }

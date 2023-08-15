@@ -1,13 +1,12 @@
-import './main.scss';
 import { Params } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';
 
-export default class Main extends ComponentView {
+export default class SignUp extends ComponentView {
   constructor() {
     const params: Params = {
       tagName: 'section',
-      classNames: ['main-page'],
+      classNames: ['signup-page'],
       text: '',
       callback: null,
     };
@@ -18,8 +17,8 @@ export default class Main extends ComponentView {
   private configureView(): void {
     const titleParams: Params = {
       tagName: 'h1',
-      classNames: ['main-title'],
-      text: 'Main',
+      classNames: ['signup-title'],
+      text: 'Sign Up',
     };
     const titleElementBuilder: ElementBuilder = new ElementBuilder(titleParams);
 
