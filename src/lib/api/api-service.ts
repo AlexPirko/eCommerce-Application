@@ -1,5 +1,5 @@
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
-import { Client } from '@commercetools/sdk-client-v2';
+import { Client, TokenInfo } from '@commercetools/sdk-client-v2';
 import {
   ClientResponse,
   Customer,
@@ -11,6 +11,7 @@ import {
 import CtpClientBuilder from './api-client-builder';
 import { ctpParams } from './client-credemtials';
 import { generateAnonymousId } from '@lib/utils/create-random-id';
+import { setUserToken } from '@lib/utils/set-user-token';
 
 export default class ApiServices {
   private static _instance: ApiServices;
@@ -31,14 +32,12 @@ export default class ApiServices {
     const ctpClientBuilder: CtpClientBuilder = new CtpClientBuilder();
     ApiServices._ctpClient = ctpClientBuilder.createCtpClient(email, password);
     ApiServices._apiRoot = createApiBuilderFromCtpClient(ApiServices._ctpClient).withProjectKey({
-      projectKey: 'ecommerce-app',
+      projectKey: ctpParams.CTP_PROJECT_KEY,
     });
     console.log(ApiServices._apiRoot);
     console.log(ApiServices._ctpClient);
     return this;
   }
-
-  private setUserToken() {}
 
   public async createCustomer(body: CustomerDraft): Promise<ClientResponse<CustomerSignInResult> | void> {
     return ApiServices._apiRoot
@@ -46,7 +45,7 @@ export default class ApiServices {
       .post({
         body,
         headers: {
-          Authorization: 'Bearer GkmvS6vmloIJQepAGx7amwVbEdzogaAj',
+          Authorization: ApiServices._token,
           'Content-Type': 'application/json',
         },
       })
@@ -55,7 +54,7 @@ export default class ApiServices {
   }
 
   public async deleteCustomer(customerId: string, version: string): Promise<Customer> {
-    const response: Response = (await fetch(
+    const response: Response = await fetch(
       `https://${ctpParams.CTP_API_URL}ecommerce-app/customers/${customerId}?version=${version}`,
       {
         method: 'DELETE',
@@ -63,12 +62,12 @@ export default class ApiServices {
           Authorization: ApiServices._token, // 'Bearer GkmvS6vmloIJQepAGx7amwVbEdzogaAj',
         },
       }
-    ).catch(console.log)) as Response;
+    ).catch();
 
     return response.json();
   }
 
-  public getCustommer() {
+  public getCustomer() {
     console.log(ApiServices._ctpClient);
     console.log(ApiServices._apiRoot);
     return ApiServices._apiRoot
@@ -80,18 +79,14 @@ export default class ApiServices {
   }
 
   public getCurrentCustomer(): Promise<ClientResponse<Customer> | void> {
-    console.log(ApiServices._ctpClient);
-    console.log(ApiServices._apiRoot);
     return ApiServices._apiRoot.me().get().execute().catch(console.log);
   }
 
   public getProducts(): Promise<ClientResponse<ProductPagedQueryResponse> | void> {
-    console.log(ApiServices._ctpClient);
-    console.log(ApiServices._apiRoot);
     return ApiServices._apiRoot.products().get().execute().catch(console.log);
   }
 
-  public async getCustomerToken(email: string, password: string): Promise<Response> {
+  public async getCustomerToken(email: string, password: string): Promise<TokenInfo> {
     const projectKey: string = ctpParams.CTP_PROJECT_KEY;
     const response = (await fetch(`https://${ctpParams.CTP_AUTH_URL}/oauth/${projectKey}/customers/token`, {
       method: 'POST',
@@ -101,10 +96,11 @@ export default class ApiServices {
       },
       body: `grant_type=password&username=${email}&password=${password}&scope=view_published_products:${projectKey} manage_my_orders:${projectKey} manage_my_profile:${projectKey} manage_customers:${projectKey}`,
     }).catch(console.log)) as Response;
+    await setUserToken(response.json());
     return response.json();
   }
 
-  public async getAnonimousToken(): Promise<Response> {
+  public async getAnonimousToken(): Promise<TokenInfo> {
     const projectKey: string = ctpParams.CTP_PROJECT_KEY;
     const anonymousId = generateAnonymousId();
     const response = (await fetch(`https://${ctpParams.CTP_AUTH_URL}/oauth/token`, {
@@ -115,6 +111,7 @@ export default class ApiServices {
       },
       body: `grant_type=client_credentials&scope=view_published_products:${projectKey} manage_my_orders:${projectKey} manage_my_profile:${projectKey} manage_customers:${projectKey}&anonymous_id=${anonymousId}`,
     }).catch(console.log)) as Response;
+    await setUserToken(response.json());
     return response.json();
   }
 }
