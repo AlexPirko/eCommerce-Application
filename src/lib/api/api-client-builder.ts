@@ -5,29 +5,35 @@ import {
   Client,
   PasswordAuthMiddlewareOptions,
   RefreshAuthMiddlewareOptions,
+  TokenCache,
 } from '@commercetools/sdk-client-v2';
 import { ctpParams } from './client-credemtials';
 
 export default class CtpClientBuilder {
-  private static _ctpClient: Client | null;
-  constructor() {}
+  private _httpMiddlewareOptions: HttpMiddlewareOptions;
+  constructor() {
+    this._httpMiddlewareOptions = {
+      host: ctpParams.CTP_API_URL,
+      fetch,
+    };
+  }
 
-  public createCtpClient(email: string | null, password: string | null): Client {
+  public createCtpClient(email: string | null, password: string | null, currentTokenCache: TokenCache): Client {
     let ctpClient: Client;
     const refreshToken: string | null = localStorage.getItem('refreshToken');
 
     if (email && password) {
-      ctpClient = this.getCtpClientWithPasswordFlow(email, password);
+      ctpClient = this.getCtpClientWithPasswordFlow(email, password, currentTokenCache);
     } else if (refreshToken) {
-      ctpClient = this.getCtpClientWithRefrehToken(refreshToken);
+      ctpClient = this.getCtpClientWithRefrehToken(refreshToken, currentTokenCache);
     } else {
-      ctpClient = this.getCtpClientWithCredentialsFlow();
+      ctpClient = this.getCtpClientWithCredentialsFlow(currentTokenCache);
     }
     console.log(ctpClient);
     return ctpClient;
   }
 
-  private getCtpClientWithCredentialsFlow(): Client {
+  private getCtpClientWithCredentialsFlow(currentTokenCache: TokenCache): Client {
     console.log('withClientCredentials scope:\n');
 
     const authMiddlewareOptions: AuthMiddlewareOptions = {
@@ -37,26 +43,22 @@ export default class CtpClientBuilder {
         clientId: ctpParams.CTP_CLIENT_ID,
         clientSecret: ctpParams.CTP_CLIENT_SECRET,
       },
+      tokenCache: currentTokenCache,
       scopes: [ctpParams.CTP_SCOPES],
-      fetch,
-    };
-
-    const httpMiddlewareOptions: HttpMiddlewareOptions = {
-      host: ctpParams.CTP_API_URL,
       fetch,
     };
 
     const ctpClient = new ClientBuilder()
       .withProjectKey(ctpParams.CTP_PROJECT_KEY)
       .withClientCredentialsFlow(authMiddlewareOptions)
-      .withHttpMiddleware(httpMiddlewareOptions)
+      .withHttpMiddleware(this._httpMiddlewareOptions)
       .withLoggerMiddleware()
       .build();
 
     return ctpClient;
   }
 
-  private getCtpClientWithRefrehToken(refreshToken: string): Client {
+  private getCtpClientWithRefrehToken(refreshToken: string, currentTokenCache: TokenCache): Client {
     console.log('withRefrehToken scope:\n');
 
     const refreshAuthMiddlewareOptions: RefreshAuthMiddlewareOptions = {
@@ -66,25 +68,25 @@ export default class CtpClientBuilder {
         clientId: ctpParams.CTP_CLIENT_ID,
         clientSecret: ctpParams.CTP_CLIENT_SECRET,
       },
+      tokenCache: currentTokenCache,
       refreshToken: refreshToken,
-      fetch,
-    };
-
-    const httpMiddlewareOptions: HttpMiddlewareOptions = {
-      host: ctpParams.CTP_API_URL,
       fetch,
     };
 
     const ctpClient: Client = new ClientBuilder()
       .withRefreshTokenFlow(refreshAuthMiddlewareOptions)
-      .withHttpMiddleware(httpMiddlewareOptions)
+      .withHttpMiddleware(this._httpMiddlewareOptions)
       .withLoggerMiddleware()
       .build();
 
     return ctpClient;
   }
 
-  private getCtpClientWithPasswordFlow(customerEmail: string, customerPassword: string): Client {
+  private getCtpClientWithPasswordFlow(
+    customerEmail: string,
+    customerPassword: string,
+    tokenCache: TokenCache
+  ): Client {
     console.log('withPasswordFlow scope:\n');
 
     const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
@@ -98,19 +100,15 @@ export default class CtpClientBuilder {
           password: customerPassword,
         },
       },
+      tokenCache: tokenCache,
       scopes: [ctpParams.CTP_SCOPES],
-      fetch,
-    };
-
-    const httpMiddlewareOptions: HttpMiddlewareOptions = {
-      host: ctpParams.CTP_API_URL,
       fetch,
     };
 
     const ctpClient = new ClientBuilder()
       .withProjectKey(ctpParams.CTP_PROJECT_KEY)
       .withPasswordFlow(passwordAuthMiddlewareOptions)
-      .withHttpMiddleware(httpMiddlewareOptions)
+      .withHttpMiddleware(this._httpMiddlewareOptions)
       .withLoggerMiddleware()
       .build();
 
@@ -132,15 +130,10 @@ export default class CtpClientBuilder {
       fetch,
     };
 
-    const httpMiddlewareOptions: HttpMiddlewareOptions = {
-      host: ctpParams.CTP_API_URL,
-      fetch,
-    };
-
     const ctpClient = new ClientBuilder()
       .withProjectKey(ctpParams.CTP_PROJECT_KEY)
       .withAnonymousSessionFlow(authMiddlewareOptions)
-      .withHttpMiddleware(httpMiddlewareOptions)
+      .withHttpMiddleware(this._httpMiddlewareOptions)
       .withLoggerMiddleware()
       .build();
 
