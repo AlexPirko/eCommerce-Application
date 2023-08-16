@@ -12,15 +12,12 @@ import { ctpParams } from './client-credemtials';
 export default class CtpClientBuilder {
   private _httpMiddlewareOptions: HttpMiddlewareOptions;
   constructor() {
-    this._httpMiddlewareOptions = {
-      host: ctpParams.CTP_API_URL,
-      fetch,
-    };
+    this._httpMiddlewareOptions = { host: ctpParams.CTP_API_URL, fetch };
   }
 
   public createCtpClient(email: string | null, password: string | null, currentTokenCache: TokenCache): Client {
     let ctpClient: Client;
-    const refreshToken: string | null = localStorage.getItem('refreshToken');
+    const refreshToken: string | undefined = currentTokenCache.get().refreshToken;
 
     if (email && password) {
       ctpClient = this.getCtpClientWithPasswordFlow(email, password, currentTokenCache);
@@ -29,7 +26,6 @@ export default class CtpClientBuilder {
     } else {
       ctpClient = this.getCtpClientWithCredentialsFlow(currentTokenCache);
     }
-    console.log(ctpClient);
     return ctpClient;
   }
 

@@ -3,6 +3,7 @@ import { Client, TokenCache, TokenInfo } from '@commercetools/sdk-client-v2';
 import {
   ClientResponse,
   Customer,
+  CustomerCreateEmailToken,
   CustomerDraft,
   CustomerSignInResult,
   ProductPagedQueryResponse,
@@ -29,7 +30,7 @@ export default class ApiServices {
     return ApiServices._instance ?? (ApiServices._instance = this);
   }
 
-  public setNewApiClient(email: string | null = null, password: string | null = null): ApiServices {
+  public setApiClient(email: string | null = null, password: string | null = null): ApiServices {
     const ctpClientBuilder: CtpClientBuilder = new CtpClientBuilder();
     this._ctpClient = ctpClientBuilder.createCtpClient(email, password, this._tokenCache);
     this._apiRoot = createApiBuilderFromCtpClient(this._ctpClient).withProjectKey({
@@ -58,18 +59,17 @@ export default class ApiServices {
       {
         method: 'DELETE',
         headers: {
-          Authorization: this._tokenCache.get().token, // 'Bearer GkmvS6vmloIJQepAGx7amwVbEdzogaAj',
+          Authorization: this._tokenCache.get().token,
         },
       }
     ).catch((error) => error);
-
     return response.json();
   }
 
   public async getCustomer(customerId: string): Promise<Customer> {
     return this._apiRoot
       .customers()
-      .withId({ ID: customerId }) //'42ac197d-c4be-4075-a766-158dc7f7c630'
+      .withId({ ID: customerId })
       .get()
       .execute()
       .catch((error) => error);
@@ -85,7 +85,7 @@ export default class ApiServices {
 
   public async getProducts(): Promise<ClientResponse<ProductPagedQueryResponse>> {
     return this._apiRoot
-      ?.products()
+      .products()
       .get()
       .execute()
       .catch((error) => error);
@@ -122,5 +122,16 @@ export default class ApiServices {
 
   public getTokenCache() {
     return this._tokenCache;
+  }
+
+  public async verifyEmail(customerCreateEmailData: CustomerCreateEmailToken): Promise<void> {
+    return this._apiRoot
+      .customers()
+      .emailToken()
+      .post({
+        body: customerCreateEmailData,
+      })
+      .execute()
+      .catch((error) => error);
   }
 }
