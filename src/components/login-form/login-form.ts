@@ -96,7 +96,6 @@ export class LoginForm {
     const link: HTMLAnchorElement = document.createElement('a');
     link.setAttribute('href', `http://${window.location.host}/${redirectText}`);
     link.textContent = 'here';
-    console.log(this.linkText);
     text.append(link);
     return text;
   }
