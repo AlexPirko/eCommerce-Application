@@ -22,6 +22,7 @@ export default class Login extends ComponentView {
         descText: 'Please enter your email and password',
         btnText: 'log in',
         linkText: "Don't have an account ? Register ",
+        redirectText: 'signup',
         onSubmit: () => console.log('submit'),
       }).createForm()
     );

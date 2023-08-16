@@ -22,6 +22,7 @@ export default class SignUp extends ComponentView {
         descText: 'Please fill the fields',
         btnText: 'Register',
         linkText: 'Already have an account ? Login ',
+        redirectText: 'login',
         onSubmit: () => console.log('submit'),
       }).createForm()
     );
