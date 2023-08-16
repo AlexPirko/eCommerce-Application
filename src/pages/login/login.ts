@@ -1,12 +1,13 @@
+import './login-page.scss';
 import { Params } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
-import ElementBuilder from '@lib/services/element-builder';
+import { LoginForm } from '@components/login-form/login-form';
 
 export default class Login extends ComponentView {
   constructor() {
     const params: Params = {
       tagName: 'section',
-      classNames: ['login-page'],
+      classNames: ['login-wrapper'],
       text: '',
       callback: null,
     };
@@ -15,13 +16,14 @@ export default class Login extends ComponentView {
   }
 
   private configureView(): void {
-    const titleParams: Params = {
-      tagName: 'h1',
-      classNames: ['login-title'],
-      text: 'Login',
-    };
-    const titleElementBuilder: ElementBuilder = new ElementBuilder(titleParams);
-
-    this.viewElementBuilder.addInnerElement(titleElementBuilder);
+    this.viewElementBuilder.addInnerElement(
+      new LoginForm({
+        titleText: 'Log in',
+        descText: 'Please enter your email and password',
+        btnText: 'log in',
+        linkText: "Don't have an account ? Register ",
+        onSubmit: () => console.log('submit'),
+      }).createForm()
+    );
   }
 }

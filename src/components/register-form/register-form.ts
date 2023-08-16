@@ -1,8 +1,8 @@
-import './RegisterForm.scss';
-import InputBlock from '../input/InputBlock';
+import './register-form.scss';
+import InputBlock from '../common/input/Input-block';
 import { IForm } from 'src/lib/types/interfaces';
 import { textInputs } from 'src/lib/types/enum';
-import { LoginForm } from '../signinForm/LoginForm';
+import { LoginForm } from '../login-form/login-form';
 import { validate } from 'src/lib/utils/validate';
 export class RegisterForm extends LoginForm {
   constructor({ titleText, descText, btnText, linkText, onSubmit }: IForm) {

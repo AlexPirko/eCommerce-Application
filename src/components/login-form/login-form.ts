@@ -1,6 +1,5 @@
-/* eslint-disable max-lines-per-function */
-import './LoginForm.scss';
-import InputBlock from '../input/InputBlock';
+import './login-form.scss';
+import InputBlock from '../common/input/Input-block';
 import { IForm } from 'src/lib/types/interfaces';
 
 export class LoginForm {
@@ -93,7 +92,7 @@ export class LoginForm {
     const text: HTMLParagraphElement = document.createElement('p');
     text.textContent = this.linkText;
     const link: HTMLAnchorElement = document.createElement('a');
-    link.setAttribute('href', '#');
+    link.setAttribute('href', 'http://localhost:8080/signup');
     link.textContent = 'here';
     text.append(link);
     return text;
