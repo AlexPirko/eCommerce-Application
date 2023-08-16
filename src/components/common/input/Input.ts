@@ -1,5 +1,5 @@
 import './input.scss';
-import { IInput } from 'src/lib/types/interfaces';
+import { IInput } from '@lib/types/input-interface';
 import { validate } from 'src/lib/utils/validate';
 export class Input {
   protected type: string;

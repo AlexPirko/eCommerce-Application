@@ -1,6 +1,6 @@
 import './login-form.scss';
 import InputBlock from '../common/input/Input-block';
-import { IForm } from 'src/lib/types/interfaces';
+import { IForm } from '@lib/types/input-interface';
 
 export class LoginForm {
   protected titleText: string;

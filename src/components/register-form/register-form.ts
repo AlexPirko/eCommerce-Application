@@ -1,6 +1,6 @@
 import './register-form.scss';
 import InputBlock from '../common/input/Input-block';
-import { IForm } from 'src/lib/types/interfaces';
+import { IForm } from '@lib/types/input-interface';
 import { textInputs } from 'src/lib/types/enum';
 import { LoginForm } from '../login-form/login-form';
 import { validate } from 'src/lib/utils/validate';

@@ -1,6 +1,6 @@
 import './input.scss';
 import { Input } from './Input';
-import { IInputBlock } from 'src/lib/types/interfaces';
+import { IInputBlock } from '@lib/types/input-interface';
 
 export default class InputBlock extends Input {
   private label: string;
