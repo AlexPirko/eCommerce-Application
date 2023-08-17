@@ -16,10 +16,10 @@ const baseConfig = {
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/source',
+        type: 'asset/resource',
       },
       {
-        test: /\.(png|jpg|svg)$/,
+        test: /.(png|jpg|svg)$/,
         loader: 'url-loader',
         type: 'javascript/auto',
       },
@@ -44,7 +44,7 @@ const baseConfig = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
-    plugins: [new TsconfigPathsPlugin({})]
+    plugins: [new TsconfigPathsPlugin({})],
   },
   output: {
     filename: 'index.js',
