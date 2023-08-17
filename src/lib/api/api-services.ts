@@ -1,5 +1,5 @@
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
-import { Client, TokenCache, TokenInfo } from '@commercetools/sdk-client-v2';
+import { Client, TokenCache } from '@commercetools/sdk-client-v2';
 import {
   ClientResponse,
   Customer,
@@ -11,15 +11,13 @@ import {
 } from '@commercetools/platform-sdk';
 import CtpClientBuilder from './api-client-builder';
 import { ctpParams } from './client-credemtials';
-import { generateAnonymousId } from '@lib/utils/create-random-id';
-import { setUserToken } from '@lib/utils/set-user-token';
 import ClientTokenCache from './token-cache';
 
 export default class ApiServices {
   private static _instance: ApiServices;
   private _ctpClient: Client;
   private _apiRoot: ByProjectKeyRequestBuilder;
-  private _tokenCache: TokenCache;
+  private _tokenCache: ClientTokenCache;
 
   constructor() {
     this._tokenCache = new ClientTokenCache();
@@ -91,36 +89,7 @@ export default class ApiServices {
       .catch((error) => error);
   }
 
-  public async getCustomerToken(email: string, password: string): Promise<TokenInfo> {
-    const projectKey: string = ctpParams.CTP_PROJECT_KEY;
-    const response = await fetch(`https://${ctpParams.CTP_AUTH_URL}/oauth/${projectKey}/customers/token`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: 'Basic ' + btoa(`${ctpParams.CTP_CLIENT_ID}:${ctpParams.CTP_CLIENT_SECRET}`),
-      },
-      body: `grant_type=password&username=${email}&password=${password}&scope=view_published_products:${projectKey} manage_my_orders:${projectKey} manage_my_profile:${projectKey} manage_customers:${projectKey}`,
-    }).catch((error) => error);
-    await setUserToken(response.json());
-    return response.json();
-  }
-
-  public async getAnonimousToken(): Promise<TokenInfo> {
-    const projectKey: string = ctpParams.CTP_PROJECT_KEY;
-    const anonymousId = generateAnonymousId();
-    const response = await fetch(`https://${ctpParams.CTP_AUTH_URL}/oauth/token`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: 'Basic ' + btoa(`${ctpParams.CTP_CLIENT_ID}:${ctpParams.CTP_CLIENT_SECRET}`),
-      },
-      body: `grant_type=client_credentials&scope=view_published_products:${projectKey} manage_my_orders:${projectKey} manage_my_profile:${projectKey} manage_customers:${projectKey}&anonymous_id=${anonymousId}`,
-    }).catch((error) => error);
-    await setUserToken(response.json());
-    return response.json();
-  }
-
-  public getTokenCache() {
+  public getTokenCache(): TokenCache {
     return this._tokenCache;
   }
 

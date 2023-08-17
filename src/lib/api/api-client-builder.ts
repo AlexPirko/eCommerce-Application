@@ -44,7 +44,7 @@ export default class CtpClientBuilder {
       fetch,
     };
 
-    const ctpClient = new ClientBuilder()
+    const ctpClient: Client = new ClientBuilder()
       .withProjectKey(ctpParams.CTP_PROJECT_KEY)
       .withClientCredentialsFlow(authMiddlewareOptions)
       .withHttpMiddleware(this._httpMiddlewareOptions)
@@ -101,7 +101,7 @@ export default class CtpClientBuilder {
       fetch,
     };
 
-    const ctpClient = new ClientBuilder()
+    const ctpClient: Client = new ClientBuilder()
       .withProjectKey(ctpParams.CTP_PROJECT_KEY)
       .withPasswordFlow(passwordAuthMiddlewareOptions)
       .withHttpMiddleware(this._httpMiddlewareOptions)
@@ -126,7 +126,7 @@ export default class CtpClientBuilder {
       fetch,
     };
 
-    const ctpClient = new ClientBuilder()
+    const ctpClient: Client = new ClientBuilder()
       .withProjectKey(ctpParams.CTP_PROJECT_KEY)
       .withAnonymousSessionFlow(authMiddlewareOptions)
       .withHttpMiddleware(this._httpMiddlewareOptions)
