@@ -1,20 +1,21 @@
-/* eslint-disable max-lines-per-function */
-import './LoginForm.scss';
-import InputBlock from '../input/InputBlock';
-import { IForm } from 'src/lib/types/interfaces';
+import './login-form.scss';
+import InputBlock from '../common/input/Input-block';
+import { IForm } from '@lib/types/input-interface';
 
 export class LoginForm {
   protected titleText: string;
   protected descText: string;
   protected btnText: string;
   protected linkText: string;
+  protected redirectText: string;
   protected onSubmit: () => void;
 
-  constructor({ titleText, descText, btnText, linkText, onSubmit }: IForm) {
+  constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
     this.titleText = titleText;
     this.descText = descText;
     this.btnText = btnText;
     this.linkText = linkText;
+    this.redirectText = redirectText;
     this.onSubmit = onSubmit;
   }
 
@@ -75,7 +76,7 @@ export class LoginForm {
       emailInput.create,
       passwordInput.create,
       this.createSubmitBtn(),
-      this.registerLink()
+      this.registerLink(this.redirectText)
     );
 
     form.addEventListener('submit', (ev: SubmitEvent): void => {
@@ -89,11 +90,11 @@ export class LoginForm {
     return form;
   }
 
-  protected registerLink(): HTMLParagraphElement {
+  protected registerLink(redirectText: string): HTMLParagraphElement {
     const text: HTMLParagraphElement = document.createElement('p');
     text.textContent = this.linkText;
     const link: HTMLAnchorElement = document.createElement('a');
-    link.setAttribute('href', '#');
+    link.setAttribute('href', `http://${window.location.host}/${redirectText}`);
     link.textContent = 'here';
     text.append(link);
     return text;

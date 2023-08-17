@@ -11,6 +11,7 @@ export interface IForm {
   descText: string;
   btnText: string;
   linkText: string;
+  redirectText: string;
   onSubmit: () => void;
 }
 

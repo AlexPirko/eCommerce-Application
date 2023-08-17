@@ -1,12 +1,12 @@
-import './RegisterForm.scss';
-import InputBlock from '../input/InputBlock';
-import { IForm } from 'src/lib/types/interfaces';
+import './register-form.scss';
+import InputBlock from '../common/input/Input-block';
+import { IForm } from '@lib/types/input-interface';
 import { textInputs } from 'src/lib/types/enum';
-import { LoginForm } from '../signinForm/LoginForm';
+import { LoginForm } from '../login-form/login-form';
 import { validate } from 'src/lib/utils/validate';
 export class RegisterForm extends LoginForm {
-  constructor({ titleText, descText, btnText, linkText, onSubmit }: IForm) {
-    super({ titleText, descText, btnText, linkText, onSubmit });
+  constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
+    super({ titleText, descText, btnText, linkText, redirectText, onSubmit });
   }
 
   public createForm(): HTMLFormElement {
@@ -36,7 +36,7 @@ export class RegisterForm extends LoginForm {
       this.userInfo(),
       this.address(),
       this.createSubmitBtn(),
-      this.registerLink()
+      this.registerLink(this.redirectText)
     );
     form.addEventListener('submit', (ev: SubmitEvent): void => {
       ev.preventDefault();
