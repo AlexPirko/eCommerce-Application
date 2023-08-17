@@ -6,6 +6,7 @@ import {
   CustomerCreateEmailToken,
   CustomerDraft,
   CustomerSignInResult,
+  MyCustomerSignin,
   ProductPagedQueryResponse,
   createApiBuilderFromCtpClient,
 } from '@commercetools/platform-sdk';
@@ -37,11 +38,11 @@ export default class ApiServices {
     return this;
   }
 
-  public async createCustomer(body: CustomerDraft): Promise<ClientResponse<CustomerSignInResult>> {
+  public async createCustomer(customerData: CustomerDraft): Promise<ClientResponse<CustomerSignInResult>> {
     return this._apiRoot
       .customers()
       .post({
-        body,
+        body: customerData,
         headers: {
           Authorization: this._tokenCache.get().token,
           'Content-Type': 'application/json',
@@ -102,5 +103,9 @@ export default class ApiServices {
       })
       .execute()
       .catch((error) => error);
+  }
+
+  public async customerLogin(customerData: MyCustomerSignin) {
+    return this._apiRoot.me().login().post({ body: customerData }).execute();
   }
 }
