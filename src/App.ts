@@ -16,8 +16,10 @@ export default class App {
   private router: Router;
   private pageContainer: PageContainer | null;
   private header: Header | null;
+  private _apiServices: ApiServices;
 
   constructor() {
+    this._apiServices = new ApiServices();
     this.pageContainer = null;
     this.header = null;
 
@@ -90,6 +92,6 @@ export default class App {
     this.header?.setSelectedLink(page);
     this.pageContainer?.addCurrentPage(component);
   }
-
+  
   public run(): void {}
 }
