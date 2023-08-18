@@ -47,8 +47,10 @@ const baseConfig = {
     plugins: [new TsconfigPathsPlugin({})],
   },
   output: {
-    filename: 'index.js',
+    filename: '[name].js',
+    chunkFilename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   plugins: [
     new HtmlWebpackPlugin({

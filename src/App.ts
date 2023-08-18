@@ -94,5 +94,14 @@ export default class App {
     this.pageContainer?.addCurrentPage(component);
   }
 
-  public run(): void {}
+  public run(): void {
+    this._apiServices.createCustomer({
+      email: 'alex2@example.com',
+      password: '2password',
+      firstName: 'Alex',
+      lastName: 'Al',
+      dateOfBirth: '2018-10-12',
+      addresses: [{ country: 'EG', city: 'Kair', streetName: 'Avenue', streetNumber: '11', postalCode: '23456' }],
+    });
+  }
 }
