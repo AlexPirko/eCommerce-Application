@@ -1,7 +1,8 @@
 import './login-form.scss';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
-
+import ApiServices from '@lib/api/api-services';
+import Toastify from 'toastify';
 export class LoginForm {
   protected titleText: string;
   protected descText: string;
@@ -50,6 +51,7 @@ export class LoginForm {
     return valid;
   }
 
+  // eslint-disable-next-line max-lines-per-function
   public createForm(): HTMLFormElement {
     const form: HTMLFormElement = document.createElement('form');
     form.classList.add('form');
@@ -79,12 +81,33 @@ export class LoginForm {
       this.registerLink(this.redirectText)
     );
 
-    form.addEventListener('submit', (ev: SubmitEvent): void => {
+    // eslint-disable-next-line max-lines-per-function
+    form.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
       ev.preventDefault();
       const isValid: boolean = this.validateForm(form);
       if (isValid) {
-        console.log('validation complete');
-        this.onSubmit();
+        const formData: FormData = new FormData(form);
+        const email: string = String(formData.get('email'));
+        const password: string = String(formData.get('password'));
+
+        const api = new ApiServices();
+        if (email !== undefined && password !== undefined) {
+          api
+            .customerLogin({ email, password })
+            .then((res) => {
+              console.log(res);
+              // if (res.statusCode !== undefined && res.statusCode >= 400 && res.statusCode < 500) console.log(res);
+              // else {
+              //   console.log(res);
+              // }
+              this.onSubmit();
+            })
+            .catch((error) => {
+              console.log(error.message);
+              Toastify.success(error.message, '');
+              Toastify.setOption('position', 'top-right');
+            });
+        }
       }
     });
     return form;
