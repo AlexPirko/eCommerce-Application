@@ -2,6 +2,7 @@ import '@assets/styles/global.scss';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 import Header from '@layouts/header/header';
+import ApiServices from '@lib/api/api-services';
 import ComponentView from '@lib/services/component-view';
 import { RouteParams } from '@lib/types/params-interface';
 import Catalog from '@pages/catalog/catalog';
@@ -16,8 +17,10 @@ export default class App {
   private router: Router;
   private pageContainer: PageContainer | null;
   private header: Header | null;
+  private _apiServices: ApiServices;
 
   constructor() {
+    this._apiServices = new ApiServices();
     this.pageContainer = null;
     this.header = null;
 
