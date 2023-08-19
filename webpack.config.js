@@ -11,6 +11,13 @@ const baseConfig = {
     rules: [
       { test: /\.ts$/i, use: 'ts-loader' },
       {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      },
+      {
         test: /\.scss$/i,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
