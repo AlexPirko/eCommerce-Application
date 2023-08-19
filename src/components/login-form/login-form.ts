@@ -89,13 +89,13 @@ export class LoginForm {
     return form;
   }
 
-  public submitForm(form: HTMLFormElement) {
+  public submitForm(form: HTMLFormElement): void {
     const isValid: boolean = this.validateForm(form);
     if (isValid) {
       const formData: FormData = new FormData(form);
       const email: string = String(formData.get('email'));
       const password: string = String(formData.get('password'));
-      const api = new ApiServices();
+      const api: ApiServices = new ApiServices();
 
       if (email !== undefined && password !== undefined) {
         api
