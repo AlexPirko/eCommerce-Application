@@ -13,7 +13,7 @@ export class LoginForm {
   protected onSubmit: () => void;
 
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
-    this.form = makeElement<HTMLFormElement>('form', ['form'], { novalidate: '' });
+    this.form = makeElement('form', ['form'], { novalidate: '' });
     this.titleText = titleText;
     this.descText = descText;
     this.btnText = btnText;

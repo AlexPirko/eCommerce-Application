@@ -46,8 +46,8 @@ export default class Header extends ComponentView {
       callback: null,
     };
     const navElementBuilder: ElementBuilder = new ElementBuilder(navParams);
-    const leftNavNodeWrapper: HTMLElement = makeElement('div', ['left-node__wrapper']);
-    const rightNavNodeWrapper: HTMLElement = makeElement('div', ['right-node__wrapper']);
+    const leftNavNodeWrapper: HTMLDivElement = makeElement('div', ['left-node__wrapper']);
+    const rightNavNodeWrapper: HTMLDivElement = makeElement('div', ['right-node__wrapper']);
     const NUM_OF_LEFT_NAV_TITLE = 4;
     navElementBuilder.addInnerElement(leftNavNodeWrapper);
     navElementBuilder.addInnerElement(rightNavNodeWrapper);
