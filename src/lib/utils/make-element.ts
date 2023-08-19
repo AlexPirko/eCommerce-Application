@@ -1,5 +1,6 @@
-export default function makeElement(elem: string, className: string[]): HTMLElement {
+export default function makeElement<T>(elem: string, className: string[], attribute?: Record<string, string>): T {
   const element: HTMLElement = document.createElement(elem);
   element.classList.add(...className);
-  return element;
+  if (attribute) Object.keys(attribute).forEach((item) => element.setAttribute(item, attribute.item));
+  return element as T;
 }

@@ -1,8 +1,10 @@
 import './login-form.scss';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
+import makeElement from '@lib/utils/make-element';
 
 export class LoginForm {
+  protected readonly form: HTMLFormElement;
   protected titleText: string;
   protected descText: string;
   protected btnText: string;
@@ -11,12 +13,14 @@ export class LoginForm {
   protected onSubmit: () => void;
 
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
+    this.form = makeElement<HTMLFormElement>('form', ['form'], { novalidate: '' });
     this.titleText = titleText;
     this.descText = descText;
     this.btnText = btnText;
     this.linkText = linkText;
     this.redirectText = redirectText;
     this.onSubmit = onSubmit;
+    this.feedForm();
   }
 
   protected createSubmitBtn(): HTMLButtonElement {
@@ -38,6 +42,40 @@ export class LoginForm {
     return fragment;
   }
 
+  protected createInputElements(): { emailInput: HTMLDivElement; passwordInput: HTMLDivElement } {
+    const emailInput: HTMLDivElement = new InputBlock({
+      type: 'email',
+      id: 3,
+      label: 'Email',
+      classNames: [''],
+      placeholder: 'Enter your email',
+      value: '',
+    }).create;
+
+    const passwordInput: HTMLDivElement = new InputBlock({
+      type: 'password',
+      id: 4,
+      label: 'Password',
+      classNames: [''],
+      placeholder: 'Enter your password',
+      value: '',
+    }).create;
+
+    return { emailInput, passwordInput };
+  }
+
+  protected feedForm(): void {
+    const { emailInput, passwordInput } = this.createInputElements();
+
+    this.form.append(
+      this.createFormTitle(),
+      emailInput,
+      passwordInput,
+      this.createSubmitBtn(),
+      this.registerLink(this.redirectText)
+    );
+  }
+
   protected validateForm(form: HTMLFormElement): boolean {
     const inputs: NodeListOf<HTMLInputElement> = form.querySelectorAll('input');
     let valid: boolean = true;
@@ -50,44 +88,15 @@ export class LoginForm {
     return valid;
   }
 
-  public createForm(): HTMLFormElement {
-    const form: HTMLFormElement = document.createElement('form');
-    form.classList.add('form');
-    form.setAttribute('novalidate', '');
-    const emailInput: InputBlock = new InputBlock({
-      type: 'email',
-      id: 3,
-      label: 'Email',
-      classNames: [''],
-      placeholder: 'Enter your email',
-      value: '',
-    });
-    const passwordInput: InputBlock = new InputBlock({
-      type: 'password',
-      id: 4,
-      label: 'Password',
-      classNames: [''],
-      placeholder: 'Enter your password',
-      value: '',
-    });
-
-    form.append(
-      this.createFormTitle(),
-      emailInput.create,
-      passwordInput.create,
-      this.createSubmitBtn(),
-      this.registerLink(this.redirectText)
-    );
-
-    form.addEventListener('submit', (ev: SubmitEvent): void => {
+  protected setFormSubmitEventHandler() {
+    this.form.addEventListener('submit', (ev: SubmitEvent): void => {
       ev.preventDefault();
-      const isValid: boolean = this.validateForm(form);
+      const isValid: boolean = this.validateForm(this.form);
       if (isValid) {
         console.log('validation complete');
         this.onSubmit();
       }
     });
-    return form;
   }
 
   protected registerLink(redirectText: string): HTMLParagraphElement {
@@ -98,5 +107,9 @@ export class LoginForm {
     link.textContent = 'here';
     text.append(link);
     return text;
+  }
+
+  public getElement() {
+    return this.form;
   }
 }

@@ -1,7 +1,7 @@
 import './register-form.scss';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
-import { textInputs } from 'src/lib/types/enum';
+import { addressTypes, textInputs } from 'src/lib/types/enum';
 import { LoginForm } from '../login-form/login-form';
 import { validate } from 'src/lib/utils/validate';
 export class RegisterForm extends LoginForm {
@@ -9,45 +9,19 @@ export class RegisterForm extends LoginForm {
     super({ titleText, descText, btnText, linkText, redirectText, onSubmit });
   }
 
-  public createForm(): HTMLFormElement {
-    const form: HTMLFormElement = document.createElement('form');
-    form.classList.add('form');
-    form.setAttribute('novalidate', '');
-    const emailInput: InputBlock = new InputBlock({
-      type: 'email',
-      id: 3,
-      label: 'Email',
-      classNames: [''],
-      placeholder: 'Enter your email',
-      value: '',
-    });
-    const passwordInput: InputBlock = new InputBlock({
-      type: 'password',
-      id: 4,
-      label: 'Password',
-      classNames: [''],
-      placeholder: 'Enter your password',
-      value: '',
-    });
-    form.append(
+  protected feedForm(): void {
+    const { emailInput, passwordInput } = this.createInputElements();
+
+    this.form.append(
       this.createFormTitle(),
-      emailInput.create,
-      passwordInput.create,
+      emailInput,
+      passwordInput,
       this.userInfo(),
-      this.address('Billing'),
-      this.address('Shipping'),
+      this.address(addressTypes.BILLING),
+      this.address(addressTypes.SHIPPING),
       this.createSubmitBtn(),
       this.registerLink(this.redirectText)
     );
-    form.addEventListener('submit', (ev: SubmitEvent): void => {
-      ev.preventDefault();
-      const isValid: boolean = this.validateForm(form);
-      if (isValid) {
-        console.log('validation complete');
-        this.onSubmit();
-      }
-    });
-    return form;
   }
 
   private address(addressType: string): HTMLDivElement {
@@ -169,7 +143,7 @@ export class RegisterForm extends LoginForm {
     wrapper.classList.add('address__options');
 
     wrapper.append(setAsDefaultCheckbox);
-    if (addressType === 'Billing') wrapper.append(setaAsShippingCheckbox);
+    if (addressType === addressTypes.BILLING) wrapper.append(setaAsShippingCheckbox);
 
     return wrapper;
   }
