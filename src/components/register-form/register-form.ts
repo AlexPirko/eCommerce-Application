@@ -34,7 +34,8 @@ export class RegisterForm extends LoginForm {
       emailInput.create,
       passwordInput.create,
       this.userInfo(),
-      this.address(),
+      this.address('Billing'),
+      this.address('Shipping'),
       this.createSubmitBtn(),
       this.registerLink(this.redirectText)
     );
@@ -49,10 +50,12 @@ export class RegisterForm extends LoginForm {
     return form;
   }
 
-  private address(): HTMLDivElement {
+  private address(addressType: string): HTMLDivElement {
     const wrapper: HTMLDivElement = document.createElement('div');
-    wrapper.classList.add('addressWrapper');
-
+    wrapper.classList.add('address-wrapper', `address__${addressType.toLowerCase()}`);
+    const header: HTMLHeadingElement = document.createElement('h4');
+    header.classList.add(`${addressType.toLowerCase()}-address__header`);
+    header.innerHTML = `${addressType} address`;
     const streetInput: InputBlock = new InputBlock({
       type: 'text',
       id: 8,
@@ -61,7 +64,6 @@ export class RegisterForm extends LoginForm {
       placeholder: 'Street',
       value: '',
     });
-
     const cityInput: InputBlock = new InputBlock({
       type: 'text',
       id: 9,
@@ -78,8 +80,16 @@ export class RegisterForm extends LoginForm {
       placeholder: 'Postal Code',
       value: '',
     });
-
-    wrapper.append(streetInput.create, cityInput.create, postalInput.create, this.countries());
+    const countriesCheckBox: HTMLDivElement = this.countries(addressType);
+    const addressCheckboxes: HTMLDivElement = this.getAddressCheckboxes(addressType);
+    wrapper.append(
+      header,
+      streetInput.create,
+      cityInput.create,
+      postalInput.create,
+      countriesCheckBox,
+      addressCheckboxes
+    );
     return wrapper;
   }
 
@@ -115,7 +125,7 @@ export class RegisterForm extends LoginForm {
     return fragment;
   }
 
-  private countries(): HTMLDivElement {
+  private countries(addressType: string): HTMLDivElement {
     const wrapper: HTMLDivElement = document.createElement('div');
     const label1: HTMLLabelElement = document.createElement('label');
     const label2: HTMLLabelElement = document.createElement('label');
@@ -124,11 +134,11 @@ export class RegisterForm extends LoginForm {
     const span1: HTMLSpanElement = document.createElement('span');
     const span2: HTMLSpanElement = document.createElement('span');
 
-    input1.setAttribute('name', 'country');
+    input1.setAttribute('name', `${addressType.toLowerCase()}-country`);
     input1.setAttribute('type', 'radio');
     input1.setAttribute('checked', 'true');
 
-    input2.setAttribute('name', 'country');
+    input2.setAttribute('name', `${addressType.toLowerCase()}-country`);
     input2.setAttribute('type', 'radio');
 
     function onChange(): void {
@@ -148,6 +158,66 @@ export class RegisterForm extends LoginForm {
     label2.append(input2, span2);
 
     wrapper.append(label1, label2);
+    return wrapper;
+  }
+
+  private getAddressCheckboxes(addressType: string) {
+    const wrapper: HTMLDivElement = document.createElement('div');
+    const setAsDefaultCheckbox: HTMLDivElement = this.getDefaultAddressCheckbox(addressType);
+    const setaAsShippingCheckbox: HTMLDivElement = this.getUseAsShippingCheckbox();
+
+    wrapper.classList.add('address__options');
+
+    wrapper.append(setAsDefaultCheckbox);
+    if (addressType === 'Billing') wrapper.append(setaAsShippingCheckbox);
+
+    return wrapper;
+  }
+
+  private getUseAsShippingCheckbox(): HTMLDivElement {
+    const wrapper: HTMLDivElement = document.createElement('div');
+    wrapper.classList.add('address__use-as-shipping');
+    const label: HTMLLabelElement = document.createElement('label');
+    const input: HTMLInputElement = document.createElement('input');
+    const span: HTMLSpanElement = document.createElement('span');
+
+    input.setAttribute('name', `use-as-shipping`);
+    input.setAttribute('type', 'checkbox');
+    input.checked = false;
+    input.classList.add('filled-in');
+
+    span.textContent = `Use as shipping address`;
+
+    input.addEventListener('change', function () {
+      const shippingAddressContainer: HTMLDivElement | null = document.querySelector('.address__shipping');
+      if (shippingAddressContainer) {
+        shippingAddressContainer.style.display = this.checked ? 'none' : 'flex';
+      }
+    });
+
+    label.append(input, span);
+
+    wrapper.append(label);
+    return wrapper;
+  }
+
+  private getDefaultAddressCheckbox(addressType: string): HTMLDivElement {
+    const wrapper: HTMLDivElement = document.createElement('div');
+    wrapper.classList.add('default-adress', 'switch');
+
+    const label: HTMLLabelElement = document.createElement('label');
+    const input: HTMLInputElement = document.createElement('input');
+    const span: HTMLSpanElement = document.createElement('span');
+
+    input.setAttribute('name', `${addressType.toLowerCase()}-address`);
+    input.setAttribute('type', 'checkbox');
+    input.setAttribute('checked', 'false');
+
+    span.classList.add('lever');
+
+    label.append(input, span, `Set as default address`);
+
+    wrapper.append(label);
     return wrapper;
   }
 }
