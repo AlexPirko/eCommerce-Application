@@ -2,7 +2,9 @@ import './login-form.scss';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
 import ApiServices from '@lib/api/api-services';
-import Toastify from 'toastify';
+import M from 'materialize-css'; // Импорт объекта M из библиотеки Materialize
+import 'materialize-css/dist/css/materialize.min.css';
+
 export class LoginForm {
   protected titleText: string;
   protected descText: string;
@@ -51,7 +53,6 @@ export class LoginForm {
     return valid;
   }
 
-  // eslint-disable-next-line max-lines-per-function
   public createForm(): HTMLFormElement {
     const form: HTMLFormElement = document.createElement('form');
     form.classList.add('form');
@@ -81,36 +82,34 @@ export class LoginForm {
       this.registerLink(this.redirectText)
     );
 
-    // eslint-disable-next-line max-lines-per-function
     form.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
       ev.preventDefault();
-      const isValid: boolean = this.validateForm(form);
-      if (isValid) {
-        const formData: FormData = new FormData(form);
-        const email: string = String(formData.get('email'));
-        const password: string = String(formData.get('password'));
-
-        const api = new ApiServices();
-        if (email !== undefined && password !== undefined) {
-          api
-            .customerLogin({ email, password })
-            .then((res) => {
-              console.log(res);
-              // if (res.statusCode !== undefined && res.statusCode >= 400 && res.statusCode < 500) console.log(res);
-              // else {
-              //   console.log(res);
-              // }
-              this.onSubmit();
-            })
-            .catch((error) => {
-              console.log(error.message);
-              Toastify.success(error.message, '');
-              Toastify.setOption('position', 'top-right');
-            });
-        }
-      }
+      this.submitForm(form);
     });
     return form;
+  }
+
+  public submitForm(form: HTMLFormElement) {
+    const isValid: boolean = this.validateForm(form);
+    if (isValid) {
+      const formData: FormData = new FormData(form);
+      const email: string = String(formData.get('email'));
+      const password: string = String(formData.get('password'));
+      const api = new ApiServices();
+
+      if (email !== undefined && password !== undefined) {
+        api
+          .customerLogin({ email, password })
+          .then((res) => {
+            console.log(res);
+            this.onSubmit();
+          })
+          .catch((error) => {
+            M.AutoInit();
+            M.toast({ html: error.message, classes: 'rounded' });
+          });
+      }
+    }
   }
 
   protected registerLink(redirectText: string): HTMLParagraphElement {
