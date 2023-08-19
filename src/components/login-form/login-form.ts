@@ -1,7 +1,7 @@
 import './login-form.scss';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
-import makeElement from '@lib/utils/make-element';
+import createHTMLElement from '@lib/utils/create-html-element';
 
 export class LoginForm {
   protected readonly form: HTMLFormElement;
@@ -13,7 +13,7 @@ export class LoginForm {
   protected onSubmit: () => void;
 
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
-    this.form = makeElement('form', ['form'], { novalidate: '' });
+    this.form = createHTMLElement('form', ['form'], { novalidate: '' });
     this.titleText = titleText;
     this.descText = descText;
     this.btnText = btnText;

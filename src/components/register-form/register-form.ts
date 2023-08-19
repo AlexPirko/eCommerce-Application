@@ -136,21 +136,21 @@ export class RegisterForm extends LoginForm {
   }
 
   private getAddressCheckboxes(addressType: string) {
-    const wrapper: HTMLDivElement = document.createElement('div');
+    const container: HTMLDivElement = document.createElement('div');
     const setAsDefaultCheckbox: HTMLDivElement = this.getDefaultAddressCheckbox(addressType);
     const setaAsShippingCheckbox: HTMLDivElement = this.getUseAsShippingCheckbox();
 
-    wrapper.classList.add('address__options');
+    container.classList.add('address__options');
 
-    wrapper.append(setAsDefaultCheckbox);
-    if (addressType === addressTypes.BILLING) wrapper.append(setaAsShippingCheckbox);
+    container.append(setAsDefaultCheckbox);
+    if (addressType === addressTypes.BILLING) container.append(setaAsShippingCheckbox);
 
-    return wrapper;
+    return container;
   }
 
   private getUseAsShippingCheckbox(): HTMLDivElement {
-    const wrapper: HTMLDivElement = document.createElement('div');
-    wrapper.classList.add('address__use-as-shipping');
+    const container: HTMLDivElement = document.createElement('div');
+    container.classList.add('address__use-as-shipping');
     const label: HTMLLabelElement = document.createElement('label');
     const input: HTMLInputElement = document.createElement('input');
     const span: HTMLSpanElement = document.createElement('span');
@@ -171,13 +171,13 @@ export class RegisterForm extends LoginForm {
 
     label.append(input, span);
 
-    wrapper.append(label);
-    return wrapper;
+    container.append(label);
+    return container;
   }
 
   private getDefaultAddressCheckbox(addressType: string): HTMLDivElement {
-    const wrapper: HTMLDivElement = document.createElement('div');
-    wrapper.classList.add('default-adress', 'switch');
+    const container: HTMLDivElement = document.createElement('div');
+    container.classList.add('default-adress', 'switch');
 
     const label: HTMLLabelElement = document.createElement('label');
     const input: HTMLInputElement = document.createElement('input');
@@ -191,7 +191,7 @@ export class RegisterForm extends LoginForm {
 
     label.append(input, span, `Set as default address`);
 
-    wrapper.append(label);
-    return wrapper;
+    container.append(label);
+    return container;
   }
 }
