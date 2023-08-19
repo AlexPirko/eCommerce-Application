@@ -15,6 +15,10 @@
   }
 }
 
+.nav-item__selected > .btn {
+  background-color: #25a1d6;
+}
+
 nav i.menu-logo {
   font-size: 4rem;
 }
