@@ -10,6 +10,7 @@ describe('Input Class Tests', () => {
       classNames: [],
       placeholder: 'Enter your name',
       value: 'Oks Pozd',
+      name: 'InputName',
     };
 
     input = new Input(mockInputData);
@@ -21,5 +22,6 @@ describe('Input Class Tests', () => {
     expect(inputElement.id).toBe('1');
     expect(inputElement.placeholder).toBe('Enter your name');
     expect(inputElement.value).toBe('Oks Pozd');
+    expect(inputElement.name).toBe('InputName');
   });
 });
