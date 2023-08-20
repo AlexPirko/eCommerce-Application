@@ -15,6 +15,7 @@ const HeaderTitle: HeaderTitle = {
   CART: 'Cart',
   SIGNUP: 'Sign Up',
   LOGIN: 'Log In',
+  LOGOUT: 'Log Out',
 };
 
 export default class Header extends ComponentView {

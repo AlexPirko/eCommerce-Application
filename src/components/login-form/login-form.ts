@@ -1,9 +1,11 @@
 import './login-form.scss';
+import M from 'materialize-css'; // Импорт объекта M из библиотеки Materialize
+import 'materialize-css/dist/css/materialize.min.css';
+import toggleNavBtn from '@lib/utils/toggleNavBtn';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
 import ApiServices from '@lib/api/api-services';
-import M from 'materialize-css'; // Импорт объекта M из библиотеки Materialize
-import 'materialize-css/dist/css/materialize.min.css';
+import Router from '@components/router/router';
 
 export class LoginForm {
   protected titleText: string;
@@ -92,6 +94,7 @@ export class LoginForm {
   public submitForm(form: HTMLFormElement): void {
     const isValid: boolean = this.validateForm(form);
     if (isValid) {
+      const router: Router = new Router(null);
       const formData: FormData = new FormData(form);
       const email: string = String(formData.get('email'));
       const password: string = String(formData.get('password'));
@@ -103,6 +106,9 @@ export class LoginForm {
           .then((res) => {
             console.log(res);
             this.onSubmit();
+            router.navigate('main');
+            localStorage.setItem('login', 'true');
+            toggleNavBtn();
           })
           .catch((error) => {
             M.AutoInit();

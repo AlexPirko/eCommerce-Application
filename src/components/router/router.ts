@@ -2,8 +2,8 @@ import { RouteParams, RequestParams } from '@lib/types/params-interface';
 import { Paths } from './paths';
 
 export default class Router {
-  private routes: RouteParams[];
-  constructor(routes: RouteParams[]) {
+  private routes: RouteParams[] | null;
+  constructor(routes: RouteParams[] | null) {
     this.routes = routes;
 
     this.handleListeners();
@@ -17,7 +17,7 @@ export default class Router {
     const request: RequestParams = this.parseUrl(url);
 
     const currentUrl: string = request.resource === '' ? request.path : `${request.path}/${request.resource}`;
-    const route: RouteParams | undefined = this.routes.find((item) => item.path === currentUrl);
+    const route: RouteParams | undefined = this.routes?.find((item) => item.path === currentUrl);
 
     if (!route) {
       this.redirectToNotFound();
@@ -39,7 +39,7 @@ export default class Router {
   }
 
   private redirectToNotFound(): void {
-    const routeNotFound: RouteParams | undefined = this.routes.find((item) => item.path === Paths.NOT_FOUND);
+    const routeNotFound: RouteParams | undefined = this.routes?.find((item) => item.path === Paths.NOT_FOUND);
     if (routeNotFound) {
       this.navigate(routeNotFound.path);
     }
