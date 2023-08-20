@@ -28,7 +28,7 @@ export default class NotFound extends ComponentView {
     this.viewElementBuilder.addInnerElement(titleElementBuilder);
   }
 
-  createContent() {
+  private createContent(): void {
     const pageWrapper: HTMLDivElement = createHTMLElement('div', ['page-wrapper']);
     const firstFigure: HTMLHeadingElement = createHTMLElement('h2', ['four-figure']);
     const lastFigure: HTMLHeadingElement = createHTMLElement('h2', ['four-figure']);

@@ -7,6 +7,7 @@ export default class ClientTokenCache {
     this.cache = {
       token: '',
       expirationTime: 0,
+      refreshToken: '',
     };
   }
 

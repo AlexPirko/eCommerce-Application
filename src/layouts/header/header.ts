@@ -45,10 +45,10 @@ export default class Header extends ComponentView {
       classNames: ['nav'],
       callback: null,
     };
+    const NUM_OF_LEFT_NAV_TITLE = 4;
     const navElementBuilder: ElementBuilder = new ElementBuilder(navParams);
     const leftNavNodeWrapper: HTMLDivElement = createHTMLElement('div', ['left-node__wrapper']);
     const rightNavNodeWrapper: HTMLDivElement = createHTMLElement('div', ['right-node__wrapper']);
-    const NUM_OF_LEFT_NAV_TITLE = 4;
     navElementBuilder.addInnerElement(leftNavNodeWrapper);
     navElementBuilder.addInnerElement(rightNavNodeWrapper);
 

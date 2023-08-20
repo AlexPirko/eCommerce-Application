@@ -2,6 +2,9 @@ import './login-form.scss';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
 import createHTMLElement from '@lib/utils/create-html-element';
+import ApiServices from '@lib/api/api-services';
+import M from 'materialize-css'; // Импорт объекта M из библиотеки Materialize
+import 'materialize-css/dist/css/materialize.min.css';
 
 export class LoginForm {
   protected readonly form: HTMLFormElement;
@@ -91,16 +94,33 @@ export class LoginForm {
   }
 
   protected setFormSubmitEventHandler() {
-    this.form.addEventListener('submit', (ev: SubmitEvent): void => {
+    this.form.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
       ev.preventDefault();
-      const isValid: boolean = this.validateForm(this.form);
-      if (isValid) {
-        console.log('validation complete');
-        const formData: FormData = new FormData(this.form);
-        console.log(formData);
-        this.onSubmit();
-      }
+      this.submitForm(this.form);
     });
+  }
+
+  public submitForm(form: HTMLFormElement): void {
+    const isValid: boolean = this.validateForm(form);
+    if (isValid) {
+      const formData: FormData = new FormData(form);
+      const email: string = String(formData.get('email'));
+      const password: string = String(formData.get('password'));
+      const api: ApiServices = new ApiServices();
+
+      if (email !== undefined && password !== undefined) {
+        api
+          .customerLogin({ email, password })
+          .then((res) => {
+            console.log(res);
+            this.onSubmit();
+          })
+          .catch((error) => {
+            M.AutoInit();
+            M.toast({ html: error.message, classes: 'rounded' });
+          });
+      }
+    }
   }
 
   protected registerLink(redirectText: string): HTMLParagraphElement {

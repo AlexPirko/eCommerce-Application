@@ -1,6 +1,7 @@
 import './input.scss';
 import { IInput } from '@lib/types/input-interface';
-import { validate } from 'src/lib/utils/validate';
+// import { validate } from './../../../lib/utils/validate';
+import { validate } from '@lib/utils/validate';
 export class Input {
   protected type: string;
   protected id: number | string;

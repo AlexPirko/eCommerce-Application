@@ -1,0 +1,22 @@
+@import '../../assets/styles/constants';
+
+.signup-title,
+.login-title {
+  margin-top: 40px;
+}
+
+.main-icons {
+  color: #039be5;
+  font-size: 3.2rem;
+  padding-right: 1.5rem;
+}
+
+.main-link {
+  &:hover {
+    color: $color-three;
+  }
+}
+
+.link-wrapper {
+  display: flex;
+}
