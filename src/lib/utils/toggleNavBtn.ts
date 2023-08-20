@@ -2,9 +2,9 @@ import Router from '@components/router/router';
 
 export default function toggleNavBtn(): void {
   const isLogin: boolean = Boolean(localStorage.getItem('login')) || false;
-  const signupBtn = document.querySelector('.nav-signup') as HTMLElement;
-  const loginBtn = document.querySelector('.nav-login') as HTMLElement;
-  const logoutBtn = document.querySelector('.nav-logout') as HTMLElement;
+  const signupBtn: HTMLElement = document.querySelector('.nav-signup') as HTMLElement;
+  const loginBtn: HTMLElement = document.querySelector('.nav-login') as HTMLElement;
+  const logoutBtn: HTMLElement = document.querySelector('.nav-logout') as HTMLElement;
   if (isLogin) {
     signupBtn.style.display = 'none';
     loginBtn.style.display = 'none';
