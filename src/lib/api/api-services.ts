@@ -106,6 +106,15 @@ export default class ApiServices {
   }
 
   public async customerLogin(customerData: MyCustomerSignin): Promise<ClientResponse<CustomerSignInResult>> {
-    return this._apiRoot.me().login().post({ body: customerData }).execute();
+    this.setApiClient(customerData.email, customerData.password);
+    const response: ClientResponse<CustomerSignInResult> = await this._apiRoot
+      .me()
+      .login()
+      .post({ body: customerData })
+      .execute()
+      .catch((er) => er);
+    const refreshToken: string | undefined = this.getTokenCache().get().refreshToken;
+    localStorage.setItem('refreshToken', `${refreshToken}`);
+    return response;
   }
 }

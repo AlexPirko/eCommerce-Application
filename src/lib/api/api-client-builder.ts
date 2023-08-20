@@ -17,7 +17,7 @@ export default class CtpClientBuilder {
 
   public createCtpClient(email: string | null, password: string | null, currentTokenCache: TokenCache): Client {
     let ctpClient: Client;
-    const refreshToken: string | undefined = currentTokenCache.get().refreshToken;
+    const refreshToken: string | null = localStorage.getItem('refreshToken');
 
     if (email && password) {
       ctpClient = this.getCtpClientWithPasswordFlow(email, password, currentTokenCache);
@@ -111,7 +111,7 @@ export default class CtpClientBuilder {
     return ctpClient;
   }
 
-  private getCtpClientWithAnonymousFlow(): Client {
+  private getCtpClientWithAnonymousFlow(tokenCache: TokenCache): Client {
     console.log('withAnonymousFlow scope:\n');
 
     const authMiddlewareOptions: AuthMiddlewareOptions = {
@@ -122,6 +122,7 @@ export default class CtpClientBuilder {
         clientSecret: ctpParams.CTP_CLIENT_SECRET,
         anonymousId: 'set-123',
       },
+      tokenCache: tokenCache,
       scopes: [ctpParams.CTP_SCOPES],
       fetch,
     };
