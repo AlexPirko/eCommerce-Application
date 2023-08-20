@@ -14,3 +14,15 @@ $color-nine: #2557d6;
     @content;
   }
 }
+
+@mixin laptop {
+  @media (max-width: 980px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 690px) {
+    @content;
+  }
+}

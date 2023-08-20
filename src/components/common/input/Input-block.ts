@@ -12,20 +12,20 @@ export default class InputBlock extends Input {
     this.create = this.createInputBlock();
   }
 
-  private createLabel(): HTMLLabelElement {
+  public createLabel(): HTMLLabelElement {
     const label: HTMLLabelElement = document.createElement('label');
     label.setAttribute('for', this.id.toString());
     label.textContent = this.label;
     return label;
   }
 
-  private createErrorBlock(): HTMLSpanElement {
+  public createErrorBlock(): HTMLSpanElement {
     const error: HTMLSpanElement = document.createElement('span');
     error.classList.add('error-text');
     return error;
   }
 
-  private createInputBlock(): HTMLDivElement {
+  public createInputBlock(): HTMLDivElement {
     const wrapper: HTMLDivElement = document.createElement('div');
     wrapper.classList.add('input-wrapper');
 
@@ -43,12 +43,12 @@ export default class InputBlock extends Input {
     return wrapper;
   }
 
-  private handleInput(input: HTMLInputElement): void {
+  public handleInput(input: HTMLInputElement): void {
     input.classList.remove('error');
     this.value = input.value;
   }
 
-  private passwordInput(input: HTMLInputElement): HTMLLabelElement {
+  public passwordInput(input: HTMLInputElement): HTMLLabelElement {
     input.setAttribute('data-type', 'password');
 
     const label: HTMLLabelElement = document.createElement('label');

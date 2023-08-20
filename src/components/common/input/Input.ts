@@ -1,11 +1,12 @@
 import './input.scss';
 import { IInput } from '@lib/types/input-interface';
-import { validate } from 'src/lib/utils/validate';
+// import { validate } from './../../../lib/utils/validate';
+import { validate } from '@lib/utils/validate';
 export class Input {
   protected type: string;
   protected id: number;
-  private classNames: string[];
-  private placeholder: string;
+  protected classNames: string[];
+  protected placeholder: string;
   public value: string;
 
   constructor({ type, id, classNames, placeholder, value }: IInput) {

@@ -29,3 +29,9 @@ nav ul a {
     background-color: $color-four !important;
   }
 }
+
+.page-container {
+  max-width: 1600px;
+  padding: 0 25px;
+  margin: auto;
+}
