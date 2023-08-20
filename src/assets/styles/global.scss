@@ -1,7 +1,7 @@
 @import 'constants';
 
 html {
-  font-size: 10px;
+  font-size: 10px !important;
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
@@ -24,9 +24,9 @@ nav ul a {
 
 .btn,
 .btn-small {
-  background-color: $color-three;
+  background-color: $color-three !important;
   &:hover {
-    background-color: $color-four;
+    background-color: $color-four !important;
   }
 }
 

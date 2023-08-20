@@ -26,9 +26,15 @@
 }
 
 nav i.menu-logo {
-  font-size: 4rem;
+  font-size: 4rem !important;
 }
 
 nav i.menu-cart {
-  font-size: 3rem;
+  font-size: 3rem !important;
+}
+
+.nav-signup,
+.nav-login,
+.nav-logout {
+  display: none;
 }

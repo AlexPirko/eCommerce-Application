@@ -6,5 +6,6 @@ export interface HeaderTitle {
   CART: string;
   SIGNUP: string;
   LOGIN: string;
+  LOGOUT?: string;
   NOT_FOUND?: string;
 }

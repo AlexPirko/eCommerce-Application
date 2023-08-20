@@ -45,5 +45,8 @@ export default class HeaderLink extends ComponentView {
     if (element.className === 'nav-item nav-login') {
       element.innerHTML = '<a class="waves-effect waves-light btn">Log In</a>';
     }
+    if (element.className === 'nav-item nav-logout') {
+      element.innerHTML = '<a class="waves-effect waves-light btn">Log Out</a>';
+    }
   }
 }

@@ -1,4 +1,6 @@
 import '@assets/styles/global.scss';
+import toggleNavBtn from '@lib/utils/toggleNavBtn';
+import blockMainLink from '@lib/utils/block-main-link';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 import Header from '@layouts/header/header';
@@ -29,7 +31,13 @@ export default class App {
 
     const routes: RouteParams[] = this.createRoutes();
     this.router = new Router(routes);
+
     this.createView();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      toggleNavBtn();
+      blockMainLink();
+    });
   }
 
   private createView(): void {
@@ -73,15 +81,15 @@ export default class App {
         callback: () => {},
       },
       {
-        path: `${Paths.LOGIN}`,
+        path: `${Paths.SIGNUP}`,
         callback: () => {
-          this.setContent(Paths.LOGIN, new Login());
+          this.setContent(Paths.SIGNUP, new SignUp());
         },
       },
       {
-        path: `${Paths.SIGNUP}`,
+        path: `${Paths.LOGIN}`,
         callback: () => {
-          this.setContent(Paths.LOGIN, new SignUp());
+          this.setContent(Paths.LOGIN, new Login());
         },
       },
       {

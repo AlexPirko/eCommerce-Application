@@ -3,11 +3,11 @@ import { Paths } from './paths';
 import SetRouterHistory from './set-router-history';
 
 export default class Router {
-  private routes: RouteParams[];
+  private routes: RouteParams[] | null;
 
   private routerHistory: SetRouterHistory;
 
-  constructor(routes: RouteParams[]) {
+  constructor(routes: RouteParams[] | null) {
     this.routes = routes;
 
     this.routerHistory = new SetRouterHistory(this.changeUrlHandler.bind(this));
@@ -19,11 +19,11 @@ export default class Router {
 
   public navigate(url: string | PopStateEvent): void {
     this.routerHistory.navigate(url);
-  }
+  }    
 
   private changeUrlHandler(params: RequestParams): void {
-    const currUrl: string = params.resource === '' ? params.path : `${params.path}/${params.resource}`;
-    const route: RouteParams | undefined = this.routes.find((item) => item.path === currUrl);
+    const currentUrl: string = request.resource === '' ? request.path : `${request.path}/${request.resource}`;
+    const route: RouteParams | undefined = this.routes?.find((item) => item.path === currentUrl);
 
     if (!route) {
       this.redirectToNotFound();
@@ -34,7 +34,7 @@ export default class Router {
   }
 
   private redirectToNotFound(): void {
-    const routeNotFound: RouteParams | undefined = this.routes.find((item) => item.path === Paths.NOT_FOUND);
+    const routeNotFound: RouteParams | undefined = this.routes?.find((item) => item.path === Paths.NOT_FOUND);
     if (routeNotFound) {
       this.navigate(routeNotFound.path);
     }
