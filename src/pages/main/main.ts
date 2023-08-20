@@ -1,5 +1,6 @@
 import './main.scss';
 import { Params } from '@lib/types/params-interface';
+import makeElement from '@lib/utils/make-element';
 import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';
 
@@ -13,6 +14,7 @@ export default class Main extends ComponentView {
     };
     super(params);
     this.configureView();
+    this.createContent();
   }
 
   private configureView(): void {
@@ -24,5 +26,21 @@ export default class Main extends ComponentView {
     const titleElementBuilder: ElementBuilder = new ElementBuilder(titleParams);
 
     this.viewElementBuilder.addInnerElement(titleElementBuilder);
+  }
+
+  private createContent(): void {
+    const signupLink: HTMLElement = makeElement('h3', ['signup-title']);
+    const loginLink: HTMLElement = makeElement('h3', ['login-title']);
+    signupLink.innerHTML = `<div class="link-wrapper">
+        <i class="material-icons main-icons">settings_power</i>
+        <a href="http://localhost:8080/signup" class="main-link">Sign up</a>
+      </div>`;
+    loginLink.innerHTML = `<div class="link-wrapper">
+        <i class="material-icons main-icons">vpn_key</i>
+        <a href="http://localhost:8080/login" class="main-link">Log in</a>
+      </div>`;
+
+    this.viewElementBuilder.addInnerElement(signupLink);
+    this.viewElementBuilder.addInnerElement(loginLink);
   }
 }

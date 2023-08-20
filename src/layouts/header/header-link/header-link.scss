@@ -6,6 +6,9 @@
   color: $color-seven;
   &:not(:last-child) {
     padding-right: 4rem;
+    @include laptop {
+      padding-right: 1rem;
+    }
   }
   &:hover {
     color: $color-four;
@@ -13,6 +16,13 @@
   &__selected {
     color: $color-nine;
   }
+  @include laptop {
+    padding-right: 1rem;
+  }
+}
+
+.nav-item__selected > .btn {
+  background-color: #25a1d6;
 }
 
 nav i.menu-logo {

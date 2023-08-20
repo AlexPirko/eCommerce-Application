@@ -6,7 +6,7 @@ const noSpecReg: RegExp = /^[a-zA-Zа-яА-ЯёЁ]+$/;
 const ruPost: RegExp = /^\d{6}$/;
 const usPost: RegExp = /^\d{5}(?:-\d{4})?$/;
 
-class Validate {
+export class Validate {
   private static instance: Validate;
   private constructor() {}
 
@@ -100,7 +100,7 @@ export function highlightError(isError: boolean, input: HTMLInputElement): void 
   }
 }
 
-function passwordErrorMsg(value: string): string {
+export function passwordErrorMsg(value: string): string {
   const upperLetter: RegExp = /[A-Z]/;
   const lowerLetter: RegExp = /[a-z]/;
   const number: RegExp = /\d/;
@@ -121,7 +121,7 @@ function passwordErrorMsg(value: string): string {
   }
 }
 
-function postErrorMsg(value: string): string {
+export function postErrorMsg(value: string): string {
   const ruRadio: HTMLElement | null = document.querySelector('[name="country"]');
   if (ruRadio !== null) {
     if ((<HTMLInputElement>ruRadio).checked === true) {
@@ -134,7 +134,7 @@ function postErrorMsg(value: string): string {
   return 'Wrong Post Format';
 }
 
-function errorMsg(type: string): string {
+export function errorMsg(type: string): string {
   switch (type) {
     case 'email':
       return 'Email address must be properly formatted';

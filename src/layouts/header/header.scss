@@ -1,4 +1,5 @@
 @import '/src/assets/styles/constants';
+@import './create-burger/burger';
 
 .nav {
   display: flex;
@@ -8,6 +9,7 @@
   height: 74px;
   line-height: 74px;
   padding: 0 18rem;
+  z-index: 8;
   box-shadow:
     0 2px 2px 0 rgba(0, 0, 0, 0.14),
     0 2px 1px 1px rgba(0, 0, 0, 0.02),
@@ -15,10 +17,26 @@
   @include desctop {
     padding: 0 10rem;
   }
+  @include laptop {
+    padding: 0 5rem;
+  }
+  @include tablet {
+    flex-wrap: wrap;
+    opacity: 0;
+  }
+  &.active {
+    opacity: 1;
+  }
 }
 
 .left-node__wrapper,
 .right-node__wrapper {
   display: flex;
   align-items: center;
+  @include tablet {
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 250px;
+    z-index: 10;
+  }
 }
