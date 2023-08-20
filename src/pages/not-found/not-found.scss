@@ -19,12 +19,19 @@
 .four-figure {
   font-family: emoji;
   font-size: 22rem;
+  @include tablet {
+    font-size: 15rem;
+  }
 }
 
 .not-found__image {
   padding: 0 1.5rem;
   width: 26rem;
   height: 23rem;
+  @include tablet {
+    width: 16rem;
+    height: 13rem;
+  }
 }
 
 .back-btn {

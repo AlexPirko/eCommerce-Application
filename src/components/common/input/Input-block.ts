@@ -34,7 +34,7 @@ export default class InputBlock extends Input {
       const atr: string = this.label.split(' ')[0];
       input.setAttribute('data-type', atr);
     }
-
+    input.setAttribute('name', this.label.toLowerCase());
     input.addEventListener('input', this.handleInput.bind(this, input));
     const label: HTMLLabelElement | null = this.type === 'password' ? this.passwordInput(input) : null;
 

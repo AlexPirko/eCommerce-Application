@@ -24,7 +24,7 @@ export default class HeaderLink extends ComponentView {
     element.classList.add('nav-item__selected');
   }
 
-  private setDeselected(): void {
+  public setDeselected(): void {
     const element: HTMLElement = this.viewElementBuilder.getElement();
     element.classList.remove('nav-item__selected');
   }

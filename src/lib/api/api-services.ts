@@ -112,7 +112,7 @@ export default class ApiServices {
       .login()
       .post({ body: customerData })
       .execute()
-      .catch((er) => er);
+      .catch((error) => error);
     const refreshToken: string | undefined = this.getTokenCache().get().refreshToken;
     localStorage.setItem('refreshToken', `${refreshToken}`);
     return response;
