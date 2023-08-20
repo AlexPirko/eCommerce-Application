@@ -21,11 +21,15 @@ export class LoginForm {
     this.redirectText = redirectText;
     this.onSubmit = onSubmit;
     this.feedForm();
+    this.setFormSubmitEventHandler();
   }
 
   protected createSubmitBtn(): HTMLButtonElement {
-    const btn: HTMLButtonElement = document.createElement('button');
-    btn.classList.add('btn', 'waves-effect', 'waves-light');
+    const btnParams = {
+      tag: 'button',
+      classes: ['btn', 'waves-effect', 'waves-light'],
+    };
+    const btn: HTMLButtonElement = createHTMLElement(btnParams.tag, btnParams.classes);
     btn.textContent = this.btnText;
     return btn;
   }
@@ -47,18 +51,16 @@ export class LoginForm {
       type: 'email',
       id: 3,
       label: 'Email',
-      classNames: [''],
       placeholder: 'Enter your email',
-      value: '',
+      name: 'email',
     }).create;
 
     const passwordInput: HTMLDivElement = new InputBlock({
       type: 'password',
       id: 4,
       label: 'Password',
-      classNames: [''],
       placeholder: 'Enter your password',
-      value: '',
+      name: 'password',
     }).create;
 
     return { emailInput, passwordInput };
@@ -94,6 +96,8 @@ export class LoginForm {
       const isValid: boolean = this.validateForm(this.form);
       if (isValid) {
         console.log('validation complete');
+        const formData: FormData = new FormData(this.form);
+        console.log(formData);
         this.onSubmit();
       }
     });

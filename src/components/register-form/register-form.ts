@@ -31,28 +31,22 @@ export class RegisterForm extends LoginForm {
     header.classList.add(`${addressType.toLowerCase()}-address__header`);
     header.innerHTML = `${addressType} address`;
     const streetInput: InputBlock = new InputBlock({
-      type: 'text',
-      id: 8,
+      id: `${addressType.toLowerCase()}Street`,
       label: textInputs.STREET,
-      classNames: [''],
       placeholder: 'Street',
-      value: '',
+      name: 'street',
     });
     const cityInput: InputBlock = new InputBlock({
-      type: 'text',
-      id: 9,
+      id: `${addressType.toLowerCase()}City`,
       label: textInputs.CITY,
-      classNames: [''],
       placeholder: 'City',
-      value: '',
+      name: 'city',
     });
     const postalInput: InputBlock = new InputBlock({
-      type: 'text',
-      id: 10,
+      id: `${addressType.toLowerCase()}Postal`,
       label: `${textInputs.POST} Code`,
-      classNames: [''],
       placeholder: 'Postal Code',
-      value: '',
+      name: 'postal',
     });
     const countriesCheckBox: HTMLDivElement = this.countries(addressType);
     const addressCheckboxes: HTMLDivElement = this.getAddressCheckboxes(addressType);
@@ -70,30 +64,24 @@ export class RegisterForm extends LoginForm {
   private userInfo(): DocumentFragment {
     const fragment: DocumentFragment = new DocumentFragment();
     const firstNameInput: InputBlock = new InputBlock({
-      type: 'text',
       id: 5,
       label: `${textInputs.FIRST} Name`,
-      classNames: [''],
       placeholder: 'Enter your First Name',
-      value: '',
+      name: 'firstName',
     });
 
     const lastNameInput: InputBlock = new InputBlock({
-      type: 'text',
       id: 6,
       label: `${textInputs.LAST} Name`,
-      classNames: [''],
       placeholder: 'Enter your Last Name',
-      value: '',
+      name: 'lastName',
     });
     const date: Date = new Date();
     const dateInput: InputBlock = new InputBlock({
-      type: 'date',
       id: 7,
       label: `${textInputs.DATE} of Birth`,
-      classNames: [''],
       placeholder: date.toLocaleDateString('Ru-ru'),
-      value: '',
+      name: 'dateOfBirth',
     });
     fragment.append(firstNameInput.create, lastNameInput.create, dateInput.create);
     return fragment;
@@ -177,13 +165,13 @@ export class RegisterForm extends LoginForm {
 
   private getDefaultAddressCheckbox(addressType: string): HTMLDivElement {
     const container: HTMLDivElement = document.createElement('div');
-    container.classList.add('default-adress', 'switch');
+    container.classList.add('default-address', 'switch');
 
     const label: HTMLLabelElement = document.createElement('label');
     const input: HTMLInputElement = document.createElement('input');
     const span: HTMLSpanElement = document.createElement('span');
 
-    input.setAttribute('name', `${addressType.toLowerCase()}-address`);
+    input.setAttribute('name', `default${addressType}Address`);
     input.setAttribute('type', 'checkbox');
     input.setAttribute('checked', 'false');
 

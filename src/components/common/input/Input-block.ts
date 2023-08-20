@@ -6,8 +6,8 @@ export default class InputBlock extends Input {
   private label: string;
   public create: HTMLDivElement;
 
-  constructor({ type, id, label, classNames, placeholder, value }: IInputBlock) {
-    super({ type, id, classNames, placeholder, value });
+  constructor({ type = 'text', id, label, classNames = [''], placeholder, value = '', name }: IInputBlock) {
+    super({ type, id, classNames, placeholder, value, name });
     this.label = label;
     this.create = this.createInputBlock();
   }

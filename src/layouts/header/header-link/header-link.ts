@@ -33,16 +33,16 @@ export default class HeaderLink extends ComponentView {
     const element: HTMLElement = this.viewElementBuilder.getElement();
     element.addEventListener('click', this.setSelected.bind(this));
 
-    if (element.className === 'nav-item nav-main') {
+    if (element.className.includes('nav-main')) {
       element.innerHTML = '<i class="menu-logo material-icons">camera</i>';
     }
-    if (element.className === 'nav-item nav-cart') {
+    if (element.className.includes('nav-cart')) {
       element.innerHTML = '<i class="menu-cart material-icons">local_grocery_store</i>';
     }
-    if (element.className === 'nav-item nav-signup') {
+    if (element.className.includes('nav-signup')) {
       element.innerHTML = '<a class="waves-effect waves-light btn">Sign Up</a>';
     }
-    if (element.className === 'nav-item nav-login') {
+    if (element.className.includes('nav-login')) {
       element.innerHTML = '<a class="waves-effect waves-light btn">Log In</a>';
     }
   }
