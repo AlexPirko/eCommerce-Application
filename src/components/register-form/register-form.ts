@@ -4,6 +4,9 @@ import { IForm } from '@lib/types/input-interface';
 import { addressTypes, textInputs } from 'src/lib/types/enum';
 import { LoginForm } from '../login-form/login-form';
 import { validate } from 'src/lib/utils/validate';
+import { CustomerDraft } from '@commercetools/platform-sdk';
+import { getFormFieldsAsCustomerDraft } from '@lib/utils/get-form-fields';
+import ApiServices from '@lib/api/api-services';
 export class RegisterForm extends LoginForm {
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
     super({ titleText, descText, btnText, linkText, redirectText, onSubmit });
@@ -24,6 +27,23 @@ export class RegisterForm extends LoginForm {
     );
   }
 
+  protected setFormSubmitEventHandler() {
+    this.form.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
+      ev.preventDefault();
+      const isValid: boolean = this.validateForm(this.form);
+      if (isValid) {
+        const api: ApiServices = new ApiServices();
+        const customerDraft: CustomerDraft = getFormFieldsAsCustomerDraft(this.form);
+        const { email, password } = customerDraft;
+        await api.createCustomer(customerDraft).catch((error) => error);
+        await api.customerLogin({ email: email, password: password as string }).catch((error) => error);
+        console.log(api.getTokenCache());
+        M.AutoInit();
+        M.toast({ html: 'You are successfuly login', classes: 'rounded' });
+      }
+    });
+  }
+
   private address(addressType: string): HTMLDivElement {
     const wrapper: HTMLDivElement = document.createElement('div');
     wrapper.classList.add('address-wrapper', `address__${addressType.toLowerCase()}`);
@@ -34,19 +54,19 @@ export class RegisterForm extends LoginForm {
       id: `${addressType.toLowerCase()}Street`,
       label: textInputs.STREET,
       placeholder: 'Street',
-      name: 'street',
+      name: `${addressType.toLowerCase()}-street`,
     });
     const cityInput: InputBlock = new InputBlock({
       id: `${addressType.toLowerCase()}City`,
       label: textInputs.CITY,
       placeholder: 'City',
-      name: 'city',
+      name: `${addressType.toLowerCase()}-city`,
     });
     const postalInput: InputBlock = new InputBlock({
       id: `${addressType.toLowerCase()}Postal`,
       label: `${textInputs.POST} Code`,
       placeholder: 'Postal Code',
-      name: 'postal',
+      name: `${addressType.toLowerCase()}-postal`,
     });
     const countriesCheckBox: HTMLDivElement = this.countries(addressType);
     const addressCheckboxes: HTMLDivElement = this.getAddressCheckboxes(addressType);
@@ -78,10 +98,11 @@ export class RegisterForm extends LoginForm {
     });
     const date: Date = new Date();
     const dateInput: InputBlock = new InputBlock({
+      type: 'date',
       id: 7,
       label: `${textInputs.DATE} of Birth`,
       placeholder: date.toLocaleDateString('Ru-ru'),
-      name: 'dateOfBirth',
+      name: `dateOfBirth`,
     });
     fragment.append(firstNameInput.create, lastNameInput.create, dateInput.create);
     return fragment;
@@ -99,9 +120,11 @@ export class RegisterForm extends LoginForm {
     input1.setAttribute('name', `${addressType.toLowerCase()}-country`);
     input1.setAttribute('type', 'radio');
     input1.setAttribute('checked', 'true');
+    input1.setAttribute('value', 'RU');
 
     input2.setAttribute('name', `${addressType.toLowerCase()}-country`);
     input2.setAttribute('type', 'radio');
+    input2.setAttribute('value', 'US');
 
     function onChange(): void {
       const postInput: Element | null = document.querySelector(`[data-type="${textInputs.POST}"]`);

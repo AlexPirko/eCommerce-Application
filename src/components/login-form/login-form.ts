@@ -7,7 +7,7 @@ import M from 'materialize-css'; // Импорт объекта M из библ�
 import 'materialize-css/dist/css/materialize.min.css';
 
 export class LoginForm {
-  protected readonly form: HTMLFormElement;
+  protected form: HTMLFormElement;
   protected titleText: string;
   protected descText: string;
   protected btnText: string;
