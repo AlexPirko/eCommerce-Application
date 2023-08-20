@@ -13,7 +13,7 @@ export interface PageParams {
 
 export interface RouteParams {
   path: string;
-  callback: (() => void) | null;
+  callback: ((arg0: RequestParams['resource']) => void) | null;
 }
 
 export interface RequestParams {

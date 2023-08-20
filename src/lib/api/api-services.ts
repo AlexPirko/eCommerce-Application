@@ -106,6 +106,11 @@ export default class ApiServices {
   }
 
   public async customerLogin(customerData: MyCustomerSignin): Promise<ClientResponse<CustomerSignInResult>> {
-    return this._apiRoot.me().login().post({ body: customerData }).execute();
+    return this._apiRoot
+      .me()
+      .login()
+      .post({ body: customerData })
+      .execute()
+      .catch((error) => error);
   }
 }
