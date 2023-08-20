@@ -19,11 +19,11 @@ export default class Router {
 
   public navigate(url: string | PopStateEvent): void {
     this.routerHistory.navigate(url);
-  }    
+  }
 
   private changeUrlHandler(params: RequestParams): void {
-    const currentUrl: string = request.resource === '' ? request.path : `${request.path}/${request.resource}`;
-    const route: RouteParams | undefined = this.routes?.find((item) => item.path === currentUrl);
+    const currUrl: string = params.resource === '' ? params.path : `${params.path}/${params.resource}`;
+    const route: RouteParams | undefined = this.routes?.find((item) => item.path === currUrl);
 
     if (!route) {
       this.redirectToNotFound();
