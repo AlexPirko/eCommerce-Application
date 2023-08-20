@@ -2,6 +2,7 @@ import '@assets/styles/global.scss';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 import Header from '@layouts/header/header';
+import CreateBurger from '@layouts/header/create-burger/create-burger';
 import ApiServices from '@lib/api/api-services';
 import ComponentView from '@lib/services/component-view';
 import { RouteParams } from '@lib/types/params-interface';
@@ -18,11 +19,13 @@ export default class App {
   private pageContainer: PageContainer | null;
   private header: Header | null;
   private _apiServices: ApiServices;
+  private burger: CreateBurger;
 
   constructor() {
     this._apiServices = new ApiServices();
     this.pageContainer = null;
     this.header = null;
+    this.burger = new CreateBurger();
 
     const routes: RouteParams[] = this.createRoutes();
     this.router = new Router(routes);
@@ -32,6 +35,7 @@ export default class App {
   private createView(): void {
     this.pageContainer = new PageContainer();
     this.header = new Header(this.router);
+    this.header.getHtmlElement()?.append(this.burger.createBurgerElement());
 
     App.container.append(
       this.header.getHtmlElement() as HTMLElement,
@@ -95,13 +99,6 @@ export default class App {
   }
 
   public run(): void {
-    this._apiServices.createCustomer({
-      email: 'alex2@example.com',
-      password: '2password',
-      firstName: 'Alex',
-      lastName: 'Al',
-      dateOfBirth: '2018-10-12',
-      addresses: [{ country: 'EG', city: 'Kair', streetName: 'Avenue', streetNumber: '11', postalCode: '23456' }],
-    });
+    this.burger.handlerListener();
   }
 }
