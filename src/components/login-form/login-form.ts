@@ -2,6 +2,7 @@ import './login-form.scss';
 import M from 'materialize-css'; // Импорт объекта M из библиотеки Materialize
 import 'materialize-css/dist/css/materialize.min.css';
 import toggleNavBtn from '@lib/utils/toggleNavBtn';
+import blockMainLink from '@lib/utils/block-main-link';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
 import ApiServices from '@lib/api/api-services';
@@ -109,6 +110,7 @@ export class LoginForm {
             router.navigate('main');
             localStorage.setItem('login', 'true');
             toggleNavBtn();
+            blockMainLink();
           })
           .catch((error) => {
             M.AutoInit();

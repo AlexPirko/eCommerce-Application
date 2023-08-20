@@ -1,5 +1,6 @@
 import '@assets/styles/global.scss';
 import toggleNavBtn from '@lib/utils/toggleNavBtn';
+import blockMainLink from '@lib/utils/block-main-link';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 import Header from '@layouts/header/header';
@@ -29,7 +30,11 @@ export default class App {
     this.router = new Router(routes);
 
     this.createView();
-    toggleNavBtn();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      toggleNavBtn();
+      blockMainLink();
+    });
   }
 
   private createView(): void {
