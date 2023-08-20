@@ -16,7 +16,7 @@ export default function toggleNavBtn(): void {
     logoutBtn.style.display = 'none';
   }
 
-  const router = new Router(null);
+  const router: Router = new Router(null);
 
   logoutBtn.addEventListener('click', (e: Event): void => {
     e.preventDefault();
