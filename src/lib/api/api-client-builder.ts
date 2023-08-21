@@ -24,12 +24,12 @@ export default class CtpClientBuilder {
     } else if (refreshToken) {
       ctpClient = this.getCtpClientWithRefrehToken(refreshToken, currentTokenCache);
     } else {
-      ctpClient = this.getCtpClientWithCredentialsFlow(currentTokenCache);
+      ctpClient = this.getCtpClientWithCredentialsFlow();
     }
     return ctpClient;
   }
 
-  private getCtpClientWithCredentialsFlow(currentTokenCache: TokenCache): Client {
+  private getCtpClientWithCredentialsFlow(): Client {
     const authMiddlewareOptions: AuthMiddlewareOptions = {
       host: ctpParams.CTP_AUTH_URL,
       projectKey: ctpParams.CTP_PROJECT_KEY,
@@ -37,7 +37,6 @@ export default class CtpClientBuilder {
         clientId: ctpParams.CTP_CLIENT_ID,
         clientSecret: ctpParams.CTP_CLIENT_SECRET,
       },
-      tokenCache: currentTokenCache,
       scopes: [ctpParams.CTP_SCOPES],
       fetch,
     };

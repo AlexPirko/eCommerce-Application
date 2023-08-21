@@ -36,11 +36,19 @@ export class RegisterForm extends LoginForm {
         const api: ApiServices = new ApiServices();
         const customerDraft: CustomerDraft = getFormFieldsAsCustomerDraft(this.form);
         const { email, password } = customerDraft;
-        await api.createCustomer(customerDraft).catch((error) => error);
-        await api
-          .customerLogin({ email: email, password: password as string })
-          .catch((error) => M.toast({ html: error.message, classes: 'rounded' }));
-        M.toast({ html: 'You are successfuly login', classes: 'rounded' });
+        api
+          .createCustomer(customerDraft)
+          .then(() => {
+            api.customerLogin({ email: email, password: password as string }).catch((error) => {
+              throw error;
+            });
+            M.toast({ html: 'You are successfuly login', classes: 'rounded' });
+          })
+          .catch((error) => {
+            M.toast({ html: error.message, classes: 'rounded' });
+          });
+        localStorage.setItem('login', 'true');
+        document.location.href = `http://${window.location.host}`;
       }
     });
   }
