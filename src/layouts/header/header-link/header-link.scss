@@ -14,7 +14,7 @@
     color: $color-four;
   }
   &__selected {
-    color: $color-nine;
+    color: $color-selected;
   }
   @include laptop {
     padding-right: 1rem;
@@ -22,7 +22,7 @@
 }
 
 .nav-item__selected > .btn {
-  background-color: #25a1d6;
+  background-color: $color-selected !important;
 }
 
 nav i.menu-logo {

@@ -1,13 +1,13 @@
 import './login-form.scss';
 import M from 'materialize-css';
 import 'materialize-css/dist/css/materialize.min.css';
-import toggleNavBtn from '@lib/utils/toggleNavBtn';
-import blockMainLink from '@lib/utils/block-main-link';
+// import toggleNavBtn from '@lib/utils/toggleNavBtn';
+// import blockMainLink from '@lib/utils/block-main-link';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
 import createHTMLElement from '@lib/utils/create-html-element';
 import ApiServices from '@lib/api/api-services';
-import Router from '@components/router/router';
+// import Router from '@components/router/router';
 
 export class LoginForm {
   protected form: HTMLFormElement;
@@ -106,7 +106,7 @@ export class LoginForm {
   public submitForm(form: HTMLFormElement): void {
     const isValid: boolean = this.validateForm(form);
     if (isValid) {
-      const router: Router = new Router(null);
+      // const router: Router = new Router(null);
       const formData: FormData = new FormData(form);
       const email: string = String(formData.get('email'));
       const password: string = String(formData.get('password'));
@@ -119,10 +119,8 @@ export class LoginForm {
           .then((res) => {
             console.log(res);
             this.onSubmit();
-            router.navigate('main');
             localStorage.setItem('login', 'true');
-            toggleNavBtn();
-            blockMainLink();
+            document.location.href = `http://${window.location.host}`;
             M.toast({ html: 'You are successfuly login', classes: 'rounded' });
           })
           .catch((error) => {

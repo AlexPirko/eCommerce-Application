@@ -5,7 +5,8 @@ import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';
 
 export default class Main extends ComponentView {
-  constructor() {
+  isLogin!: boolean;
+  constructor(isLogin: boolean) {
     const params: Params = {
       tagName: 'section',
       classNames: ['main-page'],
@@ -14,7 +15,7 @@ export default class Main extends ComponentView {
     };
     super(params);
     this.configureView();
-    this.createContent();
+    this.createContent(isLogin);
   }
 
   private configureView(): void {
@@ -28,19 +29,40 @@ export default class Main extends ComponentView {
     this.viewElementBuilder.addInnerElement(titleElementBuilder);
   }
 
-  private createContent(): void {
-    const signupLink: HTMLHeadingElement = createHTMLElement('h3', ['signup-title']);
-    const loginLink: HTMLHeadingElement = createHTMLElement('h3', ['login-title']);
-    signupLink.innerHTML = `<div class="link-wrapper">
-        <i class="material-icons main-icons">settings_power</i>
-        <a href="http://localhost:8080/signup" class="main-link">Sign up</a>
-      </div>`;
-    loginLink.innerHTML = `<div class="link-wrapper">
-        <i class="material-icons main-icons">vpn_key</i>
-        <a href="http://localhost:8080/login" class="main-link">Log in</a>
-      </div>`;
+  private createContent(isLogin: boolean): void {
+    const signupTitle: HTMLElement = createHTMLElement('div', ['signup-title']);
+    const signupIcon: HTMLElement = createHTMLElement('i', ['material-icons', 'main-icons']);
+    signupIcon.textContent = 'settings_power';
+    const signupLink: HTMLElement = createHTMLElement('a', ['main-link']);
+    signupLink.textContent = 'Sign up';
+    signupTitle.append(signupIcon, signupLink);
 
-    this.viewElementBuilder.addInnerElement(signupLink);
-    this.viewElementBuilder.addInnerElement(loginLink);
+    const loginTitle: HTMLElement = createHTMLElement('div', ['login-title']);
+    const loginIcon: HTMLElement = createHTMLElement('i', ['material-icons', 'main-icons']);
+    loginIcon.textContent = 'vpn_key';
+    const loginLink: HTMLElement = createHTMLElement('a', ['main-link']);
+    loginLink.textContent = 'Login up';
+    loginTitle.append(loginIcon, loginLink);
+
+    signupTitle.addEventListener('click', (e: Event): void => {
+      e.preventDefault();
+      if (!isLogin) {
+        document.location.href = `http://${window.location.host}/signup`;
+      } else {
+        document.location.href = `http://${window.location.host}`;
+      }
+    });
+
+    loginTitle.addEventListener('click', (e: Event): void => {
+      e.preventDefault();
+      if (!isLogin) {
+        document.location.href = `http://${window.location.host}/login`;
+      } else {
+        document.location.href = `http://${window.location.host}`;
+      }
+    });
+
+    this.viewElementBuilder.addInnerElement(signupTitle);
+    this.viewElementBuilder.addInnerElement(loginTitle);
   }
 }

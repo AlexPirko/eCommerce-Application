@@ -1,6 +1,5 @@
 import '@assets/styles/global.scss';
 import toggleNavBtn from '@lib/utils/toggleNavBtn';
-import blockMainLink from '@lib/utils/block-main-link';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 import Header from '@layouts/header/header';
@@ -22,6 +21,7 @@ export default class App {
   private header: Header | null;
   private _apiServices: ApiServices;
   private burger: CreateBurger;
+  public isLogin: boolean = Boolean(localStorage.getItem('login')) || false;
 
   constructor() {
     this._apiServices = new ApiServices();
@@ -29,14 +29,13 @@ export default class App {
     this.header = null;
     this.burger = new CreateBurger();
 
-    const routes: RouteParams[] = this.createRoutes();
+    const routes: RouteParams[] = this.createRoutes(this.isLogin);
     this.router = new Router(routes);
 
     this.createView();
 
     document.addEventListener('DOMContentLoaded', () => {
-      toggleNavBtn();
-      blockMainLink();
+      toggleNavBtn(this.isLogin);
     });
   }
 
@@ -52,18 +51,18 @@ export default class App {
   }
 
   // eslint-disable-next-line max-lines-per-function
-  private createRoutes(): RouteParams[] {
+  private createRoutes(isLogin: boolean): RouteParams[] {
     return [
       {
         path: ``,
         callback: () => {
-          this.setContent(Paths.MAIN, new Main());
+          this.setContent(Paths.MAIN, new Main(isLogin));
         },
       },
       {
         path: `${Paths.MAIN}`,
         callback: () => {
-          this.setContent(Paths.MAIN, new Main());
+          this.setContent(Paths.MAIN, new Main(isLogin));
         },
       },
       {
