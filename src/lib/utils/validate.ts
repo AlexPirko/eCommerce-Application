@@ -70,11 +70,11 @@ export function validate(value: string, input: HTMLInputElement): boolean {
 
   if (isError) {
     input.classList.add('invalid');
+    console.log(input);
     highlightError(isError, input);
   } else {
     input.classList.remove('invalid');
   }
-
   return !isError;
 }
 
@@ -83,13 +83,15 @@ export function highlightError(isError: boolean, input: HTMLInputElement): void 
   if (errorEl !== null) {
     if (isError) {
       (errorEl as HTMLSpanElement).classList.add('visible');
+      console.log(input.dataset.type);
       if (input.dataset.type === 'password') {
         errorEl.textContent = passwordErrorMsg(input.value);
       } else if (input.dataset.type === textInputs.POST) {
+        console.log('post');
         errorEl.textContent = postErrorMsg(input.value);
       } else if (input.dataset.type) {
         errorEl.textContent = errorMsg(input.dataset.type);
-      } else if (input.type === 'data') {
+      } else if (input.type === 'date') {
         errorEl.textContent = errorMsg('date');
       } else {
         errorEl.textContent = errorMsg(input.type);

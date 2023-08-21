@@ -33,6 +33,12 @@ export class Input {
     input.addEventListener('blur', (): void => {
       validate(input.value, input);
     });
+    if (this.type === 'date') {
+      input.addEventListener('change', (): void => {
+        console.log(input.value);
+        validate(input.value, input);
+      });
+    }
     return input;
   }
 
