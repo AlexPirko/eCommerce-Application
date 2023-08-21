@@ -86,7 +86,6 @@ export function highlightError(isError: boolean, input: HTMLInputElement): void 
   if (errorEl !== null) {
     if (isError) {
       (errorEl as HTMLSpanElement).classList.add('visible');
-      console.log(input.dataset.type);
       if (input.dataset.type === 'password') {
         errorEl.textContent = passwordErrorMsg(input.value);
       } else if (input.dataset.type === textInputs.POST) {

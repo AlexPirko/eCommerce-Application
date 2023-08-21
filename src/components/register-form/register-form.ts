@@ -127,15 +127,17 @@ export class RegisterForm extends LoginForm {
     input2.setAttribute('type', 'radio');
     input2.setAttribute('value', 'US');
 
-    function onChange(): void {
-      const postInput: Element | null = document.querySelector(`[data-type="${textInputs.POST}"]`);
+    function onChange(input: HTMLInputElement): void {
+      const name: 'billing-postal' | 'shipping-postal' =
+        input.name === 'billing-country' ? 'billing-postal' : 'shipping-postal';
+      const postInput: Element | null = document.querySelector(`[name=${name}]`);
       if (postInput !== null) {
         validate((<HTMLInputElement>postInput).value, <HTMLInputElement>postInput);
       }
     }
 
-    input1.addEventListener('change', onChange);
-    input2.addEventListener('change', onChange);
+    input1.addEventListener('change', () => onChange(input1));
+    input2.addEventListener('change', () => onChange(input2));
 
     span1.textContent = 'Russia';
     span2.textContent = 'USA';
