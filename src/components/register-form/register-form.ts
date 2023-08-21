@@ -25,16 +25,12 @@ export class RegisterForm extends LoginForm {
       this.createSubmitBtn(),
       this.registerLink(this.redirectText)
     );
-
-    // this.setFormSubmitEventHandler(this.form);
   }
 
   public setFormSubmitEventHandler() {
     this.form.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
       ev.preventDefault();
-      console.log(this.form);
       const isValid: boolean = this.validateForm(this.form);
-      console.log(isValid);
       if (isValid) {
         M.AutoInit();
         const api: ApiServices = new ApiServices();
