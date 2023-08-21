@@ -34,7 +34,6 @@ export default class Main extends ComponentView {
     const signupIcon: HTMLElement = makeElement('i', ['material-icons', 'main-icons']);
     signupIcon.textContent = 'settings_power';
     const signupLink: HTMLElement = makeElement('a', ['main-link']);
-    signupLink.setAttribute('href', `http://${window.location.host}/signup`);
     signupLink.textContent = 'Sign up';
     signupTitle.append(signupIcon, signupLink);
 
@@ -43,13 +42,25 @@ export default class Main extends ComponentView {
     loginIcon.textContent = 'vpn_key';
     const loginLink: HTMLElement = makeElement('a', ['main-link']);
     loginLink.textContent = 'Login up';
-    loginLink.setAttribute('href', `http://${window.location.host}/login`);
     loginTitle.append(loginIcon, loginLink);
 
-    if (isLogin) {
-      signupLink.setAttribute('href', `http://${window.location.host}`);
-      loginLink.setAttribute('href', `http://${window.location.host}`);
-    }
+    signupTitle.addEventListener('click', (e: Event): void => {
+      e.preventDefault();
+      if (!isLogin) {
+        document.location.href = `http://${window.location.host}/signup`;
+      } else {
+        document.location.href = `http://${window.location.host}`;
+      }
+    });
+
+    loginTitle.addEventListener('click', (e: Event): void => {
+      e.preventDefault();
+      if (!isLogin) {
+        document.location.href = `http://${window.location.host}/login`;
+      } else {
+        document.location.href = `http://${window.location.host}`;
+      }
+    });
 
     this.viewElementBuilder.addInnerElement(signupTitle);
     this.viewElementBuilder.addInnerElement(loginTitle);

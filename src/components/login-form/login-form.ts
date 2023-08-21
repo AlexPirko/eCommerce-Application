@@ -108,9 +108,8 @@ export class LoginForm {
             console.log(res);
             this.onSubmit();
             localStorage.setItem('login', 'true');
-            // toggleNavBtn();
-            // blockMainLink();
             document.location.href = `http://${window.location.host}`;
+            M.toast({ html: 'You are successfuly login', classes: 'rounded' });
           })
           .catch((error) => {
             M.AutoInit();
