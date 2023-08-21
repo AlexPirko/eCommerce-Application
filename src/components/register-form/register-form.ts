@@ -1,121 +1,116 @@
 import './register-form.scss';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
-import { textInputs } from 'src/lib/types/enum';
+import { addressTypes, textInputs } from 'src/lib/types/enum';
 import { LoginForm } from '../login-form/login-form';
 import { validate } from 'src/lib/utils/validate';
+import { CustomerDraft } from '@commercetools/platform-sdk';
+import { getFormFieldsAsCustomerDraft } from '@lib/utils/get-form-fields';
+import ApiServices from '@lib/api/api-services';
 export class RegisterForm extends LoginForm {
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
     super({ titleText, descText, btnText, linkText, redirectText, onSubmit });
   }
 
-  public createForm(): HTMLFormElement {
-    const form: HTMLFormElement = document.createElement('form');
-    form.classList.add('form');
-    form.setAttribute('novalidate', '');
-    const emailInput: InputBlock = new InputBlock({
-      type: 'email',
-      id: 3,
-      label: 'Email',
-      classNames: [''],
-      placeholder: 'Enter your email',
-      value: '',
-    });
-    const passwordInput: InputBlock = new InputBlock({
-      type: 'password',
-      id: 4,
-      label: 'Password',
-      classNames: [''],
-      placeholder: 'Enter your password',
-      value: '',
-    });
-    form.append(
+  protected feedForm(): void {
+    const { emailInput, passwordInput } = this.createInputElements();
+
+    this.form.append(
       this.createFormTitle(),
-      emailInput.create,
-      passwordInput.create,
+      emailInput,
+      passwordInput,
       this.userInfo(),
-      this.address(),
+      this.address(addressTypes.BILLING),
+      this.address(addressTypes.SHIPPING),
       this.createSubmitBtn(),
       this.registerLink(this.redirectText)
     );
-    form.addEventListener('submit', (ev: SubmitEvent): void => {
-      ev.preventDefault();
-      const isValid: boolean = this.validateForm(form);
-      if (isValid) {
-        console.log('validation complete');
-        this.onSubmit();
-      }
-    });
-    return form;
   }
 
-  private address(): HTMLDivElement {
-    const wrapper: HTMLDivElement = document.createElement('div');
-    wrapper.classList.add('addressWrapper');
-
-    const streetInput: InputBlock = new InputBlock({
-      type: 'text',
-      id: 8,
-      label: textInputs.STREET,
-      classNames: [''],
-      placeholder: 'Street',
-      value: '',
+  protected setFormSubmitEventHandler() {
+    this.form.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
+      ev.preventDefault();
+      const isValid: boolean = this.validateForm(this.form);
+      if (isValid) {
+        M.AutoInit();
+        const api: ApiServices = new ApiServices();
+        const customerDraft: CustomerDraft = getFormFieldsAsCustomerDraft(this.form);
+        const { email, password } = customerDraft;
+        await api.createCustomer(customerDraft).catch((error) => error);
+        await api
+          .customerLogin({ email: email, password: password as string })
+          .catch((error) => M.toast({ html: error.message, classes: 'rounded' }));
+        console.log(api.getTokenCache());
+        M.toast({ html: 'You are successfuly login', classes: 'rounded' });
+      }
     });
+  }
 
+  private address(addressType: string): HTMLDivElement {
+    const wrapper: HTMLDivElement = document.createElement('div');
+    wrapper.classList.add('address-wrapper', `address__${addressType.toLowerCase()}`);
+    const header: HTMLHeadingElement = document.createElement('h4');
+    header.classList.add(`${addressType.toLowerCase()}-address__header`);
+    header.innerHTML = `${addressType} address`;
+    const streetInput: InputBlock = new InputBlock({
+      id: `${addressType.toLowerCase()}Street`,
+      label: textInputs.STREET,
+      placeholder: 'Street',
+      name: `${addressType.toLowerCase()}-street`,
+    });
     const cityInput: InputBlock = new InputBlock({
-      type: 'text',
-      id: 9,
+      id: `${addressType.toLowerCase()}City`,
       label: textInputs.CITY,
-      classNames: [''],
       placeholder: 'City',
-      value: '',
+      name: `${addressType.toLowerCase()}-city`,
     });
     const postalInput: InputBlock = new InputBlock({
-      type: 'text',
-      id: 10,
+      id: `${addressType.toLowerCase()}Postal`,
       label: `${textInputs.POST} Code`,
-      classNames: [''],
       placeholder: 'Postal Code',
-      value: '',
+      name: `${addressType.toLowerCase()}-postal`,
     });
-
-    wrapper.append(streetInput.create, cityInput.create, postalInput.create, this.countries());
+    const countriesCheckBox: HTMLDivElement = this.countries(addressType);
+    const addressCheckboxes: HTMLDivElement = this.getAddressCheckboxes(addressType);
+    wrapper.append(
+      header,
+      streetInput.create,
+      cityInput.create,
+      postalInput.create,
+      countriesCheckBox,
+      addressCheckboxes
+    );
     return wrapper;
   }
 
   private userInfo(): DocumentFragment {
     const fragment: DocumentFragment = new DocumentFragment();
     const firstNameInput: InputBlock = new InputBlock({
-      type: 'text',
       id: 5,
       label: `${textInputs.FIRST} Name`,
-      classNames: [''],
       placeholder: 'Enter your First Name',
-      value: '',
+      name: 'firstName',
     });
 
     const lastNameInput: InputBlock = new InputBlock({
-      type: 'text',
       id: 6,
       label: `${textInputs.LAST} Name`,
-      classNames: [''],
       placeholder: 'Enter your Last Name',
-      value: '',
+      name: 'lastName',
     });
     const date: Date = new Date();
     const dateInput: InputBlock = new InputBlock({
       type: 'date',
       id: 7,
       label: `${textInputs.DATE} of Birth`,
-      classNames: [''],
       placeholder: date.toLocaleDateString('Ru-ru'),
-      value: '',
+      name: `dateOfBirth`,
     });
     fragment.append(firstNameInput.create, lastNameInput.create, dateInput.create);
     return fragment;
   }
 
-  private countries(): HTMLDivElement {
+  private countries(addressType: string): HTMLDivElement {
     const wrapper: HTMLDivElement = document.createElement('div');
     const label1: HTMLLabelElement = document.createElement('label');
     const label2: HTMLLabelElement = document.createElement('label');
@@ -124,12 +119,14 @@ export class RegisterForm extends LoginForm {
     const span1: HTMLSpanElement = document.createElement('span');
     const span2: HTMLSpanElement = document.createElement('span');
 
-    input1.setAttribute('name', 'country');
+    input1.setAttribute('name', `${addressType.toLowerCase()}-country`);
     input1.setAttribute('type', 'radio');
     input1.setAttribute('checked', 'true');
+    input1.setAttribute('value', 'RU');
 
-    input2.setAttribute('name', 'country');
+    input2.setAttribute('name', `${addressType.toLowerCase()}-country`);
     input2.setAttribute('type', 'radio');
+    input2.setAttribute('value', 'US');
 
     function onChange(): void {
       const postInput: Element | null = document.querySelector(`[data-type="${textInputs.POST}"]`);
@@ -149,5 +146,65 @@ export class RegisterForm extends LoginForm {
 
     wrapper.append(label1, label2);
     return wrapper;
+  }
+
+  private getAddressCheckboxes(addressType: string) {
+    const container: HTMLDivElement = document.createElement('div');
+    const setAsDefaultCheckbox: HTMLDivElement = this.getDefaultAddressCheckbox(addressType);
+    const setaAsShippingCheckbox: HTMLDivElement = this.getUseAsShippingCheckbox();
+
+    container.classList.add('address__options');
+
+    container.append(setAsDefaultCheckbox);
+    if (addressType === addressTypes.BILLING) container.append(setaAsShippingCheckbox);
+
+    return container;
+  }
+
+  private getUseAsShippingCheckbox(): HTMLDivElement {
+    const container: HTMLDivElement = document.createElement('div');
+    container.classList.add('address__use-as-shipping');
+    const label: HTMLLabelElement = document.createElement('label');
+    const input: HTMLInputElement = document.createElement('input');
+    const span: HTMLSpanElement = document.createElement('span');
+
+    input.setAttribute('name', `use-as-shipping`);
+    input.setAttribute('type', 'checkbox');
+    input.checked = false;
+    input.classList.add('filled-in');
+
+    span.textContent = `Use as shipping address`;
+
+    input.addEventListener('change', function () {
+      const shippingAddressContainer: HTMLDivElement | null = document.querySelector('.address__shipping');
+      if (shippingAddressContainer) {
+        shippingAddressContainer.style.display = this.checked ? 'none' : 'flex';
+      }
+    });
+
+    label.append(input, span);
+
+    container.append(label);
+    return container;
+  }
+
+  private getDefaultAddressCheckbox(addressType: string): HTMLDivElement {
+    const container: HTMLDivElement = document.createElement('div');
+    container.classList.add('default-address', 'switch');
+
+    const label: HTMLLabelElement = document.createElement('label');
+    const input: HTMLInputElement = document.createElement('input');
+    const span: HTMLSpanElement = document.createElement('span');
+
+    input.setAttribute('name', `default${addressType}Address`);
+    input.setAttribute('type', 'checkbox');
+    input.setAttribute('checked', 'false');
+
+    span.classList.add('lever');
+
+    label.append(input, span, `Set as default address`);
+
+    container.append(label);
+    return container;
   }
 }

@@ -24,7 +24,7 @@ export default class SignUp extends ComponentView {
         linkText: 'Already have an account ? Login ',
         redirectText: 'login',
         onSubmit: () => console.log('submit'),
-      }).createForm()
+      }).getElement()
     );
   }
 }

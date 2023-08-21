@@ -1,9 +1,10 @@
 export interface IInput {
-  type: string;
-  id: number;
-  classNames: string[];
-  value: string;
+  type?: string;
+  id: number | string;
+  classNames?: string[];
+  value?: string;
   placeholder: string;
+  name: string;
 }
 
 export interface IForm {
