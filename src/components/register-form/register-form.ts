@@ -40,7 +40,6 @@ export class RegisterForm extends LoginForm {
         await api
           .customerLogin({ email: email, password: password as string })
           .catch((error) => M.toast({ html: error.message, classes: 'rounded' }));
-        console.log(api.getTokenCache());
         M.toast({ html: 'You are successfuly login', classes: 'rounded' });
       }
     });
