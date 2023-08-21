@@ -7,6 +7,7 @@ import { validate } from 'src/lib/utils/validate';
 import { CustomerDraft } from '@commercetools/platform-sdk';
 import { getFormFieldsAsCustomerDraft } from '@lib/utils/get-form-fields';
 import ApiServices from '@lib/api/api-services';
+
 export class RegisterForm extends LoginForm {
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
     super({ titleText, descText, btnText, linkText, redirectText, onSubmit });
@@ -14,7 +15,6 @@ export class RegisterForm extends LoginForm {
 
   protected feedForm(): void {
     const { emailInput, passwordInput } = this.createInputElements();
-
     this.form.append(
       this.createFormTitle(),
       emailInput,
@@ -25,12 +25,16 @@ export class RegisterForm extends LoginForm {
       this.createSubmitBtn(),
       this.registerLink(this.redirectText)
     );
+
+    // this.setFormSubmitEventHandler(this.form);
   }
 
-  protected setFormSubmitEventHandler() {
+  public setFormSubmitEventHandler() {
     this.form.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
       ev.preventDefault();
+      console.log(this.form);
       const isValid: boolean = this.validateForm(this.form);
+      console.log(isValid);
       if (isValid) {
         M.AutoInit();
         const api: ApiServices = new ApiServices();
@@ -187,7 +191,9 @@ export class RegisterForm extends LoginForm {
     input.addEventListener('change', function () {
       const shippingAddressContainer: HTMLDivElement | null = document.querySelector('.address__shipping');
       if (shippingAddressContainer) {
-        shippingAddressContainer.style.display = this.checked ? 'none' : 'flex';
+        this.checked
+          ? shippingAddressContainer.classList.add('none')
+          : shippingAddressContainer.classList.remove('none');
       }
     });
 
