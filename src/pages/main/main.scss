@@ -2,7 +2,9 @@
 
 .signup-title,
 .login-title {
-  margin-top: 40px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
 }
 
 .main-icons {
@@ -12,11 +14,8 @@
 }
 
 .main-link {
+  font-size: 3rem;
   &:hover {
     color: $color-three;
   }
-}
-
-.link-wrapper {
-  display: flex;
 }

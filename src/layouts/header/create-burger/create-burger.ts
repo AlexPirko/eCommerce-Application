@@ -22,14 +22,13 @@ export default class CreateBurger {
         this.openMenu();
         nav.classList.add('active');
       } else {
-        this.closeMenu();
+        this.closeMenu(nav);
       }
     });
 
     navItemElem.forEach((item: HTMLElement) => {
       item.addEventListener('click', () => {
-        this.closeMenu();
-        nav.classList.remove('active');
+        this.closeMenu(nav);
       });
     });
   }
@@ -41,8 +40,9 @@ export default class CreateBurger {
     this.backgroundElem.style.display = 'block';
   }
 
-  private closeMenu(): void {
+  private closeMenu(elem: HTMLElement): void {
     this.isOpen = false;
+    elem.classList.remove('active');
     this.burgerWrapper.classList.remove('active');
     document.body.style.overflow = '';
     this.backgroundElem.style.display = 'none';
