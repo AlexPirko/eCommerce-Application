@@ -42,12 +42,13 @@ export class RegisterForm extends LoginForm {
             api.customerLogin({ email: email, password: password as string }).catch((error) => {
               throw error;
             });
-            console.log(api.getTokenCache());
             M.toast({ html: 'You are successfuly login', classes: 'rounded' });
           })
           .catch((error) => {
             M.toast({ html: error.message, classes: 'rounded' });
           });
+        localStorage.setItem('login', 'true');
+        document.location.href = `http://${window.location.host}`;
       }
     });
   }

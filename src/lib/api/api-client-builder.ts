@@ -30,8 +30,6 @@ export default class CtpClientBuilder {
   }
 
   private getCtpClientWithCredentialsFlow(): Client {
-    console.log('withClientCredentials scope:\n');
-
     const authMiddlewareOptions: AuthMiddlewareOptions = {
       host: ctpParams.CTP_AUTH_URL,
       projectKey: ctpParams.CTP_PROJECT_KEY,
