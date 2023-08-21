@@ -30,17 +30,17 @@ export default class Main extends ComponentView {
   }
 
   private createContent(isLogin: boolean): void {
-    const signupTitle: HTMLElement = makeElement('div', ['signup-title']);
-    const signupIcon: HTMLElement = makeElement('i', ['material-icons', 'main-icons']);
+    const signupTitle: HTMLElement = createHTMLElement('div', ['signup-title']);
+    const signupIcon: HTMLElement = createHTMLElement('i', ['material-icons', 'main-icons']);
     signupIcon.textContent = 'settings_power';
-    const signupLink: HTMLElement = makeElement('a', ['main-link']);
+    const signupLink: HTMLElement = createHTMLElement('a', ['main-link']);
     signupLink.textContent = 'Sign up';
     signupTitle.append(signupIcon, signupLink);
 
-    const loginTitle: HTMLElement = makeElement('div', ['login-title']);
-    const loginIcon: HTMLElement = makeElement('i', ['material-icons', 'main-icons']);
+    const loginTitle: HTMLElement = createHTMLElement('div', ['login-title']);
+    const loginIcon: HTMLElement = createHTMLElement('i', ['material-icons', 'main-icons']);
     loginIcon.textContent = 'vpn_key';
-    const loginLink: HTMLElement = makeElement('a', ['main-link']);
+    const loginLink: HTMLElement = createHTMLElement('a', ['main-link']);
     loginLink.textContent = 'Login up';
     loginTitle.append(loginIcon, loginLink);
 
