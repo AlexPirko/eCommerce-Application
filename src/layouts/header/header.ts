@@ -5,7 +5,7 @@ import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';
 import HeaderLink from './header-link/header-link';
 import Router from '@components/router/router';
-import makeElement from '@lib/utils/make-element';
+import createHTMLElement from '@lib/utils/create-html-element';
 
 const HeaderTitle: HeaderTitle = {
   MAIN: 'Main',
@@ -48,8 +48,8 @@ export default class Header extends ComponentView {
     };
     const NUM_OF_LEFT_NAV_TITLE = 4;
     const navElementBuilder: ElementBuilder = new ElementBuilder(navParams);
-    const leftNavNodeWrapper: HTMLElement = makeElement('div', ['left-node__wrapper']);
-    const rightNavNodeWrapper: HTMLElement = makeElement('div', ['right-node__wrapper']);
+    const leftNavNodeWrapper: HTMLDivElement = createHTMLElement('div', ['left-node__wrapper']);
+    const rightNavNodeWrapper: HTMLDivElement = createHTMLElement('div', ['right-node__wrapper']);
     navElementBuilder.addInnerElement(leftNavNodeWrapper);
     navElementBuilder.addInnerElement(rightNavNodeWrapper);
 

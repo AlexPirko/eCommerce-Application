@@ -3,7 +3,7 @@ import mainImage from '../../assets/images/404.gif';
 import { Params } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';
-import makeElement from '@lib/utils/make-element';
+import createHTMLElement from '@lib/utils/create-html-element';
 
 export default class NotFound extends ComponentView {
   constructor() {
@@ -29,19 +29,21 @@ export default class NotFound extends ComponentView {
   }
 
   private createContent(): void {
-    const pageWrapper: HTMLElement = makeElement('div', ['page-wrapper']);
-    const firstFigure: HTMLElement = makeElement('h2', ['four-figure']);
-    const lastFigure: HTMLElement = makeElement('h2', ['four-figure']);
+    const pageWrapper: HTMLDivElement = createHTMLElement('div', ['page-wrapper']);
+    const firstFigure: HTMLHeadingElement = createHTMLElement('h2', ['four-figure']);
+    const lastFigure: HTMLHeadingElement = createHTMLElement('h2', ['four-figure']);
     firstFigure.textContent = '4';
     lastFigure.textContent = '4';
+
     const img: HTMLImageElement = new Image();
     img.src = mainImage;
     img.classList.add('not-found__image');
 
-    const info: HTMLElement = makeElement('div', ['info-wrapper']);
-    const infoTitle: HTMLElement = makeElement('h3', ['info-title']);
+    const info: HTMLDivElement = createHTMLElement('div', ['info-wrapper']);
+    const infoTitle: HTMLHeadingElement = createHTMLElement('h3', ['info-title']);
     infoTitle.textContent = '...page not found';
-    const backBtn = makeElement('a', ['back-btn', 'waves-effect', 'btn']) as HTMLLinkElement;
+
+    const backBtn: HTMLLinkElement = createHTMLElement('a', ['back-btn', 'waves-effect', 'btn']);
     backBtn.href = 'http://localhost:8080/';
     backBtn.innerHTML =
       '<i class="back-btn__icon material-icons">camera</i><i class="back-btn__icon material-icons">keyboard_return</i>';

@@ -1,14 +1,16 @@
 import './login-form.scss';
-import M from 'materialize-css'; // Импорт объекта M из библиотеки Materialize
+import M from 'materialize-css';
 import 'materialize-css/dist/css/materialize.min.css';
 import toggleNavBtn from '@lib/utils/toggleNavBtn';
 import blockMainLink from '@lib/utils/block-main-link';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
+import createHTMLElement from '@lib/utils/create-html-element';
 import ApiServices from '@lib/api/api-services';
 import Router from '@components/router/router';
 
 export class LoginForm {
+  protected form: HTMLFormElement;
   protected titleText: string;
   protected descText: string;
   protected btnText: string;
@@ -17,17 +19,23 @@ export class LoginForm {
   protected onSubmit: () => void;
 
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
+    this.form = createHTMLElement('form', ['form'], { novalidate: '' });
     this.titleText = titleText;
     this.descText = descText;
     this.btnText = btnText;
     this.linkText = linkText;
     this.redirectText = redirectText;
     this.onSubmit = onSubmit;
+    this.feedForm();
+    this.setFormSubmitEventHandler();
   }
 
   protected createSubmitBtn(): HTMLButtonElement {
-    const btn: HTMLButtonElement = document.createElement('button');
-    btn.classList.add('btn', 'waves-effect', 'waves-light');
+    const btnParams = {
+      tag: 'button',
+      classes: ['btn', 'waves-effect', 'waves-light'],
+    };
+    const btn: HTMLButtonElement = createHTMLElement(btnParams.tag, btnParams.classes);
     btn.textContent = this.btnText;
     return btn;
   }
@@ -44,6 +52,38 @@ export class LoginForm {
     return fragment;
   }
 
+  protected createInputElements(): { emailInput: HTMLDivElement; passwordInput: HTMLDivElement } {
+    const emailInput: HTMLDivElement = new InputBlock({
+      type: 'email',
+      id: 3,
+      label: 'Email',
+      placeholder: 'Enter your email',
+      name: 'email',
+    }).create;
+
+    const passwordInput: HTMLDivElement = new InputBlock({
+      type: 'password',
+      id: 4,
+      label: 'Password',
+      placeholder: 'Enter your password',
+      name: 'password',
+    }).create;
+
+    return { emailInput, passwordInput };
+  }
+
+  protected feedForm(): void {
+    const { emailInput, passwordInput } = this.createInputElements();
+
+    this.form.append(
+      this.createFormTitle(),
+      emailInput,
+      passwordInput,
+      this.createSubmitBtn(),
+      this.registerLink(this.redirectText)
+    );
+  }
+
   protected validateForm(form: HTMLFormElement): boolean {
     const inputs: NodeListOf<HTMLInputElement> = form.querySelectorAll('input');
     let valid: boolean = true;
@@ -56,40 +96,11 @@ export class LoginForm {
     return valid;
   }
 
-  public createForm(): HTMLFormElement {
-    const form: HTMLFormElement = document.createElement('form');
-    form.classList.add('form');
-    form.setAttribute('novalidate', '');
-    const emailInput: InputBlock = new InputBlock({
-      type: 'email',
-      id: 3,
-      label: 'Email',
-      classNames: [''],
-      placeholder: 'Enter your email',
-      value: '',
-    });
-    const passwordInput: InputBlock = new InputBlock({
-      type: 'password',
-      id: 4,
-      label: 'Password',
-      classNames: [''],
-      placeholder: 'Enter your password',
-      value: '',
-    });
-
-    form.append(
-      this.createFormTitle(),
-      emailInput.create,
-      passwordInput.create,
-      this.createSubmitBtn(),
-      this.registerLink(this.redirectText)
-    );
-
-    form.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
+  protected setFormSubmitEventHandler() {
+    this.form.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
       ev.preventDefault();
-      this.submitForm(form);
+      this.submitForm(this.form);
     });
-    return form;
   }
 
   public submitForm(form: HTMLFormElement): void {
@@ -102,6 +113,7 @@ export class LoginForm {
       const api: ApiServices = new ApiServices();
 
       if (email !== undefined && password !== undefined) {
+        M.AutoInit();
         api
           .customerLogin({ email, password })
           .then((res) => {
@@ -111,9 +123,9 @@ export class LoginForm {
             localStorage.setItem('login', 'true');
             toggleNavBtn();
             blockMainLink();
+            M.toast({ html: 'You are successfuly login', classes: 'rounded' });
           })
           .catch((error) => {
-            M.AutoInit();
             M.toast({ html: error.message, classes: 'rounded' });
           });
       }
@@ -128,5 +140,9 @@ export class LoginForm {
     link.textContent = 'here';
     text.append(link);
     return text;
+  }
+
+  public getElement() {
+    return this.form;
   }
 }

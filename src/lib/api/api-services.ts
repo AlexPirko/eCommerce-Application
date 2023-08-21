@@ -44,7 +44,6 @@ export default class ApiServices {
       .post({
         body: customerData,
         headers: {
-          Authorization: this._tokenCache.get().token,
           'Content-Type': 'application/json',
         },
       })
@@ -111,10 +110,11 @@ export default class ApiServices {
       .me()
       .login()
       .post({ body: customerData })
-      .execute()
-      .catch((error) => error);
+      .execute();
+    // .catch((error) => error);
     const refreshToken: string | undefined = this.getTokenCache().get().refreshToken;
-    localStorage.setItem('refreshToken', `${refreshToken}`);
+    console.log(refreshToken);
+    if (refreshToken) localStorage.setItem('refreshToken', `${refreshToken}`);
     return response;
   }
 }
