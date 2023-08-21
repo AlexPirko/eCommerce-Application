@@ -25,8 +25,11 @@ export class Validate {
     return passwordRegex.test(value);
   }
 
-  public postCode(value: string): boolean {
-    const ruRadio: HTMLElement | null = document.querySelector('[name="country"]');
+  public postCode(value: string, name: string): boolean {
+    const ruRadio: HTMLElement | null =
+      name === 'billing-postal'
+        ? document.querySelector('[name="billing-country"]')
+        : document.querySelector('[name="shipping-country"]');
     if (ruRadio !== null) {
       return (<HTMLInputElement>ruRadio).checked === true ? ruPost.test(value) : usPost.test(value);
     }
@@ -60,7 +63,8 @@ export function validate(value: string, input: HTMLInputElement): boolean {
     if (type === textInputs.FIRST || type === textInputs.LAST || type === textInputs.CITY) {
       isError = !validator.noSpec(value);
     } else if (type === textInputs.POST) {
-      isError = !validator.postCode(value);
+      const name = input.name;
+      isError = !validator.postCode(value, name);
     } else {
       isError = !(value.length > 0);
     }
@@ -70,7 +74,6 @@ export function validate(value: string, input: HTMLInputElement): boolean {
 
   if (isError) {
     input.classList.add('invalid');
-    console.log(input);
     highlightError(isError, input);
   } else {
     input.classList.remove('invalid');
@@ -87,8 +90,7 @@ export function highlightError(isError: boolean, input: HTMLInputElement): void 
       if (input.dataset.type === 'password') {
         errorEl.textContent = passwordErrorMsg(input.value);
       } else if (input.dataset.type === textInputs.POST) {
-        console.log('post');
-        errorEl.textContent = postErrorMsg(input.value);
+        errorEl.textContent = postErrorMsg(input.value, input);
       } else if (input.dataset.type) {
         errorEl.textContent = errorMsg(input.dataset.type);
       } else if (input.type === 'date') {
@@ -123,14 +125,18 @@ export function passwordErrorMsg(value: string): string {
   }
 }
 
-export function postErrorMsg(value: string): string {
-  const ruRadio: HTMLElement | null = document.querySelector('[name="country"]');
+export function postErrorMsg(value: string, input: HTMLInputElement): string {
+  const ruRadio: HTMLElement | null =
+    input.name === 'billing-postal'
+      ? document.querySelector('[name="billing-country"]')
+      : document.querySelector('[name="shipping-country"]');
+
   if (ruRadio !== null) {
     if ((<HTMLInputElement>ruRadio).checked === true) {
       return 'Post code must be 6 digits';
     } else {
       if (value.length < 5) return 'Post code must be at least 5 digits';
-      return 'The index should be in this format: 33130-5678';
+      return 'The index should be in this format: 33130-5678 or 12345';
     }
   }
   return 'Wrong Post Format';
