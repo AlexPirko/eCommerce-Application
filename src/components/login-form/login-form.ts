@@ -19,7 +19,7 @@ export class LoginForm {
   protected onSubmit: () => void;
 
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
-    this.form = createHTMLElement('form', ['form'], { novalidate: '' });
+    this.form = createHTMLElement('form', ['form'], { novalidate: 'true' });
     this.titleText = titleText;
     this.descText = descText;
     this.btnText = btnText;
