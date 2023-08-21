@@ -19,7 +19,7 @@ export class LoginForm {
   protected onSubmit: () => void;
 
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
-    this.form = createHTMLElement('form', ['form'], { novalidate: '' });
+    this.form = createHTMLElement('form', ['form'], { novalidate: 'true' });
     this.titleText = titleText;
     this.descText = descText;
     this.btnText = btnText;
@@ -116,8 +116,7 @@ export class LoginForm {
         M.AutoInit();
         api
           .customerLogin({ email, password })
-          .then((res) => {
-            console.log(res);
+          .then(() => {
             this.onSubmit();
             localStorage.setItem('login', 'true');
             document.location.href = `http://${window.location.host}`;

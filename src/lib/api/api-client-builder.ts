@@ -54,8 +54,6 @@ export default class CtpClientBuilder {
   }
 
   private getCtpClientWithRefrehToken(refreshToken: string, currentTokenCache: TokenCache): Client {
-    console.log('withRefrehToken scope:\n');
-
     const refreshAuthMiddlewareOptions: RefreshAuthMiddlewareOptions = {
       host: ctpParams.CTP_AUTH_URL,
       projectKey: ctpParams.CTP_PROJECT_KEY,
@@ -82,8 +80,6 @@ export default class CtpClientBuilder {
     customerPassword: string,
     tokenCache: TokenCache
   ): Client {
-    console.log('withPasswordFlow scope:\n');
-
     const passwordAuthMiddlewareOptions: PasswordAuthMiddlewareOptions = {
       host: ctpParams.CTP_AUTH_URL,
       projectKey: ctpParams.CTP_PROJECT_KEY,
@@ -111,8 +107,6 @@ export default class CtpClientBuilder {
   }
 
   private getCtpClientWithAnonymousFlow(tokenCache: TokenCache): Client {
-    console.log('withAnonymousFlow scope:\n');
-
     const authMiddlewareOptions: AuthMiddlewareOptions = {
       host: ctpParams.CTP_AUTH_URL,
       projectKey: ctpParams.CTP_PROJECT_KEY,
