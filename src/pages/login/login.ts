@@ -24,7 +24,7 @@ export default class Login extends ComponentView {
         linkText: "Don't have an account ? Register ",
         redirectText: 'signup',
         onSubmit: () => console.log('submit'),
-      }).createForm()
+      }).getElement()
     );
   }
 }

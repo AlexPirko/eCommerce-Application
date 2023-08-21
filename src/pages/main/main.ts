@@ -1,6 +1,6 @@
 import './main.scss';
 import { Params } from '@lib/types/params-interface';
-import makeElement from '@lib/utils/make-element';
+import createHTMLElement from '@lib/utils/create-html-element';
 import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';
 

@@ -1,13 +1,13 @@
-import makeElement from '@lib/utils/make-element';
+import createHTMLElement from '@lib/utils/create-html-element';
 
 export default class CreateBurger {
-  protected readonly burgerWrapper: HTMLElement = makeElement('div', ['burger__wrapper']);
-  protected readonly backgroundElem: HTMLElement = makeElement('div', ['background-element']);
+  protected readonly burgerWrapper: HTMLDivElement = createHTMLElement('div', ['burger__wrapper']);
+  protected readonly backgroundElem: HTMLDivElement = createHTMLElement('div', ['background-element']);
   protected isOpen: boolean = false;
 
   public createBurgerElement(): HTMLElement {
-    const burger: HTMLElement = makeElement('span', ['burger']);
-    const burgerLine: HTMLElement = makeElement('span', ['burger__line']);
+    const burger: HTMLSpanElement = createHTMLElement('span', ['burger']);
+    const burgerLine: HTMLSpanElement = createHTMLElement('span', ['burger__line']);
     document.body.append(this.backgroundElem);
     burger.append(burgerLine);
     this.burgerWrapper.append(burger);

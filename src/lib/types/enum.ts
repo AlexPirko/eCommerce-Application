@@ -6,3 +6,8 @@ export enum textInputs {
   CITY = 'City',
   POST = 'Postal',
 }
+
+export enum addressTypes {
+  BILLING = 'Billing',
+  SHIPPING = 'Shipping',
+}

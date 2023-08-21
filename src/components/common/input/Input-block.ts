@@ -6,8 +6,8 @@ export default class InputBlock extends Input {
   private label: string;
   public create: HTMLDivElement;
 
-  constructor({ type, id, label, classNames, placeholder, value }: IInputBlock) {
-    super({ type, id, classNames, placeholder, value });
+  constructor({ type = 'text', id, label, classNames = [''], placeholder, value = '', name }: IInputBlock) {
+    super({ type, id, classNames, placeholder, value, name });
     this.label = label;
     this.create = this.createInputBlock();
   }
@@ -31,10 +31,9 @@ export default class InputBlock extends Input {
 
     const input: HTMLInputElement = this.getInputElement();
     if (this.type === 'text') {
-      const atr: string = this.label.split(' ')[0];
-      input.setAttribute('data-type', atr);
+      input.setAttribute('data-type', this.name);
     }
-    input.setAttribute('name', this.label.toLowerCase());
+    input.setAttribute('name', this.name);
     input.addEventListener('input', this.handleInput.bind(this, input));
     const label: HTMLLabelElement | null = this.type === 'password' ? this.passwordInput(input) : null;
 
