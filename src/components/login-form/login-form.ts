@@ -1,5 +1,5 @@
 import './login-form.scss';
-import M from 'materialize-css'; // Импорт объекта M из библиотеки Materialize
+import M from 'materialize-css';
 import 'materialize-css/dist/css/materialize.min.css';
 import toggleNavBtn from '@lib/utils/toggleNavBtn';
 import blockMainLink from '@lib/utils/block-main-link';
@@ -113,6 +113,7 @@ export class LoginForm {
       const api: ApiServices = new ApiServices();
 
       if (email !== undefined && password !== undefined) {
+        M.AutoInit();
         api
           .customerLogin({ email, password })
           .then((res) => {
@@ -122,9 +123,9 @@ export class LoginForm {
             localStorage.setItem('login', 'true');
             toggleNavBtn();
             blockMainLink();
+            M.toast({ html: 'You are successfuly login', classes: 'rounded' });
           })
           .catch((error) => {
-            M.AutoInit();
             M.toast({ html: error.message, classes: 'rounded' });
           });
       }

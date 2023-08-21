@@ -31,8 +31,7 @@ export default class InputBlock extends Input {
 
     const input: HTMLInputElement = this.getInputElement();
     if (this.type === 'text') {
-      const atr: string = this.label.split(' ')[0];
-      input.setAttribute('data-type', atr);
+      input.setAttribute('data-type', this.name);
     }
     input.setAttribute('name', this.name);
     input.addEventListener('input', this.handleInput.bind(this, input));

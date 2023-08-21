@@ -110,10 +110,10 @@ export default class ApiServices {
       .me()
       .login()
       .post({ body: customerData })
-      .execute()
-      .catch((error) => error);
+      .execute();
+    // .catch((error) => error);
     const refreshToken: string | undefined = this.getTokenCache().get().refreshToken;
-    console.log(this.getTokenCache);
+    console.log(refreshToken);
     if (refreshToken) localStorage.setItem('refreshToken', `${refreshToken}`);
     return response;
   }

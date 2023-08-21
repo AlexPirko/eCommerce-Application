@@ -32,13 +32,15 @@ export class RegisterForm extends LoginForm {
       ev.preventDefault();
       const isValid: boolean = this.validateForm(this.form);
       if (isValid) {
+        M.AutoInit();
         const api: ApiServices = new ApiServices();
         const customerDraft: CustomerDraft = getFormFieldsAsCustomerDraft(this.form);
         const { email, password } = customerDraft;
         await api.createCustomer(customerDraft).catch((error) => error);
-        await api.customerLogin({ email: email, password: password as string }).catch((error) => error);
+        await api
+          .customerLogin({ email: email, password: password as string })
+          .catch((error) => M.toast({ html: error.message, classes: 'rounded' }));
         console.log(api.getTokenCache());
-        M.AutoInit();
         M.toast({ html: 'You are successfuly login', classes: 'rounded' });
       }
     });
