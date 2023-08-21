@@ -6,6 +6,7 @@ import {
   CustomerCreateEmailToken,
   CustomerDraft,
   CustomerSignInResult,
+  CustomerToken,
   MyCustomerSignin,
   ProductPagedQueryResponse,
   createApiBuilderFromCtpClient,
@@ -48,7 +49,9 @@ export default class ApiServices {
         },
       })
       .execute()
-      .catch((error) => error);
+      .catch((error) => {
+        throw error;
+      });
   }
 
   public async deleteCustomer(customerId: string, version: string): Promise<Customer> {
@@ -60,17 +63,21 @@ export default class ApiServices {
           Authorization: this._tokenCache.get().token,
         },
       }
-    ).catch((error) => error);
+    ).catch((error) => {
+      throw error;
+    });
     return response.json();
   }
 
-  public async getCustomer(customerId: string): Promise<Customer> {
+  public async getCustomer(customerId: string): Promise<ClientResponse<Customer>> {
     return this._apiRoot
       .customers()
       .withId({ ID: customerId })
       .get()
       .execute()
-      .catch((error) => error);
+      .catch((error) => {
+        throw error;
+      });
   }
 
   public async getCurrentCustomer(): Promise<ClientResponse<Customer>> {
@@ -78,7 +85,9 @@ export default class ApiServices {
       .me()
       .get()
       .execute()
-      .catch((error) => error);
+      .catch((error) => {
+        throw error;
+      });
   }
 
   public async getProducts(): Promise<ClientResponse<ProductPagedQueryResponse>> {
@@ -86,14 +95,16 @@ export default class ApiServices {
       .products()
       .get()
       .execute()
-      .catch((error) => error);
+      .catch((error) => {
+        throw error;
+      });
   }
 
   public getTokenCache(): TokenCache {
     return this._tokenCache;
   }
 
-  public async verifyEmail(customerCreateEmailData: CustomerCreateEmailToken): Promise<void> {
+  public async verifyEmail(customerCreateEmailData: CustomerCreateEmailToken): Promise<ClientResponse<CustomerToken>> {
     return this._apiRoot
       .customers()
       .emailToken()
@@ -101,7 +112,9 @@ export default class ApiServices {
         body: customerCreateEmailData,
       })
       .execute()
-      .catch((error) => error);
+      .catch((error) => {
+        throw error;
+      });
   }
 
   public async customerLogin(customerData: MyCustomerSignin): Promise<ClientResponse<CustomerSignInResult>> {
@@ -110,10 +123,11 @@ export default class ApiServices {
       .me()
       .login()
       .post({ body: customerData })
-      .execute();
-    // .catch((error) => error);
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
     const refreshToken: string | undefined = this.getTokenCache().get().refreshToken;
-    console.log(refreshToken);
     if (refreshToken) localStorage.setItem('refreshToken', `${refreshToken}`);
     return response;
   }
