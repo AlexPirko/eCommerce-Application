@@ -16,17 +16,20 @@ import ClientTokenCache from './token-cache';
 
 export default class ApiServices {
   private static _instance: ApiServices;
-  private _ctpClient: Client;
-  private _apiRoot: ByProjectKeyRequestBuilder;
-  private _tokenCache: ClientTokenCache;
+  private _ctpClient!: Client;
+  private _apiRoot!: ByProjectKeyRequestBuilder;
+  private _tokenCache!: ClientTokenCache;
 
   constructor() {
+    if (ApiServices._instance) {
+      return ApiServices._instance;
+    }
     this._tokenCache = new ClientTokenCache();
     this._ctpClient = new CtpClientBuilder().createCtpClient('', '', this._tokenCache);
     this._apiRoot = createApiBuilderFromCtpClient(this._ctpClient).withProjectKey({
       projectKey: ctpParams.CTP_PROJECT_KEY,
     });
-    return ApiServices._instance ?? (ApiServices._instance = this);
+    ApiServices._instance = this;
   }
 
   public setApiClient(email: string | null = null, password: string | null = null): ApiServices {

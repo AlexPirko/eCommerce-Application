@@ -1,6 +1,6 @@
-import { TokenStore } from '@commercetools/sdk-client-v2';
+import { TokenCache, TokenStore } from '@commercetools/sdk-client-v2';
 
-export default class ClientTokenCache {
+export default class ClientTokenCache implements TokenCache {
   private cache: TokenStore;
 
   constructor() {
