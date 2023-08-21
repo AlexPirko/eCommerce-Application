@@ -1,14 +1,26 @@
 {
   "compilerOptions": {
     "rootDir": "src",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@src/*" : ["./src/"],
-      "@components/*" : ["./src/components/*"],
-      "@layouts/*" : ["./src/layouts/*"],
-      "@lib/*" : ["./src/layouts/*"],
-      "@pages/*" : ["./src/pages/*"],
-      "@assets/*" : ["./src/assets/*"],
+      "@src/*": [
+        "./src/"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@layouts/*": [
+        "./src/layouts/*"
+      ],
+      "@lib/*": [
+        "./src/lib/*"
+      ],
+      "@pages/*": [
+        "./src/pages/*"
+      ],
+      "@assets/*": [
+        "./src/assets/*"
+      ]
     },
     "lib": [
       "ES2021",
@@ -24,6 +36,6 @@
   },
   "include": [
     "src/**/*",
-    "main.ts"
+    "index.ts"
   ]
 }

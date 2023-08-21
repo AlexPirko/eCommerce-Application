@@ -1,0 +1,40 @@
+@import '/src/assets/styles/constants';
+
+.nav-item {
+  font-size: 2rem;
+  cursor: pointer;
+  color: $color-seven;
+  &:not(:last-child) {
+    padding-right: 4rem;
+    @include laptop {
+      padding-right: 1rem;
+    }
+  }
+  &:hover {
+    color: $color-four;
+  }
+  &__selected {
+    color: $color-selected;
+  }
+  @include laptop {
+    padding-right: 1rem;
+  }
+}
+
+.nav-item__selected > .btn {
+  background-color: $color-selected !important;
+}
+
+nav i.menu-logo {
+  font-size: 4rem !important;
+}
+
+nav i.menu-cart {
+  font-size: 3rem !important;
+}
+
+.nav-signup,
+.nav-login,
+.nav-logout {
+  display: none;
+}

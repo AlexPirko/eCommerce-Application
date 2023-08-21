@@ -11,15 +11,22 @@ const baseConfig = {
     rules: [
       { test: /\.ts$/i, use: 'ts-loader' },
       {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      },
+      {
         test: /\.scss$/i,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/source',
+        type: 'asset/resource',
       },
       {
-        test: /\.(png|jpg|svg)$/,
+        test: /.(png|jpg|svg)$/,
         loader: 'url-loader',
         type: 'javascript/auto',
       },
@@ -44,11 +51,13 @@ const baseConfig = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
-    plugins: [new TsconfigPathsPlugin({})]
+    plugins: [new TsconfigPathsPlugin({})],
   },
   output: {
-    filename: 'index.js',
+    filename: '[name].js',
+    chunkFilename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   plugins: [
     new HtmlWebpackPlugin({
