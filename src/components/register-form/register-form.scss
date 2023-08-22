@@ -7,6 +7,7 @@
   flex-direction: column;
   gap: 30px;
   align-items: center;
+
   @include tablet {
     min-width: 280px;
   }
@@ -27,4 +28,12 @@
 
 .default-address {
   align-self: self-end;
+}
+
+.address__shipping {
+  display: flex;
+}
+
+.address__shipping.none {
+  display: none;
 }

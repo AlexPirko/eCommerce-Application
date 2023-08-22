@@ -74,7 +74,6 @@ export class LoginForm {
 
   protected feedForm(): void {
     const { emailInput, passwordInput } = this.createInputElements();
-
     this.form.append(
       this.createFormTitle(),
       emailInput,
@@ -89,14 +88,18 @@ export class LoginForm {
     let valid: boolean = true;
     inputs.forEach((input: HTMLInputElement): void => {
       if (input.value.trim().length === 0) {
-        input.classList.add('invalid');
-        valid = false;
+        if (input.closest('.none')) {
+          input.classList.remove('invalid');
+        } else {
+          input.classList.add('invalid');
+          valid = false;
+        }
       }
     });
     return valid;
   }
 
-  protected setFormSubmitEventHandler() {
+  public setFormSubmitEventHandler() {
     this.form.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
       ev.preventDefault();
       this.submitForm(this.form);

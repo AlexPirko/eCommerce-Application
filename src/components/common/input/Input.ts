@@ -28,11 +28,20 @@ export class Input {
     input.setAttribute('value', this.value ?? '');
     input.setAttribute('name', this.name);
     input.addEventListener('input', (): void => {
-      validate(input.value, input);
+      if (input.closest('.none')) {
+        input.classList.remove('invalid');
+      } else {
+        validate(input.value, input);
+      }
     });
     input.addEventListener('blur', (): void => {
-      validate(input.value, input);
+      if (input.closest('.none')) {
+        input.classList.remove('invalid');
+      } else {
+        validate(input.value, input);
+      }
     });
+
     return input;
   }
 
