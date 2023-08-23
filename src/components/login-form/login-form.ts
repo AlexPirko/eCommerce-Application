@@ -86,14 +86,12 @@ export class LoginForm {
     const inputs: NodeListOf<HTMLInputElement> = form.querySelectorAll('input');
     inputs.forEach((input: HTMLInputElement): void => {
       if (input.value.trim().length === 0) {
-        if (input.closest('.none')) {
-          input.classList.remove('invalid');
-        } else {
-          input.classList.add('invalid');
-        }
+        input.classList.add('invalid');
       }
     });
-    const valid: boolean = Array.from(inputs).every((input) => !input.classList.contains('invalid'));
+    const valid: boolean = Array.from(inputs).every((input) =>
+      input.closest('.none') ? true : !input.classList.contains('invalid')
+    );
     return valid;
   }
 
