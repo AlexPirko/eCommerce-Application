@@ -1,13 +1,12 @@
 import './login-form.scss';
 import M from 'materialize-css';
 import 'materialize-css/dist/css/materialize.min.css';
-// import toggleNavBtn from '@lib/utils/toggleNavBtn';
-// import blockMainLink from '@lib/utils/block-main-link';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
 import createHTMLElement from '@lib/utils/create-html-element';
 import ApiServices from '@lib/api/api-services';
-// import Router from '@components/router/router';
+import Router from '@components/router/router';
+import toggleNavBtn from '@lib/utils/toggle-nav-btn';
 
 export class LoginForm {
   protected form: HTMLFormElement;
@@ -85,17 +84,16 @@ export class LoginForm {
 
   protected validateForm(form: HTMLFormElement): boolean {
     const inputs: NodeListOf<HTMLInputElement> = form.querySelectorAll('input');
-    let valid: boolean = true;
     inputs.forEach((input: HTMLInputElement): void => {
       if (input.value.trim().length === 0) {
         if (input.closest('.none')) {
           input.classList.remove('invalid');
         } else {
           input.classList.add('invalid');
-          valid = false;
         }
       }
     });
+    const valid: boolean = Array.from(inputs).every((input) => !input.classList.contains('invalid'));
     return valid;
   }
 
@@ -109,11 +107,11 @@ export class LoginForm {
   public submitForm(form: HTMLFormElement): void {
     const isValid: boolean = this.validateForm(form);
     if (isValid) {
-      // const router: Router = new Router(null);
       const formData: FormData = new FormData(form);
       const email: string = String(formData.get('email'));
       const password: string = String(formData.get('password'));
       const api: ApiServices = new ApiServices();
+      const router: Router = new Router(null);
 
       if (email !== undefined && password !== undefined) {
         M.AutoInit();
@@ -121,8 +119,8 @@ export class LoginForm {
           .customerLogin({ email, password })
           .then(() => {
             this.onSubmit();
-            localStorage.setItem('login', 'true');
-            document.location.href = `http://${window.location.host}`;
+            toggleNavBtn();
+            router.navigate(`http://${window.location.host}`);
             M.toast({ html: 'You are successfuly login', classes: 'rounded' });
           })
           .catch((error) => {

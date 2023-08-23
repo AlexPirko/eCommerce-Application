@@ -3,11 +3,17 @@ import { Paths } from './paths';
 import SetRouterHistory from './set-router-history';
 
 export default class Router {
-  private routes: RouteParams[] | null;
+  private static _instance: Router;
 
-  private routerHistory: SetRouterHistory;
+  private routes!: RouteParams[] | null;
+
+  private routerHistory!: SetRouterHistory;
 
   constructor(routes: RouteParams[] | null) {
+    if (Router._instance) {
+      return Router._instance;
+    }
+
     this.routes = routes;
 
     this.routerHistory = new SetRouterHistory(this.changeUrlHandler.bind(this));
@@ -15,6 +21,8 @@ export default class Router {
     document.addEventListener('DOMContentLoaded', () => {
       this.routerHistory.navigate('');
     });
+
+    Router._instance = this;
   }
 
   public navigate(url: string | PopStateEvent): void {
