@@ -44,7 +44,7 @@ export default class NotFound extends ComponentView {
     infoTitle.textContent = '...page not found';
 
     const backBtn: HTMLLinkElement = createHTMLElement('a', ['back-btn', 'waves-effect', 'btn']);
-    backBtn.href = 'http://localhost:8080/';
+    backBtn.href = `http://${window.location.host}`;
     backBtn.innerHTML =
       '<i class="back-btn__icon material-icons">camera</i><i class="back-btn__icon material-icons">keyboard_return</i>';
     info.append(infoTitle, backBtn);
