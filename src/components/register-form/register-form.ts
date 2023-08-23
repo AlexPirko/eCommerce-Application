@@ -7,6 +7,9 @@ import { validate } from 'src/lib/utils/validate';
 import { CustomerDraft } from '@commercetools/platform-sdk';
 import { getFormFieldsAsCustomerDraft } from '@lib/utils/get-form-fields';
 import ApiServices from '@lib/api/api-services';
+import Router from '@components/router/router';
+import toggleNavBtn from '@lib/utils/toggle-nav-btn';
+
 export class RegisterForm extends LoginForm {
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
     super({ titleText, descText, btnText, linkText, redirectText, onSubmit });
@@ -14,7 +17,6 @@ export class RegisterForm extends LoginForm {
 
   protected feedForm(): void {
     const { emailInput, passwordInput } = this.createInputElements();
-
     this.form.append(
       this.createFormTitle(),
       emailInput,
@@ -27,28 +29,34 @@ export class RegisterForm extends LoginForm {
     );
   }
 
-  protected setFormSubmitEventHandler() {
+  public setFormSubmitEventHandler() {
     this.form.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
       ev.preventDefault();
       const isValid: boolean = this.validateForm(this.form);
       if (isValid) {
         M.AutoInit();
         const api: ApiServices = new ApiServices();
+        const router: Router = new Router(null);
         const customerDraft: CustomerDraft = getFormFieldsAsCustomerDraft(this.form);
         const { email, password } = customerDraft;
         api
           .createCustomer(customerDraft)
           .then(() => {
-            api.customerLogin({ email: email, password: password as string }).catch((error) => {
-              throw error;
-            });
+            api
+              .customerLogin({ email: email, password: password as string })
+              .then(() => {
+                localStorage.setItem('login', 'true');
+                toggleNavBtn();
+                router.navigate(`http://${window.location.host}`);
+              })
+              .catch((error) => {
+                throw error;
+              });
             M.toast({ html: 'You are successfuly login', classes: 'rounded' });
           })
           .catch((error) => {
             M.toast({ html: error.message, classes: 'rounded' });
           });
-        localStorage.setItem('login', 'true');
-        document.location.href = `http://${window.location.host}`;
       }
     });
   }
@@ -187,7 +195,9 @@ export class RegisterForm extends LoginForm {
     input.addEventListener('change', function () {
       const shippingAddressContainer: HTMLDivElement | null = document.querySelector('.address__shipping');
       if (shippingAddressContainer) {
-        shippingAddressContainer.style.display = this.checked ? 'none' : 'flex';
+        this.checked
+          ? shippingAddressContainer.classList.add('none')
+          : shippingAddressContainer.classList.remove('none');
       }
     });
 

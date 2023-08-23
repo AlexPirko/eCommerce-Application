@@ -1,5 +1,5 @@
 import '@assets/styles/global.scss';
-import toggleNavBtn from '@lib/utils/toggleNavBtn';
+import toggleNavBtn from '@lib/utils/toggle-nav-btn';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 import Header from '@layouts/header/header';
@@ -21,7 +21,6 @@ export default class App {
   private header: Header | null;
   private _apiServices: ApiServices;
   private burger: CreateBurger;
-  public isLogin: boolean = Boolean(localStorage.getItem('login')) || false;
 
   constructor() {
     this._apiServices = new ApiServices();
@@ -29,13 +28,13 @@ export default class App {
     this.header = null;
     this.burger = new CreateBurger();
 
-    const routes: RouteParams[] = this.createRoutes(this.isLogin);
+    const routes: RouteParams[] = this.createRoutes();
     this.router = new Router(routes);
 
     this.createView();
 
     document.addEventListener('DOMContentLoaded', () => {
-      toggleNavBtn(this.isLogin);
+      toggleNavBtn();
     });
   }
 
@@ -51,18 +50,18 @@ export default class App {
   }
 
   // eslint-disable-next-line max-lines-per-function
-  private createRoutes(isLogin: boolean): RouteParams[] {
+  private createRoutes(): RouteParams[] {
     return [
       {
         path: ``,
         callback: () => {
-          this.setContent(Paths.MAIN, new Main(isLogin));
+          this.setContent(Paths.MAIN, new Main());
         },
       },
       {
         path: `${Paths.MAIN}`,
         callback: () => {
-          this.setContent(Paths.MAIN, new Main(isLogin));
+          this.setContent(Paths.MAIN, new Main());
         },
       },
       {
