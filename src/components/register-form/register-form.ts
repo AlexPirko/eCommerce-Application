@@ -7,6 +7,7 @@ import { validate } from 'src/lib/utils/validate';
 import { CustomerDraft } from '@commercetools/platform-sdk';
 import { getFormFieldsAsCustomerDraft } from '@lib/utils/get-form-fields';
 import ApiServices from '@lib/api/api-services';
+import Router from '@components/router/router';
 
 export class RegisterForm extends LoginForm {
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
@@ -34,6 +35,7 @@ export class RegisterForm extends LoginForm {
       if (isValid) {
         M.AutoInit();
         const api: ApiServices = new ApiServices();
+        const router: Router = new Router(null);
         const customerDraft: CustomerDraft = getFormFieldsAsCustomerDraft(this.form);
         const { email, password } = customerDraft;
         api
@@ -43,7 +45,7 @@ export class RegisterForm extends LoginForm {
               .customerLogin({ email: email, password: password as string })
               .then(() => {
                 localStorage.setItem('login', 'true');
-                document.location.href = `http://${window.location.host}`;
+                router.navigate(`http://${window.location.host}`);
               })
               .catch((error) => {
                 throw error;
