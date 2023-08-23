@@ -3,10 +3,11 @@ import { Params } from '@lib/types/params-interface';
 import createHTMLElement from '@lib/utils/create-html-element';
 import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';
+import Router from '@components/router/router';
 
 export default class Main extends ComponentView {
   isLogin!: boolean;
-  constructor(isLogin: boolean) {
+  constructor() {
     const params: Params = {
       tagName: 'section',
       classNames: ['main-page'],
@@ -15,7 +16,7 @@ export default class Main extends ComponentView {
     };
     super(params);
     this.configureView();
-    this.createContent(isLogin);
+    this.createContent();
   }
 
   private configureView(): void {
@@ -29,7 +30,9 @@ export default class Main extends ComponentView {
     this.viewElementBuilder.addInnerElement(titleElementBuilder);
   }
 
-  private createContent(isLogin: boolean): void {
+  private createContent(): void {
+    const router: Router = new Router(null);
+    const isLogin: string | null = localStorage.getItem('refreshToken');
     const signupTitle: HTMLElement = createHTMLElement('div', ['signup-title']);
     const signupIcon: HTMLElement = createHTMLElement('i', ['material-icons', 'main-icons']);
     signupIcon.textContent = 'settings_power';
@@ -47,18 +50,18 @@ export default class Main extends ComponentView {
     signupTitle.addEventListener('click', (e: Event): void => {
       e.preventDefault();
       if (!isLogin) {
-        document.location.href = `http://${window.location.host}/signup`;
+        router.navigate(`http://${window.location.host}/signup`);
       } else {
-        document.location.href = `http://${window.location.host}`;
+        router.navigate(`http://${window.location.host}`);
       }
     });
 
     loginTitle.addEventListener('click', (e: Event): void => {
       e.preventDefault();
       if (!isLogin) {
-        document.location.href = `http://${window.location.host}/login`;
+        router.navigate(`http://${window.location.host}/login`);
       } else {
-        document.location.href = `http://${window.location.host}`;
+        router.navigate(`http://${window.location.host}`);
       }
     });
 

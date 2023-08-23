@@ -6,6 +6,7 @@ import { IForm } from '@lib/types/input-interface';
 import createHTMLElement from '@lib/utils/create-html-element';
 import ApiServices from '@lib/api/api-services';
 import Router from '@components/router/router';
+import toggleNavBtn from '@lib/utils/toggle-nav-btn';
 
 export class LoginForm {
   protected form: HTMLFormElement;
@@ -119,7 +120,7 @@ export class LoginForm {
           .customerLogin({ email, password })
           .then(() => {
             this.onSubmit();
-            localStorage.setItem('login', 'true');
+            toggleNavBtn();
             router.navigate(`http://${window.location.host}`);
             M.toast({ html: 'You are successfuly login', classes: 'rounded' });
           })
