@@ -72,18 +72,21 @@ export class RegisterForm extends LoginForm {
       label: textInputs.STREET,
       placeholder: 'Street',
       name: `${addressType.toLowerCase()}-street`,
+      disabled: false,
     });
     const cityInput: InputBlock = new InputBlock({
       id: `${addressType.toLowerCase()}City`,
       label: textInputs.CITY,
       placeholder: 'City',
       name: `${addressType.toLowerCase()}-city`,
+      disabled: false,
     });
     const postalInput: InputBlock = new InputBlock({
       id: `${addressType.toLowerCase()}Postal`,
       label: `${textInputs.POST} Code`,
       placeholder: 'Postal Code',
       name: `${addressType.toLowerCase()}-postal`,
+      disabled: false,
     });
     const countriesCheckBox: HTMLDivElement = this.countries(addressType);
     const addressCheckboxes: HTMLDivElement = this.getAddressCheckboxes(addressType);
@@ -104,6 +107,7 @@ export class RegisterForm extends LoginForm {
       id: 5,
       label: `${textInputs.FIRST} Name`,
       placeholder: 'Enter your First Name',
+      disabled: false,
       name: 'firstName',
     });
 
@@ -112,6 +116,7 @@ export class RegisterForm extends LoginForm {
       label: `${textInputs.LAST} Name`,
       placeholder: 'Enter your Last Name',
       name: 'lastName',
+      disabled: false,
     });
     const date: Date = new Date();
     const dateInput: InputBlock = new InputBlock({
@@ -120,6 +125,7 @@ export class RegisterForm extends LoginForm {
       label: `${textInputs.DATE} of Birth`,
       placeholder: date.toLocaleDateString('Ru-ru'),
       name: `dateOfBirth`,
+      disabled: false,
     });
     fragment.append(firstNameInput.create, lastNameInput.create, dateInput.create);
     return fragment;

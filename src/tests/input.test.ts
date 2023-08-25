@@ -11,6 +11,7 @@ describe('Input Class Tests', () => {
       placeholder: 'Enter your name',
       value: 'Oks Pozd',
       name: 'InputName',
+      disabled: false,
     };
 
     input = new Input(mockInputData);
