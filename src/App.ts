@@ -1,5 +1,6 @@
 import '@assets/styles/global.scss';
 import toggleNavBtn from '@lib/utils/toggle-nav-btn';
+import profileLinkGuard from '@lib/utils/profile-link-guard';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 import Header from '@layouts/header/header';
@@ -13,6 +14,7 @@ import Main from '@pages/main/main';
 import NotFound from '@pages/not-found/not-found';
 import PageContainer from '@pages/page-container';
 import SignUp from '@pages/sign-up/sign-up';
+import Profile from '@pages/profile/profile';
 
 export default class App {
   private static container: HTMLElement = document.getElementById('body') as HTMLElement;
@@ -75,8 +77,10 @@ export default class App {
         callback: () => {},
       },
       {
-        path: `${Paths.ACCOUNT}`,
-        callback: () => {},
+        path: `${Paths.PROFILE}`,
+        callback: () => {
+          this.setContent(Paths.PROFILE, new Profile());
+        },
       },
       {
         path: `${Paths.SIGNUP}`,
@@ -106,5 +110,6 @@ export default class App {
 
   public run(): void {
     this.burger.handlerListener();
+    profileLinkGuard();
   }
 }
