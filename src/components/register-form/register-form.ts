@@ -1,4 +1,5 @@
 import './register-form.scss';
+import handleVisibility from '@lib/utils/handle-visibility';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
 import { addressTypes, textInputs } from 'src/lib/types/enum';
@@ -8,7 +9,6 @@ import { CustomerDraft } from '@commercetools/platform-sdk';
 import { getFormFieldsAsCustomerDraft } from '@lib/utils/get-form-fields';
 import ApiServices from '@lib/api/api-services';
 import Router from '@components/router/router';
-import toggleNavBtn from '@lib/utils/toggle-nav-btn';
 
 export class RegisterForm extends LoginForm {
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
@@ -46,7 +46,7 @@ export class RegisterForm extends LoginForm {
               .customerLogin({ email: email, password: password as string })
               .then(() => {
                 localStorage.setItem('login', 'true');
-                toggleNavBtn();
+                handleVisibility();
                 router.navigate(`http://${window.location.host}`);
               })
               .catch((error) => {
