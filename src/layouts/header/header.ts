@@ -1,17 +1,17 @@
 import './header.scss';
+import createHTMLElement from '@lib/utils/create-html-element';
 import { Params, PageParams } from '@lib/types/params-interface';
 import { HeaderTitle } from '@lib/types/header-interface';
 import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';
 import HeaderLink from './header-link/header-link';
 import Router from '@components/router/router';
-import createHTMLElement from '@lib/utils/create-html-element';
 
 const HeaderTitle: HeaderTitle = {
   MAIN: 'Main',
   CATALOG: 'Catalog',
-  ACCOUNT: 'My Account',
   ABOUT: 'About Us',
+  PROFILE: 'Profile',
   CART: 'Cart',
   SIGNUP: 'Sign Up',
   LOGIN: 'Log In',
@@ -46,7 +46,7 @@ export default class Header extends ComponentView {
       classNames: ['nav'],
       callback: null,
     };
-    const NUM_OF_LEFT_NAV_TITLE = 4;
+    const NUM_OF_LEFT_NAV_TITLE = 3;
     const navElementBuilder: ElementBuilder = new ElementBuilder(navParams);
     const leftNavNodeWrapper: HTMLDivElement = createHTMLElement('div', ['left-node__wrapper']);
     const rightNavNodeWrapper: HTMLDivElement = createHTMLElement('div', ['right-node__wrapper']);
