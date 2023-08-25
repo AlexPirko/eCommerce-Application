@@ -1,5 +1,5 @@
 import '@assets/styles/global.scss';
-import toggleNavBtn from '@lib/utils/toggle-nav-btn';
+import handleVisibility from '@lib/utils/handle-visibility';
 import profileLinkGuard from '@lib/utils/profile-link-guard';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
@@ -36,7 +36,7 @@ export default class App {
     this.createView();
 
     document.addEventListener('DOMContentLoaded', () => {
-      toggleNavBtn();
+      handleVisibility();
     });
   }
 
