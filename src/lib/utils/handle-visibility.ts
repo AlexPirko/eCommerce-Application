@@ -1,4 +1,7 @@
+import Router from '@components/router/router';
+
 export default function handleVisibility(): void {
+  const router: Router = new Router(null);
   const isLogin: string | null = localStorage.getItem('refreshToken');
   const signupBtn: HTMLElement = document.querySelector('.nav-signup') as HTMLElement;
   const loginBtn: HTMLElement = document.querySelector('.nav-login') as HTMLElement;
@@ -22,6 +25,7 @@ export default function handleVisibility(): void {
   logoutBtn.addEventListener('click', (e: Event): void => {
     e.preventDefault();
     localStorage.clear();
-    document.location.href = `http://${window.location.host}`;
+    handleVisibility();
+    router.navigate(`http://${window.location.host}`);
   });
 }
