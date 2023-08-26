@@ -30,7 +30,7 @@ export default class ProductFilterForm {
     button.addEventListener('mouseup', async (event) => {
       event.preventDefault();
       try {
-        const productsData = await this._productServices.getAllProductData();
+        const productsData = await this._productServices.getPageProductsData(10, 0);
         console.log(productsData);
       } catch (error) {
         console.log(error);

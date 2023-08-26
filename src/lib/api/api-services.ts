@@ -108,12 +108,13 @@ export default class ApiServices {
       });
   }
 
-  public async getAllProducts(limit: number): Promise<ClientResponse<ProductPagedQueryResponse>> {
+  public async getAllProducts(limit: number, offset: number): Promise<ClientResponse<ProductPagedQueryResponse>> {
     return this._apiRoot
       .products()
       .get({
         queryArgs: {
           limit: limit,
+          offset: offset,
         },
       })
       .execute()
