@@ -4,7 +4,7 @@ import ElementBuilder from '@lib/services/element-builder';
 import Router from '@components/router/router';
 
 export default class Catalog extends ComponentView {
-  constructor(key = '', router: Router) {
+  constructor(key: string = '', router: Router) {
     const params: Params = {
       tagName: 'section',
       classNames: ['catalog-page'],
