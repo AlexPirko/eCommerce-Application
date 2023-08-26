@@ -1,8 +1,11 @@
 import { Params } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';
+import ProductFilterForm from '@components/products-filter-form/products-filter-form';
 
 export default class Catalog extends ComponentView {
+  private filterForm: ProductFilterForm;
+
   constructor() {
     const params: Params = {
       tagName: 'section',
@@ -11,6 +14,7 @@ export default class Catalog extends ComponentView {
       callback: null,
     };
     super(params);
+    this.filterForm = new ProductFilterForm();
     this.configureView();
   }
 
@@ -23,5 +27,6 @@ export default class Catalog extends ComponentView {
     const titleElementBuilder: ElementBuilder = new ElementBuilder(titleParams);
 
     this.viewElementBuilder.addInnerElement(titleElementBuilder);
+    this.viewElementBuilder.addInnerElement(this.filterForm.element);
   }
 }

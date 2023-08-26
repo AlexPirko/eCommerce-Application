@@ -9,6 +9,8 @@ import {
   CustomerToken,
   MyCustomerSignin,
   ProductPagedQueryResponse,
+  ProductProjectionPagedQueryResponse,
+  QueryParam,
   createApiBuilderFromCtpClient,
 } from '@commercetools/platform-sdk';
 import CtpClientBuilder from './api-client-builder';
@@ -93,10 +95,27 @@ export default class ApiServices {
       });
   }
 
-  public async getProducts(): Promise<ClientResponse<ProductPagedQueryResponse>> {
+  public async getProductsBySearch(queryArgs: {
+    queryParam: QueryParam;
+  }): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> {
+    return this._apiRoot
+      .productProjections()
+      .search()
+      .get({ queryArgs })
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+  }
+
+  public async getAllProducts(limit: number): Promise<ClientResponse<ProductPagedQueryResponse>> {
     return this._apiRoot
       .products()
-      .get()
+      .get({
+        queryArgs: {
+          limit: limit,
+        },
+      })
       .execute()
       .catch((error) => {
         throw error;
