@@ -11,6 +11,6 @@ const Paths: HeaderTitle = {
   NOT_FOUND: 'not-found',
 };
 
-const PRODUCT_SELECTOR = '{key}';
+const PRODUCT_SELECTOR: string = '{key}';
 
 export { Paths, PRODUCT_SELECTOR };

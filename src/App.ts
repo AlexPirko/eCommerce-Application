@@ -1,7 +1,7 @@
 import '@assets/styles/global.scss';
 import handleVisibility from '@lib/utils/handle-visibility';
 import profileLinkGuard from '@lib/utils/profile-link-guard';
-import { getProduct } from '@lib/utils/get-products';
+import { getProducts } from '@lib/utils/get-products';
 import { Paths, PRODUCT_SELECTOR } from '@components/router/paths';
 import Router from '@components/router/router';
 import Header from '@layouts/header/header';
@@ -118,6 +118,6 @@ export default class App {
   public async run() {
     this.burger.handlerListener();
     profileLinkGuard();
-    console.log(await getProduct());
+    console.log(await getProducts());
   }
 }
