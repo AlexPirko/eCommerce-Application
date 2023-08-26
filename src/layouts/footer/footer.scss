@@ -1,11 +1,12 @@
-@import '/src/assets/styles/constants';
-
 .footer {
   background-color: #020203;
 }
 
 footer .container {
   padding-top: 1rem;
+  @media only screen and (min-width: 1080px) {
+    width: 90%;
+  }
 }
 
 footer ul.footer-list {

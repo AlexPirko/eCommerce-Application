@@ -4,6 +4,7 @@ import profileLinkGuard from '@lib/utils/profile-link-guard';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 import Header from '@layouts/header/header';
+import MainFooter from '@layouts/main-footer/main-footer';
 import Footer from '@layouts/footer/footer';
 import CreateBurger from '@layouts/header/create-burger/create-burger';
 import ApiServices from '@lib/api/api-services';
@@ -20,16 +21,18 @@ import Profile from '@pages/profile/profile';
 export default class App {
   private static container: HTMLElement = document.getElementById('body') as HTMLElement;
   private router: Router;
-  private pageContainer: PageContainer | null;
   private header: Header | null;
+  private pageContainer: PageContainer | null;
+  private mainFooter: MainFooter | null;
   private footer: Footer | null;
   private _apiServices: ApiServices;
   private burger: CreateBurger;
 
   constructor() {
     this._apiServices = new ApiServices();
-    this.pageContainer = null;
     this.header = null;
+    this.pageContainer = null;
+    this.mainFooter = null;
     this.footer = null;
     this.burger = new CreateBurger();
 
@@ -44,14 +47,16 @@ export default class App {
   }
 
   private createView(): void {
-    this.pageContainer = new PageContainer();
     this.header = new Header(this.router);
     this.header.getHtmlElement()?.append(this.burger.createBurgerElement());
+    this.mainFooter = new MainFooter();
+    this.pageContainer = new PageContainer();
     this.footer = new Footer();
 
     App.container.append(
       this.header.getHtmlElement() as HTMLElement,
       this.pageContainer.getHtmlElement() as HTMLElement,
+      this.mainFooter.getHtmlElement() as HTMLElement,
       this.footer.getHtmlElement() as HTMLElement
     );
   }
