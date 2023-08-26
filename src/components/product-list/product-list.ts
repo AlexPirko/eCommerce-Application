@@ -1,3 +1,5 @@
+import './product-list.scss';
+
 import createHTMLElement from '@lib/utils/create-html-element';
 import ProductCard from './product-card/product-card';
 import ProductServices from '@lib/services/data services/product-services';

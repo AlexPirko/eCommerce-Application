@@ -1,3 +1,5 @@
+import './catalog.scss';
+
 import { Params } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';

@@ -1,3 +1,5 @@
+import './product-card.scss';
+
 import createElementFromHtml from '@lib/utils/create-element-from-html';
 import cardTemplate from './product-card.html';
 // import { CardParams } from "@lib/types/card-params";

@@ -1,9 +1,6 @@
-.products-filter-form__button {
-  position: absolute;
-  top: 300px;
-}
-
 .products-filter-form {
-  height: 100px;
-  width: 200px;
+  display: block;
+  margin: 0;
+  grid-area: B;
+  align-items: center;
 }
