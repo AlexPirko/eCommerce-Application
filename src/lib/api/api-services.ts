@@ -10,6 +10,7 @@ import {
   MyCustomerSignin,
   ProductPagedQueryResponse,
   createApiBuilderFromCtpClient,
+  CustomerUpdate,
 } from '@commercetools/platform-sdk';
 import CtpClientBuilder from './api-client-builder';
 import { ctpParams } from './client-credemtials';
@@ -72,6 +73,20 @@ export default class ApiServices {
     return response.json();
   }
 
+  public async updateCustomer(customerId: string, customerData: CustomerUpdate): Promise<Customer> {
+    const response: Response = await fetch(`${ctpParams.CTP_API_URL}/ecommerce-app/customers/${customerId}`, {
+      method: 'POST',
+      body: JSON.stringify(customerData),
+      headers: {
+        Authorization: `Bearer ${this._tokenCache.get().token}`,
+        ContentType: 'application/json',
+      },
+    }).catch((error) => {
+      throw error;
+    });
+    return response.json();
+  }
+
   public async getCustomer(customerId: string): Promise<ClientResponse<Customer>> {
     return this._apiRoot
       .customers()
@@ -84,6 +99,7 @@ export default class ApiServices {
   }
 
   public async getCurrentCustomer(): Promise<ClientResponse<Customer>> {
+    console.log(this._apiRoot.me());
     return this._apiRoot
       .me()
       .get()
