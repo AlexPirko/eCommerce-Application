@@ -1,7 +1,8 @@
 import '@assets/styles/global.scss';
 import handleVisibility from '@lib/utils/handle-visibility';
 import profileLinkGuard from '@lib/utils/profile-link-guard';
-import { Paths } from '@components/router/paths';
+import { getProduct } from '@lib/utils/get-products';
+import { Paths, PRODUCT_SELECTOR } from '@components/router/paths';
 import Router from '@components/router/router';
 import Header from '@layouts/header/header';
 import CreateBurger from '@layouts/header/create-burger/create-burger';
@@ -69,7 +70,13 @@ export default class App {
       {
         path: `${Paths.CATALOG}`,
         callback: () => {
-          this.setContent(Paths.CATALOG, new Catalog());
+          this.setContent(Paths.CATALOG, new Catalog('', this.router));
+        },
+      },
+      {
+        path: `${Paths.CATALOG}/${PRODUCT_SELECTOR}`,
+        callback: (key) => {
+          this.setContent(Paths.CATALOG, new Catalog(key, this.router));
         },
       },
       {
@@ -108,8 +115,9 @@ export default class App {
     this.pageContainer?.addCurrentPage(component);
   }
 
-  public run(): void {
+  public async run() {
     this.burger.handlerListener();
     profileLinkGuard();
+    console.log(await getProduct());
   }
 }
