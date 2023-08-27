@@ -1,0 +1,27 @@
+.catalog-nav {
+  display: flex;
+  justify-content: space-around;
+  height: 2.5rem;
+  margin-top: 3rem;
+  margin-left: 24%;
+  grid-area: D;
+  align-self: center;
+  align-items: center;
+}
+
+.prev__button {
+  width: 10rem;
+}
+
+.catalog-nav__page-number {
+  margin-left: 3rem;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  font-size: 2.6rem;
+  text-align: center;
+}
+
+.next__button {
+  width: 10rem;
+}

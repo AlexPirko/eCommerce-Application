@@ -27,8 +27,6 @@ export default class ProductServices {
 
     const pageCardParams: CardParams[] = results.map((product) => getProductResponceAsCardData(product));
 
-    console.log(pageCardParams);
-
     return pageCardParams;
   }
 }

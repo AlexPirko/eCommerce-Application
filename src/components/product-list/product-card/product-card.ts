@@ -16,9 +16,10 @@ export default class ProductCard {
 
   private setCard(): void {
     this.setImagesUrl();
+
     Object.keys(this._cardParams).forEach((key) => {
       if (key !== 'imgUrls') {
-        this.setTextInfo(key);
+        this.setTextElementsInfo(key);
       }
     });
   }
@@ -28,10 +29,16 @@ export default class ProductCard {
     images.forEach((imag, index) => imag.setAttribute('src', this._cardParams.imgUrls[index]));
   }
 
-  private setTextInfo(elementClass: string): void {
-    const textElement: HTMLSpanElement | null = this._element.querySelector(`.${elementClass}`);
+  private setTextElementsInfo(textElementClass: string): void {
+    const textElement: HTMLSpanElement | null = this._element.querySelector(`.${textElementClass}`);
+
+    type CardParamsKey = keyof typeof this._cardParams;
     if (textElement) {
-      textElement.innerHTML = this._cardParams[elementClass as keyof typeof this._cardParams] as string;
+      if (textElementClass !== 'price') {
+        textElement.innerHTML = this._cardParams[textElementClass as CardParamsKey] as string;
+      } else {
+        textElement.innerHTML = ('$' + this._cardParams[textElementClass as CardParamsKey]) as string;
+      }
     }
   }
 

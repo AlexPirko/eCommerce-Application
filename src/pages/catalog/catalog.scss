@@ -6,9 +6,10 @@
 }
 .catalog-page {
   display: grid;
-  gap: 2%;
+  gap: 1%;
   grid-template-columns: 23% 66%;
   grid-template-areas: 
                   "A A"
-                  "B C";
+                  "B C"
+                  "D D";
 }

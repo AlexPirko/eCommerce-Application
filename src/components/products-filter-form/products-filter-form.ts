@@ -1,3 +1,4 @@
+import { FIRST_PAGE_NUMBER, PRODUCTS_PER_PAGE } from '@lib/constants/product-list-constants';
 import './products-filter-form.scss';
 
 import ProductServices from '@lib/services/data services/product-services';
@@ -30,13 +31,12 @@ export default class ProductFilterForm {
     button.addEventListener('mouseup', async (event) => {
       event.preventDefault();
       try {
-        const productsData = await this._productServices.getPageProductsData(10, 1);
+        const productsData = await this._productServices.getPageProductsData(PRODUCTS_PER_PAGE, FIRST_PAGE_NUMBER);
         console.log(productsData);
       } catch (error) {
         console.log(error);
       }
     });
-    console.log(button);
     return button;
   }
 
