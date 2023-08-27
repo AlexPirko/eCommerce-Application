@@ -1,7 +1,7 @@
 import { ClientResponse, Product, ProductPagedQueryResponse } from '@commercetools/platform-sdk';
 import ApiServices from '@lib/api/api-services';
 import { CardParams } from '@lib/types/params-interface';
-import { getProductResponceAsCardData } from '@lib/utils/get-product-data';
+import { getProductResponseAsCardData } from '@lib/utils/get-product-data';
 
 export default class ProductServices {
   private static _instance: ProductServices;
@@ -19,13 +19,13 @@ export default class ProductServices {
     const limit: number = cardsPerPage;
     const offset: number = cardsPerPage * (pageNumber - 1);
 
-    const responce: ClientResponse<ProductPagedQueryResponse> = await this.api
+    const response: ClientResponse<ProductPagedQueryResponse> = await this.api
       .getAllProducts(limit, offset)
       .catch((error) => error);
 
-    const results: Product[] = responce.body.results;
+    const results: Product[] = response.body.results;
 
-    const pageCardParams: CardParams[] = results.map((product) => getProductResponceAsCardData(product));
+    const pageCardParams: CardParams[] = results.map((product) => getProductResponseAsCardData(product));
 
     return pageCardParams;
   }

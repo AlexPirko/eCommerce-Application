@@ -3,6 +3,7 @@ import './products-filter-form.scss';
 
 import ProductServices from '@lib/services/data services/product-services';
 import createHTMLElement from '@lib/utils/create-html-element';
+import { CardParams } from '@lib/types/params-interface';
 
 export default class ProductFilterForm {
   private _element: HTMLFormElement;
@@ -31,7 +32,10 @@ export default class ProductFilterForm {
     button.addEventListener('mouseup', async (event) => {
       event.preventDefault();
       try {
-        const productsData = await this._productServices.getPageProductsData(PRODUCTS_PER_PAGE, FIRST_PAGE_NUMBER);
+        const productsData: CardParams[] = await this._productServices.getPageProductsData(
+          PRODUCTS_PER_PAGE,
+          FIRST_PAGE_NUMBER
+        );
         console.log(productsData);
       } catch (error) {
         console.log(error);

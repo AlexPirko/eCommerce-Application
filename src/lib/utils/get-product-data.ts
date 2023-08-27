@@ -1,7 +1,7 @@
 import { Product, ProductData } from '@commercetools/platform-sdk';
 import { CardParams } from '@lib/types/params-interface';
 
-export function getProductResponceAsCardData(product: Product): CardParams {
+export function getProductResponseAsCardData(product: Product): CardParams {
   const productData: ProductData = product.masterData.current;
 
   const imgUrls: string[] | undefined = productData.masterVariant.images?.map((image) => image.url);

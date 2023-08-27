@@ -10,6 +10,7 @@ export default class ProductListComponent {
   private _element: HTMLDivElement;
   private _cardsPerPage: number;
   private _pageNumber: number;
+
   constructor() {
     this._element = createHTMLElement<HTMLDivElement>('div', ['product-list']);
     this._cardsPerPage = PRODUCTS_PER_PAGE;
@@ -17,7 +18,7 @@ export default class ProductListComponent {
     this.setProductList();
   }
 
-  private async setProductList() {
+  private async setProductList(): Promise<void> {
     localStorage.removeItem('pageNumber');
     const productServices: ProductServices = new ProductServices();
     const cardsParams: CardParams[] = await productServices

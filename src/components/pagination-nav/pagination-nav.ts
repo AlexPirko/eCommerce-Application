@@ -63,9 +63,11 @@ export default class CatalogPaginationComponent {
         const pageProducts: CardParams[] = await this._productServices
           .getPageProductsData(this._cardsPerPage, +prevPageNumber)
           .catch((error) => error);
+
         const allProduct: ClientResponse<ProductPagedQueryResponse> = await this._api
           .getAllProducts(MAX_LIMIT_COUNT, 0)
           .catch((error) => error);
+
         const allProductsCount: number = allProduct.body.count;
 
         prevButtonHandlerService(this._element, event.target, pageNumberElement, allProductsCount);
@@ -93,9 +95,11 @@ export default class CatalogPaginationComponent {
         const pageProducts: CardParams[] = await this._productServices
           .getPageProductsData(this._cardsPerPage, +nextPageNumber)
           .catch((error) => error);
+
         const allProduct: ClientResponse<ProductPagedQueryResponse> = await this._api
           .getAllProducts(MAX_LIMIT_COUNT, 0)
           .catch((error) => error);
+
         const allProductsCount: number = allProduct.body.count;
 
         nextButtonHandlerService(this._element, event.target, pageNumberElement, allProductsCount);
