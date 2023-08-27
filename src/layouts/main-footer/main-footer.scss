@@ -2,6 +2,7 @@
 
 .main-footer {
   background-color: $color-six;
+  margin-top: 5rem;
 }
 
 .container {
@@ -11,7 +12,7 @@
       padding: 1rem 0 0;
     }
     @media only screen and (min-width: 1480px) {
-      padding: 1rem 3rem 0;
+      padding: 2rem 3rem 0;
     }
   }
 }

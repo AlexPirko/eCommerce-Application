@@ -19,11 +19,9 @@ export default class MainFooter extends ComponentView {
   }
 
   private configureView(): void {
-    // const imgSup: HTMLImageElement = new Image();
-    // imgSup.src = imageS;
     const mainFooterContainer: HTMLElement = createHTMLElement('div', ['container', 'main-footer-container', 'row']);
 
-    const html = `<div class="main-footer-row row col s4">
+    const html: string = `<div class="main-footer-row row col s4">
             <img class="main-footer-img" src=${imageSav}>
             <h4 class="black-text">Amazing Savings</h4>
             <p class="mf-text black-text">Up to 70% off new Products, you can be sure of the best price.</p>
