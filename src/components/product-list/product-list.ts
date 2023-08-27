@@ -18,12 +18,12 @@ export default class ProductList {
 
   private async setProductList() {
     const productServices: ProductServices = new ProductServices();
-    const productListData: CardParams = await productServices
+    const cardsParams: CardParams[] = await productServices
       .getPageProductsData(this._cardsPerPage, this._pageNumber)
       .catch((error) => error);
-    console.log(productListData);
+    console.log(cardsParams);
     for (let i: number = 0; i < this._cardsPerPage; i++) {
-      const productCard: ProductCard = new ProductCard();
+      const productCard: ProductCard = new ProductCard(cardsParams[i]);
       this._element.append(productCard.element);
     }
   }

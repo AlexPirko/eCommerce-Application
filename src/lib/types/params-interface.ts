@@ -23,7 +23,9 @@ export interface RequestParams {
 
 export interface CardParams {
   imgUrls: string[];
-  productName: string;
-  productDescription: string;
-  productType: string;
+  name: string;
+  description: string;
+  type: string;
+  brand: string;
+  price: string;
 }
