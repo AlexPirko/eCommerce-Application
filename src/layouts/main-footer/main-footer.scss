@@ -1,0 +1,43 @@
+@import '/src/assets/styles/constants';
+
+.main-footer {
+  background-color: $color-six;
+  margin-top: 5rem;
+}
+
+.container {
+  &.main-footer-container {
+    @media only screen and (min-width: 1080px) {
+      width: 50%;
+      padding: 1rem 0 0;
+    }
+    @media only screen and (min-width: 1480px) {
+      padding: 2rem 3rem 0;
+    }
+  }
+}
+
+.main-footer-container {
+  &.row {
+    margin-bottom: 5px;
+  }
+}
+
+.main-footer-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 30px !important;
+  &.row {
+    margin-bottom: 10px;
+  }
+}
+
+.main-footer-img {
+  width: 50px;
+}
+
+.mf-text {
+  text-align: center;
+  font-size: 1.3rem;
+}
