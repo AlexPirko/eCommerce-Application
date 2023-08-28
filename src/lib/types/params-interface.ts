@@ -20,3 +20,12 @@ export interface RequestParams {
   path: '' | string;
   resource: '' | string;
 }
+
+export interface CardParams {
+  imgUrls: string[];
+  name: string;
+  description: string;
+  type: string;
+  brand: string;
+  price: string;
+}
