@@ -13,6 +13,7 @@ import {
   QueryParam,
   createApiBuilderFromCtpClient,
   CustomerUpdate,
+  CustomerChangePassword,
 } from '@commercetools/platform-sdk';
 import CtpClientBuilder from './api-client-builder';
 import { ctpParams } from './client-credemtials';
@@ -83,8 +84,6 @@ export default class ApiServices {
         Authorization: `Bearer ${this._tokenCache.get().token}`,
         ContentType: 'application/json',
       },
-    }).catch((error) => {
-      throw error;
     });
     return response.json();
   }
@@ -169,5 +168,20 @@ export default class ApiServices {
     const refreshToken: string | undefined = this.getTokenCache().get().refreshToken;
     if (refreshToken) localStorage.setItem('refreshToken', `${refreshToken}`);
     return response;
+  }
+
+  public async changePassword(passwordData: CustomerChangePassword): Promise<Customer> {
+    const response: Response = await fetch(`${ctpParams.CTP_API_URL}/ecommerce-app/customers/password`, {
+      method: 'POST',
+      body: JSON.stringify(passwordData),
+      headers: {
+        Authorization: `Bearer ${this._tokenCache.get().token}`,
+        ContentType: 'application/json',
+      },
+    });
+    if (response.status === 400) {
+      throw new Error();
+    }
+    return response.json();
   }
 }

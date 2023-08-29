@@ -128,6 +128,6 @@ export default class App {
   public async run() {
     this.burger.handlerListener();
     profileLinkGuard();
-    console.log(await getProducts());
+    console.log(await getProducts(1, 1));
   }
 }

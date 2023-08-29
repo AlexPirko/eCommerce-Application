@@ -379,8 +379,7 @@ export class UserInfo {
   }
 
   async createPasswordBlock(res: Customer) {
-    const passwordWrapper = document.createElement('div');
-
+    const passwordWrapper = document.createElement('form');
     if (res.password !== undefined) {
       const passwordInput: HTMLDivElement = new InputBlock({
         type: 'text',
@@ -394,11 +393,95 @@ export class UserInfo {
       passwordWrapper.append(passwordInput);
 
       const editBtn = document.createElement('button');
+      editBtn.classList.add('btn');
+
       editBtn.textContent = 'Edit Password';
       editBtn.addEventListener('click', (ev) => {
         ev.preventDefault();
-        console.log('edit');
+        editBtn.disabled = true;
+        passwordInput.replaceWith(
+          new InputBlock({
+            type: 'password',
+            id: 'passwordInput',
+            label: 'Enter your old password',
+            placeholder: '',
+            name: 'password',
+            value: '',
+            disabled: false,
+          }).create
+        );
+        const newPassword = new InputBlock({
+          type: 'password',
+          id: 'newPasswordInput',
+          label: 'Enter your new password',
+          placeholder: '',
+          name: 'password',
+          value: '',
+          disabled: false,
+        }).create;
+
+        const checkNewPassword = new InputBlock({
+          type: 'password',
+          id: 'checkNewPasswordInput',
+          label: 'Enter your new password',
+          placeholder: '',
+          name: 'password',
+          value: '',
+          disabled: false,
+        }).create;
+
+        const submitBtn = document.createElement('button');
+        submitBtn.classList.add('btn');
+        submitBtn.textContent = 'Change Password';
+        const cancelBtn = document.createElement('button');
+        cancelBtn.classList.add('btn');
+        cancelBtn.textContent = 'Cancel';
+        cancelBtn.addEventListener('click', async (ev) => {
+          ev.preventDefault();
+          passwordWrapper.replaceWith(await this.createPasswordBlock(res));
+          editBtn.disabled = false;
+        });
+
+        submitBtn.addEventListener('click', (ev) => {
+          M.AutoInit();
+
+          ev.preventDefault();
+          const newPasswordInput = passwordWrapper.querySelector('#newPasswordInput');
+          const checkPassword = passwordWrapper.querySelector('#checkNewPasswordInput');
+          const currentPasswordInput = passwordWrapper.querySelector('#passwordInput');
+
+          if (newPasswordInput !== null && checkPassword !== null && currentPasswordInput !== null) {
+            const firstValue = (<HTMLInputElement>newPasswordInput).value;
+            const secondValue = (<HTMLInputElement>checkPassword).value;
+            const currentPassword = (<HTMLInputElement>currentPasswordInput).value;
+            if (firstValue !== secondValue) {
+              M.toast({ html: 'You have entered different passwords', classes: 'different' });
+            } else {
+              this.services
+                .changePassword({
+                  id: res.id,
+                  version: res.version,
+                  currentPassword,
+                  newPassword: firstValue,
+                })
+                .then(async () => {
+                  M.toast({ html: 'You have changed password!', classes: 'rounded' });
+                  passwordWrapper.replaceWith(await this.createPasswordBlock(res));
+                  editBtn.disabled = false;
+                  localStorage.setItem('login', 'false');
+                })
+                .catch(() => {
+                  currentPasswordInput.classList.add('invalid');
+                  M.toast({ html: 'You have entered wrong password', classes: 'different' });
+                });
+            }
+          }
+
+          editBtn.disabled = false;
+        });
+        passwordWrapper.append(newPassword, checkNewPassword, submitBtn, cancelBtn);
       });
+      passwordWrapper.append(editBtn);
     }
 
     return passwordWrapper;
