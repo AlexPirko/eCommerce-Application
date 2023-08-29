@@ -1,3 +1,9 @@
+.user-info-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
 .info-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -15,7 +21,17 @@
 }
 
 .different {
-background-color: red;
-border-radius: 10px;
+  background-color: red;
+  border-radius: 10px;
+
+}
+
+.password-wrapper {
+  max-width: 300px;
+
+}
+
+.addresses-wrapper {
+
 
 }

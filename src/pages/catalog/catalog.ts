@@ -12,7 +12,7 @@ export default class Catalog extends ComponentView {
   private filterForm: ProductFilterForm;
   private productList: ProductListComponent;
   private pageNav: CatalogPaginationComponent;
-    
+
   constructor(key: string = '', router: Router) {
     const params: Params = {
       tagName: 'section',
@@ -21,17 +21,17 @@ export default class Catalog extends ComponentView {
       callback: null,
     };
     super(params);
-    
+
     this.productList = new ProductListComponent();
     this.filterForm = new ProductFilterForm();
     this.pageNav = new CatalogPaginationComponent(1);
-    
+
     if (key) {
       console.log(key /* Здесь будет функция инициализирующая создание страницы с детальной инфо detailedCard()*/);
     } else {
       console.log(router /* Здесь будет функция инициализирующая создание страниц с картами товров*/);
     }
-    
+
     this.configureView();
   }
 

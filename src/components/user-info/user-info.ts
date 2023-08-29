@@ -21,12 +21,13 @@ export class UserInfo {
 
   async createUserInfoPage(): Promise<HTMLDivElement> {
     const wrapper: HTMLDivElement = document.createElement('div');
+    wrapper.classList.add('user-info-wrapper');
     try {
       const res: Customer = await this.getInfo();
       console.log(res);
       wrapper.append(
-        await this.createUserInfoBlock(res),
         await this.createPasswordBlock(res),
+        await this.createUserInfoBlock(res),
         await this.createAdressesBlock(res)
       );
       return wrapper;
@@ -135,6 +136,47 @@ export class UserInfo {
     btns.forEach((button: HTMLButtonElement) => (button.disabled = false));
   }
 
+  updateCustomerRequest(formData: FormData, id: string, version: number) {
+    this.services
+      .updateCustomer(id, {
+        version,
+        actions: [
+          {
+            action: 'changeEmail',
+            email: String(formData.get('email')),
+          },
+          {
+            action: 'setFirstName',
+            firstName: String(formData.get('firstName')),
+          },
+          {
+            action: 'setLastName',
+            lastName: String(formData.get('lastName')),
+          },
+          {
+            action: 'setDateOfBirth',
+            dateOfBirth: String(formData.get('dateOfBirth')),
+          },
+        ],
+      })
+      .then((): void => {
+        M.toast({ html: 'Successfully changed info', classes: 'rounded' });
+      })
+      .catch((er): void => {
+        console.log(er);
+        M.toast({ html: er.message, classes: 'rounded' });
+      });
+  }
+
+  // updateAddress(wrapper: HTMLDivElement, addressId: string) {
+  // const isDefaultBilling = wrapper.querySelector('[name="defaultBilling"]');
+  // const isDefaultShipping = wrapper.querySelector('[name="defaultShipping"]');
+  // const country = wrapper.querySelector(`[name="${addressId}"]`);
+  // const city = wrapper.querySelector(`[name="city"]`);
+  // const street = wrapper.querySelector(`[name="streetName"]`);
+  // const postal = wrapper.querySelector(`[name="postalCode"]`);
+  // }
+
   async saveEdit(
     form: HTMLFormElement,
     btn: HTMLButtonElement,
@@ -160,35 +202,7 @@ export class UserInfo {
         if (index !== btns.length - 1) button.disabled = true;
       });
 
-      this.services
-        .updateCustomer(id, {
-          version,
-          actions: [
-            {
-              action: 'changeEmail',
-              email: String(formData.get('email')),
-            },
-            {
-              action: 'setFirstName',
-              firstName: String(formData.get('firstName')),
-            },
-            {
-              action: 'setLastName',
-              lastName: String(formData.get('lastName')),
-            },
-            {
-              action: 'setDateOfBirth',
-              dateOfBirth: String(formData.get('dateOfBirth')),
-            },
-          ],
-        })
-        .then((): void => {
-          M.toast({ html: 'Successfully changed info', classes: 'rounded' });
-        })
-        .catch((er): void => {
-          console.log(er);
-          M.toast({ html: er.message, classes: 'rounded' });
-        });
+      this.updateCustomerRequest(formData, id, version);
     }
   }
 
@@ -292,15 +306,15 @@ export class UserInfo {
     wrapper.insertAdjacentHTML('afterbegin', defaultRadio);
     if (isDefault) {
       wrapper.style.backgroundColor = 'aquamarine';
-      const addBtn: HTMLButtonElement = document.createElement('button');
-      addBtn.textContent = `Add new ${type} Address`;
-      addBtn.classList.add('waves-effect', 'waves-light', 'btn');
-      addBtn.disabled = true;
-      addBtn.addEventListener('click', (ev: MouseEvent) => {
-        ev.preventDefault();
-        this.addNewAddress(type, addBtn);
-      });
-      wrapper.append(addBtn);
+      // const addBtn: HTMLButtonElement = document.createElement('button');
+      // addBtn.textContent = `Add new ${type} Address`;
+      // addBtn.classList.add('waves-effect', 'waves-light', 'btn');
+      // addBtn.disabled = true;
+      // addBtn.addEventListener('click', (ev: MouseEvent) => {
+      //   ev.preventDefault();
+      //   this.addNewAddress(type, addBtn);
+      // });
+      // wrapper.append(addBtn);
     }
     return wrapper;
   }
@@ -380,6 +394,10 @@ export class UserInfo {
 
   async createPasswordBlock(res: Customer) {
     const passwordWrapper = document.createElement('form');
+    passwordWrapper.classList.add('password-wrapper');
+    const title = document.createElement('h5');
+    title.textContent = 'Password';
+    passwordWrapper.append(title);
     if (res.password !== undefined) {
       const passwordInput: HTMLDivElement = new InputBlock({
         type: 'text',
