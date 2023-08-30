@@ -14,14 +14,17 @@ export type TAddressInfo = {
   streetName?: string;
   postalCode?: string;
   id?: string;
+  verion?: number;
 };
 export type TBillingAddressesInfo = {
   addresses?: Address[];
   billingAddressIds?: string[];
   defaultBillingAddressId?: string;
+  version: number;
 };
 export type TShippingAddressesInfo = {
   addresses?: Address[];
   shippingAddressIds?: string[];
   defaultShippingAddressId?: string;
+  version: number;
 };

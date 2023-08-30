@@ -156,6 +156,7 @@ export default class ApiServices {
   }
 
   public async customerLogin(customerData: MyCustomerSignin): Promise<ClientResponse<CustomerSignInResult>> {
+    this._tokenCache = new ClientTokenCache();
     this.setApiClient(customerData.email, customerData.password);
     const response: ClientResponse<CustomerSignInResult> = await this._apiRoot
       .me()
@@ -167,6 +168,7 @@ export default class ApiServices {
       });
     const refreshToken: string | undefined = this.getTokenCache().get().refreshToken;
     if (refreshToken) localStorage.setItem('refreshToken', `${refreshToken}`);
+    console.log(refreshToken);
     return response;
   }
 
