@@ -10,8 +10,14 @@ $color-nine: #2557d6;
 $color-selected: #25a1d6;
 
 //media
+@mixin large-desctop {
+  @media (max-width: 1500px) {
+    @content;
+  }
+}
+
 @mixin desctop {
-  @media (max-width: 1200px) {
+  @media (max-width: 1280px) {
     @content;
   }
 }
@@ -23,7 +29,7 @@ $color-selected: #25a1d6;
 }
 
 @mixin tablet {
-  @media (max-width: 690px) {
+  @media (max-width: 600px) {
     @content;
   }
 }

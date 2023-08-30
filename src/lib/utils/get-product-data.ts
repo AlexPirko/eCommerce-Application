@@ -14,6 +14,5 @@ export function getProductResponseAsCardData(product: Product): CardParams {
     brand: productData.masterVariant.attributes?.[1].value as string,
     price: String(productData.masterVariant.prices?.[0].value.centAmount),
   };
-
   return cardParams;
 }
