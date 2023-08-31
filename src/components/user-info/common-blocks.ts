@@ -19,9 +19,14 @@ export async function saveEdit(
   const formData: FormData = new FormData(form);
   const inputs: NodeListOf<HTMLInputElement> = form.querySelectorAll('input');
   const btns: NodeListOf<HTMLButtonElement> = form.querySelectorAll('button');
-  const noErrors: boolean = Array.from(inputs).every((input: HTMLInputElement) => !input.classList.contains('invalid'));
+  inputs.forEach((input: HTMLInputElement) => {
+    input.value === '' ? input.classList.add('invalid') : input.classList.remove('invalid');
+  });
+  const noErrors: boolean = Array.from(inputs).every(
+    (input: HTMLInputElement) => !input.classList.contains('invalid') && input.value !== ''
+  );
   if (noErrors) {
-    btn.innerHTML = `
+    btn.innerHTML = `  
       <i class="material-icons left">edit</i> Edit ${text}`;
     inputs.forEach((input: HTMLInputElement): void => {
       input.setAttribute('disabled', 'true');

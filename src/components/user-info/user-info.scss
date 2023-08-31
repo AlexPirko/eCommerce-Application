@@ -31,7 +31,13 @@
 
 }
 
-.addresses-wrapper {
-
-
+.addresses {
+  display: flex;
+  gap: 20px;
 }
+
+.defaultAddress {
+  background-color: aqua;
+}
+
+.addresses-wrapper {}

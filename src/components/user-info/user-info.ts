@@ -44,9 +44,10 @@ export class UserInfo {
     const adressesBlock: HTMLDivElement = document.createElement('div');
     const title: HTMLHeadElement = document.createElement('h5');
     title.textContent = 'Addresses Information';
-    const addressesWrapper: HTMLDivElement = document.createElement('div');
-    addressesWrapper.append(createBillingAdresses(res), createShippingAdresses(res));
-    adressesBlock.append(title, addressesWrapper);
+    const adressesWrapper: HTMLDivElement = document.createElement('div');
+    adressesWrapper.classList.add('addresses');
+    adressesWrapper.append(createBillingAdresses(res), createShippingAdresses(res));
+    adressesBlock.append(title, adressesWrapper);
     return adressesBlock;
   }
 }
