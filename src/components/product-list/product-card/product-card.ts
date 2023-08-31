@@ -15,6 +15,7 @@ export default class ProductCard {
   }
 
   private setCard(): void {
+    this._element.dataset.key = this._cardParams.key;
     this.setImagesUrl();
 
     Object.keys(this._cardParams).forEach((key) => {
@@ -40,6 +41,11 @@ export default class ProductCard {
         textElement.innerHTML = ('$' + this._cardParams[textElementClass as CardParamsKey]) as string;
       }
     }
+  }
+
+  private setDeatailedButtonClickEventHandler() {
+    const button: HTMLButtonElement | null = this._element.querySelector('.button__detailed');
+    button?.addEventListener('click', (): void => {});
   }
 
   public get element(): HTMLDivElement {

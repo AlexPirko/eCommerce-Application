@@ -3,6 +3,6 @@ const _apiServices = new ApiServices();
 
 // Возможно не понадобится, пока нужна для проверки
 export async function getProducts(): Promise<Response> {
-  const result = await _apiServices.getProducts().catch((error) => error);
+  const result = await _apiServices.getAllProducts(500, 1).catch((error) => error);
   return result.body.results;
 }
