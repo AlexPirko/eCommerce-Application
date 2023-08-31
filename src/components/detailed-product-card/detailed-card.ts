@@ -9,7 +9,9 @@ export default class DetailedCard extends ComponentView {
   protected detailedCardContainer: HTMLElement;
   private _cardsPerPage: number;
   private _pageNumber: number;
-  data: CardParams[] | undefined;
+  protected data: CardParams[] | undefined;
+  protected slider: HTMLElement;
+  protected imageModal: HTMLDivElement;
 
   constructor() {
     const params: Params = {
@@ -23,6 +25,8 @@ export default class DetailedCard extends ComponentView {
     this._cardsPerPage = 500;
     this._pageNumber = 1;
 
+    this.slider = createHTMLElement('div', ['slider']);
+    this.imageModal = createHTMLElement('div', ['image-modal']);
     this.detailedCardContainer = createHTMLElement('div', ['detailed-cart', 'row']);
     this.getPromise();
   }
@@ -66,43 +70,96 @@ export default class DetailedCard extends ComponentView {
     `;
   }
 
-  private createSlider(): HTMLElement {
-    const slider: HTMLDivElement = createHTMLElement('div', ['slider']);
-    const html: string = `
+  private createCarousel(): string {
+    return `
       <div class="carousel carousel-slider center">
-        <div class="carousel-fixed-item center">          
+        <div class="carousel-item" id='1' href="#one!">
+          <img class="modal-image" src=${this.data?.[2].imgUrls[1]}>
         </div>
-        <div class="carousel-item" href="#one!">
-          <img src=${this.data?.[2].imgUrls[1]}>
+        <div class="carousel-item" id='2' href="#two!">
+          <img class="modal-image" src=${this.data?.[2].imgUrls[2]}>
         </div>
-        <div class="carousel-item" href="#two!">
-          <img src=${this.data?.[2].imgUrls[2]}>
+        <div class="carousel-item" id='3' href="#three!">
+          <img class="modal-image" src=${this.data?.[2].imgUrls[3]}>
         </div>
-        <div class="carousel-item" href="#three!">
-          <img src=${this.data?.[2].imgUrls[3]}>
-        </div>
-        <div class="carousel-item" href="#four!">
-          <img src=${this.data?.[2].imgUrls[0]}>
+        <div class="carousel-item" id='0' href="#four!">
+          <img class="modal-image" src=${this.data?.[2].imgUrls[0]}>
         </div>
       </div>      
     `;
-    slider.innerHTML = html;
-    return slider;
+  }
+
+  private createMainSlider(): HTMLElement {
+    this.slider.innerHTML = this.createCarousel();
+    return this.slider;
   }
 
   private configureView(): void {
     this.detailedCardContainer.innerHTML = this.createDetailedCartHtml();
-    this.detailedCardContainer.lastElementChild?.append(this.createSlider());
+    this.detailedCardContainer.lastElementChild?.append(this.createMainSlider());
+    this.createImageModal();
 
-    const el: HTMLElement = this.createSlider().firstElementChild as HTMLElement;
-    this.sliderInit(el);
+    const carousel: NodeListOf<HTMLElement> = document.querySelectorAll('.carousel') as NodeListOf<HTMLElement>;
+    this.mainSliderInit(carousel[1]);
+    this.imageModalInit(carousel[0]);
   }
 
-  sliderInit(el: HTMLElement) {
+  private mainSliderInit(el: HTMLElement): void {
     M.AutoInit();
-
     M.Carousel.init(el, {
       indicators: true,
+    });
+  }
+
+  private modalSliderInit(el: HTMLElement): void {
+    M.AutoInit();
+    M.Carousel.init(el, {
+      indicators: false,
+    });
+  }
+
+  private imageModalInit(el: HTMLElement): void {
+    const carousel: HTMLElement = this.slider.firstElementChild as HTMLElement;
+    const carouselItem: HTMLCollection = carousel.children;
+    for (const item of carouselItem) {
+      item.addEventListener('click', (event: Event) => {
+        event.preventDefault();
+        if (event?.target) {
+          this.toggleModal();
+          this.modalSliderInit(el);
+        }
+      });
+    }
+  }
+
+  private toggleModal() {
+    const backgroundElem: HTMLDivElement = document.querySelector('.background-element') as HTMLDivElement;
+    backgroundElem.style.opacity = '0.7';
+    this.imageModal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    backgroundElem.style.display = 'block';
+  }
+
+  private createImageModal(): void {
+    const imageModalWrapper: HTMLDivElement = createHTMLElement('div', ['image-modal_wrapper']);
+    const closeBtnWrapper: HTMLDivElement = createHTMLElement('div', ['close-btn_wrapper']);
+    const closeBtn: HTMLButtonElement = createHTMLElement('button', ['close-btn']);
+    const backgroundElem: HTMLDivElement = document.querySelector('.background-element') as HTMLDivElement;
+
+    imageModalWrapper.innerHTML = this.createCarousel();
+    closeBtn.innerHTML = `<i class="medium material-icons">close</i>`;
+
+    closeBtnWrapper.append(closeBtn);
+    imageModalWrapper.append(closeBtnWrapper);
+    this.imageModal.append(imageModalWrapper);
+
+    document.body.prepend(this.imageModal);
+
+    closeBtn.addEventListener('click', () => {
+      this.imageModal.style.display = 'none';
+      document.body.style.overflow = '';
+      backgroundElem.style.opacity = '1';
+      backgroundElem.style.display = 'none';
     });
   }
 

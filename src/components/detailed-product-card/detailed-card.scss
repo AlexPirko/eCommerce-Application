@@ -175,3 +175,72 @@ div.carousel.carousel-slider {
     height: 40%;
   }
 }
+
+div.carousel .indicators {
+  bottom: 20%;
+  @include desctop {
+    bottom: 30%;
+  }
+}
+
+div.carousel .indicators .indicator-item {
+  background-color: $color-three;
+  opacity: 0.5;
+  &.active {
+    background-color: $color-three;
+    opacity: 1;
+  }
+}
+
+// Modal
+.image-modal {
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  top: 0;
+  left: 0;
+}
+
+.image-modal_wrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.image-modal_wrapper > .carousel.carousel-slider {
+  top: 0;
+  left: 0;
+  height: 80%;
+  @include desctop {
+    height: 75%;
+  }
+  @include laptop {
+    height: 50%;
+  }
+  @include tablet {
+    height: 40%;
+  }
+}
+
+.image-modal_wrapper > .carousel .carousel-item {
+  min-height: 350px;
+}
+
+.image-modal_wrapper > .carousel .carousel-item .modal-image {
+  height: 100%;
+  @include tablet {
+    height: 80%;
+  }
+}
+
+.close-btn_wrapper {
+  bottom: 35%;
+  position: relative;
+  right: 5%;
+}
+
+.close-btn {
+  cursor: pointer;
+}
