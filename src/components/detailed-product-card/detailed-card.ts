@@ -7,11 +7,11 @@ import ProductServices from '@lib/services/data services/product-services';
 
 export default class DetailedCard extends ComponentView {
   protected detailedCardContainer: HTMLElement;
+  protected slider: HTMLElement;
+  protected imageModal: HTMLDivElement;
   private _cardsPerPage: number;
   private _pageNumber: number;
   protected data: CardParams[] | undefined;
-  protected slider: HTMLElement;
-  protected imageModal: HTMLDivElement;
 
   constructor() {
     const params: Params = {
@@ -25,9 +25,9 @@ export default class DetailedCard extends ComponentView {
     this._cardsPerPage = 500;
     this._pageNumber = 1;
 
+    this.detailedCardContainer = createHTMLElement('div', ['detailed-cart', 'row']);
     this.slider = createHTMLElement('div', ['slider']);
     this.imageModal = createHTMLElement('div', ['image-modal']);
-    this.detailedCardContainer = createHTMLElement('div', ['detailed-cart', 'row']);
     this.getPromise();
   }
 
@@ -132,7 +132,7 @@ export default class DetailedCard extends ComponentView {
     }
   }
 
-  private toggleModal() {
+  private toggleModal(): void {
     const backgroundElem: HTMLDivElement = document.querySelector('.background-element') as HTMLDivElement;
     backgroundElem.style.opacity = '0.7';
     this.imageModal.style.display = 'block';
