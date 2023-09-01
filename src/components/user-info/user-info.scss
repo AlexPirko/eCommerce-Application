@@ -38,6 +38,13 @@
 
 .defaultAddress {
   background-color: aqua;
+  order: -1;
 }
 
-.addresses-wrapper {}
+
+
+.addresses-wrapper {
+
+  display: flex;
+  flex-direction: column;
+}

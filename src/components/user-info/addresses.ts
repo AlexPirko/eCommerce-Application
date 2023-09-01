@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import { TAddressInfo, TBillingAddressesInfo, TShippingAddressesInfo } from '@lib/types/user-info-types';
 import InputBlock from '@components/common/input/Input-block';
-import { saveEdit } from './common-blocks';
+import { saveEdit, editMode } from './common-blocks';
 import { Address } from '@commercetools/platform-sdk';
 import { validate } from '@lib/utils/validate';
 
@@ -9,18 +9,23 @@ import { validate } from '@lib/utils/validate';
 // 2) Получаем id добавленного адреса.
 // 3) Устанавливаем адреса как shipping/billing с помощью addShippingAddressId
 
+// добавить адрес
+// обновить адрес
+// удалить адрес
+
 // eslint-disable-next-line max-lines-per-function
 export function createAddressBlock(
   { country, city, streetName, postalCode, id }: TAddressInfo,
   version: number,
   isDefault: boolean,
   type: 'billing' | 'shipping',
+  customerId: string,
   isNew = false
 ): HTMLFormElement {
   const addressForm: HTMLFormElement = document.createElement('form');
   addressForm.classList.add('address-form');
   if (id !== undefined) addressForm.setAttribute('id', id);
-  const btns = adressesBtns(isNew, addressForm, version, id ?? 'id');
+  const btns = adressesBtns(isNew, addressForm, version, customerId, type);
   addressForm.append(btns);
 
   if (country !== undefined) {
@@ -82,12 +87,13 @@ export function createAddressBlock(
   return addressForm;
 }
 
-export function addNewAddress(type: 'billing' | 'shipping', btn: HTMLButtonElement, version: number): void {
+export function addNewAddress(type: 'billing' | 'shipping', btn: HTMLButtonElement, version: number, id: string): void {
   const newAddress: HTMLFormElement = createAddressBlock(
     { country: '', city: '', streetName: '', postalCode: '' },
     version,
     false,
     type,
+    id,
     true
   );
   btn.parentElement?.insertAdjacentElement('beforeend', newAddress);
@@ -101,7 +107,14 @@ export function addNewAddress(type: 'billing' | 'shipping', btn: HTMLButtonEleme
   });
 }
 
-export function adressesBtns(isNew: boolean, addressForm: HTMLFormElement, version: number, id?: string) {
+export function adressesBtns(
+  isNew: boolean,
+  addressForm: HTMLFormElement,
+  version: number,
+  customerId: string,
+  type: 'billing' | 'shipping'
+  // id?: string,
+) {
   const btnsWrapper: HTMLDivElement = document.createElement('div');
   btnsWrapper.classList.add('btns-wrapper');
 
@@ -115,38 +128,39 @@ export function adressesBtns(isNew: boolean, addressForm: HTMLFormElement, versi
     });
     const saveBtn: HTMLButtonElement = document.createElement('button');
     saveBtn.textContent = 'Save';
+    saveBtn.setAttribute('data-type', type);
+    saveBtn.classList.add('btn');
     addressForm.append(cancelBtn, saveBtn);
     saveBtn.addEventListener('click', async (ev): Promise<void> => {
       ev.preventDefault();
-      await saveEdit(addressForm, saveBtn, id ?? '1', version, '');
-      // saveBtn.textContent = 'Edit';
-      // saveBtn.disabled = true;
-
-      // saveBtn.replace(createEditBtn(''));
+      if (saveBtn.textContent === 'Save') {
+        await saveEdit(addressForm, saveBtn, customerId, version, '', cancelBtn);
+      } else {
+        editMode(addressForm);
+        saveBtn.textContent = 'Save';
+      }
     });
+  } else {
+    const editBtn = document.createElement('button');
+    const deleteBtn = document.createElement('button');
+    editBtn.textContent = 'Edit';
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.addEventListener('click', (ev) => {
+      ev.preventDefault();
+    });
+    editBtn.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      // if (editBtn.textContent === 'Edit') {
+      //   editBtn.textContent = 'Save';
+      //   editMode(addressForm);
+      // } else {
+      //   saveEdit(addressForm, editBtn, customerId, version, '');
+      //   editBtn.innerHTML = 'Edit';
+      //   editBtn.disabled = false;
+      // }
+    });
+    btnsWrapper.append(editBtn, deleteBtn);
   }
-  // else {
-  //   const editBtn = document.createElement('button');
-  //   editBtn.textContent = 'Edit';
-  //   deleteBtn.textContent = 'Delete';
-  //   deleteBtn.addEventListener('click', (ev) => {
-  //     ev.preventDefault();
-  //   });
-  //   editBtn.addEventListener('click', (ev) => {
-  //     ev.preventDefault();
-  //     if (editBtn.textContent === 'Edit') {
-  //       editBtn.textContent = 'Save';
-  //       editMode(addressForm);
-  //     } else {
-  //       saveEdit(addressForm, editBtn, id, version, '');
-  //       editBtn.innerHTML = 'Edit';
-  //       editBtn.disabled = false;
-  //     }
-  //     btnsWrapper.append(editBtn);
-  //   });
-  // btnsWrapper.append(editBtn);
-  // }
-  // btnsWrapper.append(deleteBtn);
   return btnsWrapper;
 }
 export function createBillingAdresses({
@@ -154,6 +168,7 @@ export function createBillingAdresses({
   billingAddressIds,
   defaultBillingAddressId,
   version,
+  id,
 }: TBillingAddressesInfo): HTMLDivElement {
   const wrapper: HTMLDivElement = document.createElement('div');
   wrapper.classList.add('addresses-wrapper');
@@ -171,9 +186,10 @@ export function createBillingAdresses({
         address,
         version,
         address.id === defaultBillingAddressId,
-        'billing'
+        'billing',
+        id
       );
-      addAddressBtn('billing', version, wrapper);
+      if (address.id === defaultBillingAddressId) addAddressBtn('billing', version, wrapper, id);
       wrapper.append(curAddress);
     });
   }
@@ -195,14 +211,14 @@ function setDefaultAddress(type: string, addressForm: HTMLFormElement): void {
   });
 }
 
-function addAddressBtn(type: 'billing' | 'shipping', version: number, wrapper: HTMLDivElement) {
+function addAddressBtn(type: 'billing' | 'shipping', version: number, wrapper: HTMLDivElement, id: string) {
   const addBtn: HTMLButtonElement = document.createElement('button');
   addBtn.textContent = `Add new ${type} Address`;
   addBtn.classList.add('waves-effect', 'waves-light', 'btn');
   addBtn.disabled = false;
   addBtn.addEventListener('click', (ev: MouseEvent): void => {
     ev.preventDefault();
-    addNewAddress(type, addBtn, version);
+    addNewAddress(type, addBtn, version, id);
   });
   wrapper.append(addBtn);
 }
@@ -211,6 +227,7 @@ export function createShippingAdresses({
   shippingAddressIds,
   defaultShippingAddressId,
   version,
+  id,
 }: TShippingAddressesInfo): HTMLDivElement {
   const wrapper: HTMLDivElement = document.createElement('div');
   wrapper.classList.add('addresses-wrapper');
@@ -228,9 +245,10 @@ export function createShippingAdresses({
         address,
         version,
         address.id === defaultShippingAddressId,
-        'shipping'
+        'shipping',
+        id
       );
-      addAddressBtn('shipping', version, wrapper);
+      if (address.id === defaultShippingAddressId) addAddressBtn('shipping', version, wrapper, id);
 
       wrapper.append(curAddress);
     });

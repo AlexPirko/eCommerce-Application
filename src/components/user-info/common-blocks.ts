@@ -1,4 +1,4 @@
-import { updateCustomerRequest } from './updateCustomer';
+import { updateCustomerRequest, addNewAddress } from './updateCustomer';
 
 export function createEditBtn({ text }: { text: string }): HTMLButtonElement {
   const btn: HTMLButtonElement = document.createElement('button');
@@ -13,7 +13,8 @@ export async function saveEdit(
   btn: HTMLButtonElement,
   id: string,
   version: number,
-  text: string
+  text: string,
+  cancelBtn?: HTMLButtonElement
 ): Promise<void> {
   M.AutoInit();
   const formData: FormData = new FormData(form);
@@ -35,8 +36,14 @@ export async function saveEdit(
     btns.forEach((button: HTMLButtonElement, index: number): void => {
       if (index !== btns.length - 1) button.disabled = true;
     });
-
-    updateCustomerRequest(formData, id, version);
+    if (cancelBtn) {
+      console.log(cancelBtn);
+      const type = btn.getAttribute('data-type');
+      console.log(type);
+      if (type === 'billing' || type == 'shipping') addNewAddress(formData, id, version, cancelBtn, type);
+    } else {
+      updateCustomerRequest(formData, id, version);
+    }
   }
 }
 

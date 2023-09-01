@@ -21,10 +21,12 @@ export type TBillingAddressesInfo = {
   billingAddressIds?: string[];
   defaultBillingAddressId?: string;
   version: number;
+  id: string;
 };
 export type TShippingAddressesInfo = {
   addresses?: Address[];
   shippingAddressIds?: string[];
   defaultShippingAddressId?: string;
   version: number;
+  id: string;
 };
