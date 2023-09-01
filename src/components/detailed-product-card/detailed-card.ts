@@ -89,32 +89,26 @@ export default class DetailedCard extends ComponentView {
     `;
   }
 
-  private createMainSlider(): HTMLElement {
-    this.slider.innerHTML = this.createCarousel();
-    return this.slider;
-  }
-
   private configureView(): void {
     this.detailedCardContainer.innerHTML = this.createDetailedCartHtml();
     this.detailedCardContainer.lastElementChild?.append(this.createMainSlider());
     this.createImageModal();
 
     const carousel: NodeListOf<HTMLElement> = document.querySelectorAll('.carousel') as NodeListOf<HTMLElement>;
-    this.mainSliderInit(carousel[1]);
     this.imageModalInit(carousel[0]);
+    this.mainSliderInit(carousel[1]);
+  }
+
+  private modalSliderInit(el: HTMLElement): void {
+    M.Carousel.init(el, {
+      indicators: true,
+    });
   }
 
   private mainSliderInit(el: HTMLElement): void {
     M.AutoInit();
     M.Carousel.init(el, {
       indicators: true,
-    });
-  }
-
-  private modalSliderInit(el: HTMLElement): void {
-    M.AutoInit();
-    M.Carousel.init(el, {
-      indicators: false,
     });
   }
 
@@ -161,6 +155,11 @@ export default class DetailedCard extends ComponentView {
       backgroundElem.style.opacity = '1';
       backgroundElem.style.display = 'none';
     });
+  }
+
+  private createMainSlider(): HTMLElement {
+    this.slider.innerHTML = this.createCarousel();
+    return this.slider;
   }
 
   public getElement(): HTMLElement {

@@ -177,7 +177,7 @@ div.carousel.carousel-slider {
 }
 
 div.carousel .indicators {
-  bottom: 20%;
+  bottom: 15%;
   @include desctop {
     bottom: 30%;
   }
@@ -243,4 +243,8 @@ div.carousel .indicators .indicator-item {
 
 .close-btn {
   cursor: pointer;
+}
+
+.image-modal_wrapper .carousel .indicators {
+  bottom: -4%;
 }
