@@ -12,7 +12,7 @@ export function getProductResponseAsCardData(product: Product): CardParams {
     description: productData.description?.['en-US'] as string,
     type: productData.masterVariant.attributes?.[0].value as string,
     brand: productData.masterVariant.attributes?.[1].value as string,
-    price: String(productData.masterVariant.prices?.[0].value.centAmount),
+    price: productData.masterVariant.prices?.[0].value.centAmount as number,
   };
   return cardParams;
 }

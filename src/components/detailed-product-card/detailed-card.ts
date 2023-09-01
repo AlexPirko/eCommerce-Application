@@ -1,9 +1,11 @@
 import './detailed-card.scss';
 
 import createHTMLElement from '@lib/utils/create-html-element';
+// import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
 import { CardParams, Params } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
 import ProductServices from '@lib/services/data services/product-services';
+import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
 
 export default class DetailedCard extends ComponentView {
   protected detailedCardContainer: HTMLElement;
@@ -41,6 +43,8 @@ export default class DetailedCard extends ComponentView {
   }
 
   private createDetailedCartHtml(): string {
+    let price: number;
+    if (this.data?.[0].price) price = this.data?.[0].price / 100;
     return `
       <div class='row top-bar'>
         <div class='col s12 m6 l7 breadcrumbs'>
@@ -53,7 +57,7 @@ export default class DetailedCard extends ComponentView {
           </ul>
         </div>
         <div class='btn-container col s12 m6 l5'>
-            <div class='detail-price'>Price: ${this.data?.[0].price}$</div>
+            <div class='detail-price'>Price: ${changeCurrencyFormat(price!)}</div>
             <div class='detail-buttons'>
               <button class='waves-effect waves-light btn-small add-button'><i class="menu-cart material-icons">shopping_cart</i>Add to Cart</button>
             </div>
