@@ -124,7 +124,7 @@ export default class App {
     this.pageContainer?.addCurrentPage(component);
   }
 
-  public async run() {
+  public run(): void {
     this.burger.handlerListener();
     profileLinkGuard();
   }

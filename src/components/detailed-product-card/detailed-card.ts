@@ -1,15 +1,14 @@
 import './detailed-card.scss';
 
 import createHTMLElement from '@lib/utils/create-html-element';
-// import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
+import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
 import { CardParams, Params } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
 import ProductServices from '@lib/services/data services/product-services';
-import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
 
 export default class DetailedCard extends ComponentView {
-  protected detailedCardContainer: HTMLElement;
-  protected slider: HTMLElement;
+  protected detailedCardContainer: HTMLDivElement;
+  protected slider: HTMLDivElement;
   protected imageModal: HTMLDivElement;
   private _cardsPerPage: number;
   private _pageNumber: number;
@@ -42,7 +41,7 @@ export default class DetailedCard extends ComponentView {
     this.configureView();
   }
 
-  private createDetailedCartHtml(): string {
+  private createDetailedCardHtml(): string {
     let price: number;
     if (this.data?.[0].price) price = this.data?.[0].price / 100;
     return `
@@ -94,7 +93,7 @@ export default class DetailedCard extends ComponentView {
   }
 
   private configureView(): void {
-    this.detailedCardContainer.innerHTML = this.createDetailedCartHtml();
+    this.detailedCardContainer.innerHTML = this.createDetailedCardHtml();
     this.detailedCardContainer.lastElementChild?.append(this.createMainSlider());
     this.createImageModal();
 
@@ -161,12 +160,12 @@ export default class DetailedCard extends ComponentView {
     });
   }
 
-  private createMainSlider(): HTMLElement {
+  private createMainSlider(): HTMLDivElement {
     this.slider.innerHTML = this.createCarousel();
     return this.slider;
   }
 
-  public getElement(): HTMLElement {
+  public getElement(): HTMLDivElement {
     return this.detailedCardContainer;
   }
 }
