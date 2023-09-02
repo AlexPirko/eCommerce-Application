@@ -1,6 +1,4 @@
-/* eslint-disable max-lines-per-function */
-
-import { Customer } from '@commercetools/platform-sdk';
+import { Customer, ClientResponse } from '@commercetools/platform-sdk';
 import InputBlock from '@components/common/input/Input-block';
 import ApiServices from '@lib/api/api-services';
 
@@ -33,10 +31,10 @@ export async function createPasswordBlock(res: Customer) {
     });
     passwordWrapper.append(editBtn);
   }
-
   return passwordWrapper;
 }
 
+// eslint-disable-next-line max-lines-per-function
 function editPassword(
   editBtn: HTMLButtonElement,
   passwordInput: HTMLDivElement,
@@ -88,14 +86,14 @@ function editPassword(
     editBtn.disabled = false;
   });
 
-  submitBtn.addEventListener('click', (ev) => {
+  submitBtn.addEventListener('click', async (ev) => {
     ev.preventDefault();
-    submitPassword(passwordWrapper, res, editBtn);
+    await submitPassword(passwordWrapper, res, editBtn);
   });
   passwordWrapper.append(newPassword, checkNewPassword, submitBtn, cancelBtn);
 }
 
-function submitPassword(passwordWrapper: HTMLFormElement, res: Customer, editBtn: HTMLButtonElement) {
+async function submitPassword(passwordWrapper: HTMLFormElement, res: Customer, editBtn: HTMLButtonElement) {
   M.AutoInit();
 
   const newPasswordInput: Element | null = passwordWrapper.querySelector('#newPasswordInput');
@@ -108,24 +106,25 @@ function submitPassword(passwordWrapper: HTMLFormElement, res: Customer, editBtn
     const firstValue: string = (<HTMLInputElement>newPasswordInput).value;
     const secondValue: string = (<HTMLInputElement>checkPassword).value;
     if (firstValue !== secondValue) {
-      M.toast({ html: 'You have entered different passwords', classes: 'different' });
+      M.toast({ html: 'You have entered different passwords', classes: 'error-toast' });
     } else {
+      const customerRes: ClientResponse<Customer> = await api.getCustomer(res.id);
       api
         .changePassword({
-          id: res.id,
-          version: res.version,
+          id: customerRes.body.id,
+          version: customerRes.body.version,
           currentPassword,
           newPassword: firstValue,
         })
         .then(async (): Promise<void> => {
-          M.toast({ html: 'You have changed password!', classes: 'rounded' });
+          M.toast({ html: 'You have changed password!', classes: 'success-toast' });
           passwordWrapper.replaceWith(await createPasswordBlock(res));
           api.customerLogin({ email: (<HTMLInputElement>email)?.value, password: firstValue });
           editBtn.disabled = false;
         })
         .catch((): void => {
           currentPasswordInput.classList.add('invalid');
-          M.toast({ html: 'You have entered wrong password', classes: 'different' });
+          M.toast({ html: 'You have entered wrong password', classes: 'error-toast' });
         });
     }
   }

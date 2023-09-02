@@ -1,14 +1,13 @@
-/* eslint-disable max-lines-per-function */
 import InputBlock from '@components/common/input/Input-block';
 import { TUserInfo } from '@lib/types/user-info-types';
 import { saveEdit, editMode, createEditBtn } from './common-blocks';
 
+// eslint-disable-next-line max-lines-per-function
 export default async function createPersonalInfoBlock({
   email,
   firstName,
   lastName,
   dateOfBirth,
-  version,
   id,
 }: TUserInfo): Promise<HTMLFormElement> {
   const formUserInfo: HTMLFormElement = document.createElement('form');
@@ -73,7 +72,7 @@ export default async function createPersonalInfoBlock({
   formUserInfo.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
     ev.preventDefault();
     if (btn.textContent === `Save ${btnText}`) {
-      await saveEdit(formUserInfo, btn, id, version, `${btnText}`);
+      await saveEdit(formUserInfo, btn, id, `${btnText}`);
     } else {
       editMode(formUserInfo);
       btn.textContent = `Save ${btnText}`;

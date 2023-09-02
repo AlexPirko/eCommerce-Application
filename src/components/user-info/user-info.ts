@@ -1,11 +1,10 @@
-/* eslint-disable max-lines-per-function */
 import './user-info';
 import ApiServices from '@lib/api/api-services';
 import 'materialize-css/dist/css/materialize.min.css';
 import { Customer, ClientResponse } from '@commercetools/platform-sdk';
 import './user-info.scss';
 import createPersonalInfoBlock from './personal-info';
-import { createPasswordBlock } from './password-block';
+import { createPasswordBlock } from './password-info';
 import { createShippingAdresses, createBillingAdresses } from './addresses';
 
 export class UserInfo {
@@ -24,7 +23,6 @@ export class UserInfo {
     wrapper.classList.add('user-info-wrapper');
     try {
       const res: Customer = await this.getInfo();
-      console.log(res);
       wrapper.append(
         await createPasswordBlock(res),
         await createPersonalInfoBlock(res),
@@ -32,7 +30,6 @@ export class UserInfo {
       );
       return wrapper;
     } catch (er) {
-      console.log(er);
       const title: HTMLHeadElement = document.createElement('h5');
       title.textContent = 'Something went wrong, please visit this page later';
       wrapper.append(title);

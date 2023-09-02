@@ -1,31 +1,22 @@
-/* eslint-disable max-lines-per-function */
 import { TAddressInfo, TBillingAddressesInfo, TShippingAddressesInfo } from '@lib/types/user-info-types';
 import InputBlock from '@components/common/input/Input-block';
 import { saveEdit, editMode } from './common-blocks';
 import { Address } from '@commercetools/platform-sdk';
 import { validate } from '@lib/utils/validate';
-
-// 1) Добавить адрес с помощью addAddress.
-// 2) Получаем id добавленного адреса.
-// 3) Устанавливаем адреса как shipping/billing с помощью addShippingAddressId
-
-// добавить адрес
-// обновить адрес
-// удалить адрес
+import { deleteAddress } from './updateCustomer';
 
 // eslint-disable-next-line max-lines-per-function
-export function createAddressBlock(
+async function createAddressBlock(
   { country, city, streetName, postalCode, id }: TAddressInfo,
-  version: number,
   isDefault: boolean,
   type: 'billing' | 'shipping',
   customerId: string,
   isNew = false
-): HTMLFormElement {
+): Promise<HTMLFormElement> {
   const addressForm: HTMLFormElement = document.createElement('form');
   addressForm.classList.add('address-form');
   if (id !== undefined) addressForm.setAttribute('id', id);
-  const btns = adressesBtns(isNew, addressForm, version, customerId, type);
+  const btns: HTMLDivElement = await adressesBtns(isNew, addressForm, customerId, type, id);
   addressForm.append(btns);
 
   if (country !== undefined) {
@@ -87,188 +78,6 @@ export function createAddressBlock(
   return addressForm;
 }
 
-export function addNewAddress(type: 'billing' | 'shipping', btn: HTMLButtonElement, version: number, id: string): void {
-  const newAddress: HTMLFormElement = createAddressBlock(
-    { country: '', city: '', streetName: '', postalCode: '' },
-    version,
-    false,
-    type,
-    id,
-    true
-  );
-  btn.parentElement?.insertAdjacentElement('beforeend', newAddress);
-  const inputs: NodeListOf<HTMLInputElement> = newAddress.querySelectorAll('input');
-  inputs.forEach((input: HTMLInputElement): void => {
-    input.removeAttribute('disabled');
-  });
-  const btns: NodeListOf<HTMLButtonElement> = newAddress.querySelectorAll('button');
-  btns.forEach((button: HTMLButtonElement): void => {
-    button.removeAttribute('disabled');
-  });
-}
-
-export function adressesBtns(
-  isNew: boolean,
-  addressForm: HTMLFormElement,
-  version: number,
-  customerId: string,
-  type: 'billing' | 'shipping'
-  // id?: string,
-) {
-  const btnsWrapper: HTMLDivElement = document.createElement('div');
-  btnsWrapper.classList.add('btns-wrapper');
-
-  if (isNew) {
-    const cancelBtn: HTMLButtonElement = document.createElement('button');
-    cancelBtn.disabled = true;
-    cancelBtn.textContent = 'Cancel';
-    cancelBtn.addEventListener('click', (ev): void => {
-      ev.preventDefault();
-      addressForm.remove();
-    });
-    const saveBtn: HTMLButtonElement = document.createElement('button');
-    saveBtn.textContent = 'Save';
-    saveBtn.setAttribute('data-type', type);
-    saveBtn.classList.add('btn');
-    addressForm.append(cancelBtn, saveBtn);
-    saveBtn.addEventListener('click', async (ev): Promise<void> => {
-      ev.preventDefault();
-      if (saveBtn.textContent === 'Save') {
-        await saveEdit(addressForm, saveBtn, customerId, version, '', cancelBtn);
-      } else {
-        editMode(addressForm);
-        saveBtn.textContent = 'Save';
-      }
-    });
-  } else {
-    const editBtn = document.createElement('button');
-    const deleteBtn = document.createElement('button');
-    editBtn.textContent = 'Edit';
-    deleteBtn.textContent = 'Delete';
-    deleteBtn.addEventListener('click', (ev) => {
-      ev.preventDefault();
-    });
-    editBtn.addEventListener('click', (ev) => {
-      ev.preventDefault();
-      // if (editBtn.textContent === 'Edit') {
-      //   editBtn.textContent = 'Save';
-      //   editMode(addressForm);
-      // } else {
-      //   saveEdit(addressForm, editBtn, customerId, version, '');
-      //   editBtn.innerHTML = 'Edit';
-      //   editBtn.disabled = false;
-      // }
-    });
-    btnsWrapper.append(editBtn, deleteBtn);
-  }
-  return btnsWrapper;
-}
-export function createBillingAdresses({
-  addresses,
-  billingAddressIds,
-  defaultBillingAddressId,
-  version,
-  id,
-}: TBillingAddressesInfo): HTMLDivElement {
-  const wrapper: HTMLDivElement = document.createElement('div');
-  wrapper.classList.add('addresses-wrapper');
-  const title: HTMLHeadingElement = document.createElement('h5');
-  title.textContent = 'Billing Address(es)';
-
-  wrapper.append(title);
-
-  if (addresses !== undefined && billingAddressIds !== undefined) {
-    const billingAddresses: Address[] = addresses.filter(
-      (address: Address): boolean => billingAddressIds.find((id: string): boolean => id === address.id) !== undefined
-    );
-    billingAddresses.forEach((address: Address): void => {
-      const curAddress: HTMLFormElement = createAddressBlock(
-        address,
-        version,
-        address.id === defaultBillingAddressId,
-        'billing',
-        id
-      );
-      if (address.id === defaultBillingAddressId) addAddressBtn('billing', version, wrapper, id);
-      wrapper.append(curAddress);
-    });
-  }
-
-  return wrapper;
-}
-
-function setDefaultAddress(type: string, addressForm: HTMLFormElement): void {
-  const defaultName: string = `default${type[0].toUpperCase() + type.slice(1)}`;
-  const radioDefault: Element | null = addressForm.querySelector(`[name='${defaultName}']`);
-  radioDefault?.addEventListener('click', () => {
-    const allDefaults: NodeListOf<Element> = document.querySelectorAll(`[name='${defaultName}']`);
-    allDefaults.forEach((radio) => {
-      (<HTMLInputElement>radio).checked = false;
-      radio.closest('.address-form')?.classList.remove('defaultAddress');
-    });
-    (<HTMLInputElement>radioDefault).checked = true;
-    radioDefault.closest('.address-form')?.classList.add('defaultAddress');
-  });
-}
-
-function addAddressBtn(type: 'billing' | 'shipping', version: number, wrapper: HTMLDivElement, id: string) {
-  const addBtn: HTMLButtonElement = document.createElement('button');
-  addBtn.textContent = `Add new ${type} Address`;
-  addBtn.classList.add('waves-effect', 'waves-light', 'btn');
-  addBtn.disabled = false;
-  addBtn.addEventListener('click', (ev: MouseEvent): void => {
-    ev.preventDefault();
-    addNewAddress(type, addBtn, version, id);
-  });
-  wrapper.append(addBtn);
-}
-export function createShippingAdresses({
-  addresses,
-  shippingAddressIds,
-  defaultShippingAddressId,
-  version,
-  id,
-}: TShippingAddressesInfo): HTMLDivElement {
-  const wrapper: HTMLDivElement = document.createElement('div');
-  wrapper.classList.add('addresses-wrapper');
-  const title: HTMLHeadingElement = document.createElement('h5');
-  title.textContent = 'Shipping Address(es)';
-
-  wrapper.append(title);
-
-  if (addresses !== undefined && shippingAddressIds !== undefined) {
-    const shippingAddresses: Address[] = addresses.filter(
-      (address: Address): boolean => shippingAddressIds.find((id: string): boolean => id === address.id) !== undefined
-    );
-    shippingAddresses.forEach((address: Address): void => {
-      const curAddress: HTMLFormElement = createAddressBlock(
-        address,
-        version,
-        address.id === defaultShippingAddressId,
-        'shipping',
-        id
-      );
-      if (address.id === defaultShippingAddressId) addAddressBtn('shipping', version, wrapper, id);
-
-      wrapper.append(curAddress);
-    });
-  }
-
-  return wrapper;
-}
-// const submitText: string = 'addresses information';
-// const submitBtn: HTMLButtonElement = await this.createEditBtn({ text: submitText });
-// adressesForm.append(submitBtn);
-// adressesForm.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
-//   ev.preventDefault();
-//   if (submitBtn.textContent === `Save ${submitText}`) {
-//     await this.saveEdit(adressesForm, submitBtn, res.id, res.version, `${submitText}`);
-//   } else {
-//     this.editMode(adressesForm);
-//     submitBtn.textContent = `Save ${submitText}`;
-//   }
-// });
-
 function countriesBlock(addressType: string, form: HTMLFormElement): HTMLDivElement {
   const wrapper: HTMLDivElement = document.createElement('div');
   const label1: HTMLLabelElement = document.createElement('label');
@@ -308,5 +117,169 @@ function countriesBlock(addressType: string, form: HTMLFormElement): HTMLDivElem
   label2.append(input2, span2);
 
   wrapper.append(label1, label2);
+  return wrapper;
+}
+
+async function addNewAddress(type: 'billing' | 'shipping', btn: HTMLButtonElement, id: string): Promise<void> {
+  const newAddress: HTMLFormElement = await createAddressBlock(
+    { country: '', city: '', streetName: '', postalCode: '' },
+    false,
+    type,
+    id,
+    true
+  );
+  btn.parentElement?.insertAdjacentElement('beforeend', newAddress);
+  const inputs: NodeListOf<HTMLInputElement> = newAddress.querySelectorAll('input');
+  inputs.forEach((input: HTMLInputElement): void => {
+    input.removeAttribute('disabled');
+  });
+  const btns: NodeListOf<HTMLButtonElement> = newAddress.querySelectorAll('button');
+  btns.forEach((button: HTMLButtonElement): void => {
+    button.removeAttribute('disabled');
+  });
+}
+
+// eslint-disable-next-line max-lines-per-function
+async function adressesBtns(
+  isNew: boolean,
+  addressForm: HTMLFormElement,
+  customerId: string,
+  type: 'billing' | 'shipping',
+  id?: string
+) {
+  const btnsWrapper: HTMLDivElement = document.createElement('div');
+  btnsWrapper.classList.add('btns-wrapper');
+  const editBtn: HTMLButtonElement = document.createElement('button');
+  const deleteBtn: HTMLButtonElement = document.createElement('button');
+  editBtn.textContent = 'Edit';
+  editBtn.setAttribute('data-type', type);
+  deleteBtn.textContent = 'Delete';
+  deleteBtn.classList.add('delete-btn');
+  deleteBtn.addEventListener('click', async (ev): Promise<void> => {
+    ev.preventDefault();
+    if (id !== undefined) {
+      await deleteAddress(customerId, id, type, addressForm);
+    }
+  });
+
+  const cancelBtn: HTMLButtonElement = document.createElement('button');
+  if (isNew) {
+    editBtn.textContent = 'Save';
+    cancelBtn.disabled = true;
+    cancelBtn.textContent = 'Cancel';
+    deleteBtn.classList.add('none');
+    cancelBtn.addEventListener('click', (ev): void => {
+      ev.preventDefault();
+      addressForm.remove();
+    });
+    btnsWrapper.append(cancelBtn);
+  }
+
+  editBtn.addEventListener('click', async (ev): Promise<void> => {
+    ev.preventDefault();
+    if (editBtn.textContent === 'Edit') {
+      editMode(addressForm);
+      editBtn.textContent = 'Save';
+      editBtn.dataset.action = 'update';
+      editBtn.dataset.addressId = id;
+    } else {
+      isNew
+        ? await saveEdit(addressForm, editBtn, customerId, '', cancelBtn)
+        : await saveEdit(addressForm, editBtn, customerId, '');
+      editBtn.textContent = 'Edit';
+      editBtn.disabled = false;
+      deleteBtn.classList.remove('none');
+      cancelBtn.classList.add('none');
+    }
+  });
+
+  btnsWrapper.append(editBtn, deleteBtn);
+  return btnsWrapper;
+}
+
+function setDefaultAddress(type: string, addressForm: HTMLFormElement): void {
+  const defaultName: string = `default${type[0].toUpperCase() + type.slice(1)}`;
+  const radioDefault: Element | null = addressForm.querySelector(`[name='${defaultName}']`);
+  radioDefault?.addEventListener('click', (): void => {
+    const allDefaults: NodeListOf<Element> = document.querySelectorAll(`[name='${defaultName}']`);
+    allDefaults.forEach((radio): void => {
+      (<HTMLInputElement>radio).checked = false;
+      radio.closest('.address-form')?.classList.remove('defaultAddress');
+    });
+    (<HTMLInputElement>radioDefault).checked = true;
+    radioDefault.closest('.address-form')?.classList.add('defaultAddress');
+  });
+}
+
+function addAddressBtn(type: 'billing' | 'shipping', wrapper: HTMLDivElement, id: string) {
+  const addBtn: HTMLButtonElement = document.createElement('button');
+  addBtn.textContent = `Add new ${type} Address`;
+  addBtn.classList.add('waves-effect', 'waves-light', 'add-btn', 'btn');
+  addBtn.disabled = false;
+  addBtn.addEventListener('click', (ev: MouseEvent): void => {
+    ev.preventDefault();
+    addNewAddress(type, addBtn, id);
+  });
+  wrapper.append(addBtn);
+}
+
+export function createShippingAdresses({
+  addresses,
+  shippingAddressIds,
+  defaultShippingAddressId,
+  id,
+}: TShippingAddressesInfo): HTMLDivElement {
+  const wrapper: HTMLDivElement = document.createElement('div');
+  wrapper.classList.add('addresses-wrapper');
+  const title: HTMLHeadingElement = document.createElement('h5');
+  title.textContent = 'Shipping Address(es)';
+  wrapper.append(title);
+
+  if (addresses !== undefined && shippingAddressIds !== undefined) {
+    const shippingAddresses: Address[] = addresses.filter(
+      (address: Address): boolean => shippingAddressIds.find((id: string): boolean => id === address.id) !== undefined
+    );
+    shippingAddresses.forEach(async (address: Address): Promise<void> => {
+      const curAddress: HTMLFormElement = await createAddressBlock(
+        address,
+        address.id === defaultShippingAddressId,
+        'shipping',
+        id
+      );
+      if (address.id === defaultShippingAddressId) addAddressBtn('shipping', wrapper, id);
+      wrapper.append(curAddress);
+    });
+  }
+  return wrapper;
+}
+
+export function createBillingAdresses({
+  addresses,
+  billingAddressIds,
+  defaultBillingAddressId,
+  id,
+}: TBillingAddressesInfo): HTMLDivElement {
+  const wrapper: HTMLDivElement = document.createElement('div');
+  wrapper.classList.add('addresses-wrapper');
+  const title: HTMLHeadingElement = document.createElement('h5');
+  title.textContent = 'Billing Address(es)';
+  wrapper.append(title);
+
+  if (addresses !== undefined && billingAddressIds !== undefined) {
+    const billingAddresses: Address[] = addresses.filter(
+      (address: Address): boolean => billingAddressIds.find((id: string): boolean => id === address.id) !== undefined
+    );
+    billingAddresses.forEach(async (address: Address): Promise<void> => {
+      const curAddress: HTMLFormElement = await createAddressBlock(
+        address,
+        address.id === defaultBillingAddressId,
+        'billing',
+        id
+      );
+      if (address.id === defaultBillingAddressId) addAddressBtn('billing', wrapper, id);
+      wrapper.append(curAddress);
+    });
+  }
+
   return wrapper;
 }

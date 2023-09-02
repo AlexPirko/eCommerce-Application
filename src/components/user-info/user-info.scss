@@ -23,7 +23,17 @@
 .different {
   background-color: red;
   border-radius: 10px;
+}
+.error-toast {
+  background-color: red;
+  border-radius: 10px;
+  font-size: 20px;
 
+}
+.success-toast {
+  background-color: green;
+  border-radius: 10px;
+  font-size: 20px;
 }
 
 .password-wrapper {
@@ -37,14 +47,50 @@
 }
 
 .defaultAddress {
-  background-color: aqua;
+  background-color: #ede7f6;
   order: -1;
 }
 
 
 
 .addresses-wrapper {
-
+  gap: 10px;
   display: flex;
   flex-direction: column;
+
+  .add-btn {
+    order: 2;
+  }
+
+  h5 {
+    order: -1;
+  }
+}
+
+.address-form {
+  position: relative;
+  border: 1px solid grey;
+padding: 5px;
+
+}
+
+.delete-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: transparent;
+  border: 1px solid red;
+  color: red;
+  padding: 2px;
+  transition: .3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: red;
+    color: white;
+  }
+}
+
+.none {
+  display: none;
 }

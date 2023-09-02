@@ -1,4 +1,4 @@
-import { updateCustomerRequest, addNewAddress } from './updateCustomer';
+import { updateCustomerInfo, addNewAddress, updateAddress } from './updateCustomer';
 
 export function createEditBtn({ text }: { text: string }): HTMLButtonElement {
   const btn: HTMLButtonElement = document.createElement('button');
@@ -12,7 +12,6 @@ export async function saveEdit(
   form: HTMLFormElement,
   btn: HTMLButtonElement,
   id: string,
-  version: number,
   text: string,
   cancelBtn?: HTMLButtonElement
 ): Promise<void> {
@@ -20,11 +19,11 @@ export async function saveEdit(
   const formData: FormData = new FormData(form);
   const inputs: NodeListOf<HTMLInputElement> = form.querySelectorAll('input');
   const btns: NodeListOf<HTMLButtonElement> = form.querySelectorAll('button');
-  inputs.forEach((input: HTMLInputElement) => {
+  inputs.forEach((input: HTMLInputElement): void => {
     input.value === '' ? input.classList.add('invalid') : input.classList.remove('invalid');
   });
   const noErrors: boolean = Array.from(inputs).every(
-    (input: HTMLInputElement) => !input.classList.contains('invalid') && input.value !== ''
+    (input: HTMLInputElement): boolean => !input.classList.contains('invalid') && input.value !== ''
   );
   if (noErrors) {
     btn.innerHTML = `  
@@ -36,18 +35,21 @@ export async function saveEdit(
     btns.forEach((button: HTMLButtonElement, index: number): void => {
       if (index !== btns.length - 1) button.disabled = true;
     });
+    const type: string | null = btn.getAttribute('data-type');
     if (cancelBtn) {
-      console.log(cancelBtn);
-      const type = btn.getAttribute('data-type');
-      console.log(type);
-      if (type === 'billing' || type == 'shipping') addNewAddress(formData, id, version, cancelBtn, type);
+      if (type === 'billing' || type == 'shipping') await addNewAddress(formData, id, cancelBtn, type);
+    } else if (btn.dataset.action === 'update') {
+      if (type === 'billing' || type == 'shipping') {
+        const addressId = btn.dataset.addressId || '1';
+        await updateAddress(formData, id, addressId, type, btn);
+      }
     } else {
-      updateCustomerRequest(formData, id, version);
+      await updateCustomerInfo(formData, id);
     }
   }
 }
 
-export function editMode(form: HTMLFormElement) {
+export function editMode(form: HTMLFormElement): void {
   const inputs: NodeListOf<HTMLInputElement> = form.querySelectorAll('input');
   inputs.forEach((input: HTMLInputElement): void => {
     input.removeAttribute('disabled');
