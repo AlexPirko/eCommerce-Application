@@ -12,7 +12,7 @@ export function getProductResponseAsCardData(product: Product): CardParams {
     description: productData.description?.['en-US'] as string,
     type: productData.masterVariant.attributes?.[0].value as string,
     brand: productData.masterVariant.attributes?.[1].value as string,
-    price: String(productData.masterVariant.prices?.[0].value.centAmount),
+    price: productData.masterVariant.prices?.[0].value.centAmount as number,
     key: product.key as string,
   };
 
@@ -28,7 +28,7 @@ export function getProductProjectionResponseAsCardData(product: ProductProjectio
     description: product.description?.['en-US'] as string,
     type: product.masterVariant.attributes?.[0].value as string,
     brand: product.masterVariant.attributes?.[1].value as string,
-    price: String(product.masterVariant.prices?.[0].value.centAmount),
+    price: product.masterVariant.prices?.[0].value.centAmount as number,
     key: product.key as string,
   };
 

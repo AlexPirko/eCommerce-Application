@@ -10,8 +10,8 @@
   display: grid;
   gap: 1%;
   grid-template-columns: 23% 66%;
-  grid-template-areas: 
-                  "A A"
-                  "B C"
-                  "D D";
+  grid-template-areas:
+    'A A'
+    'B C'
+    'D D';
 }

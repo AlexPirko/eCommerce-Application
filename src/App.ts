@@ -1,7 +1,6 @@
 import '@assets/styles/global.scss';
 import handleVisibility from '@lib/utils/handle-visibility';
 import profileLinkGuard from '@lib/utils/profile-link-guard';
-import { getProducts } from '@lib/utils/get-products';
 import { Paths, PRODUCT_SELECTOR } from '@components/router/paths';
 import Router from '@components/router/router';
 import Header from '@layouts/header/header';
@@ -125,9 +124,8 @@ export default class App {
     this.pageContainer?.addCurrentPage(component);
   }
 
-  public async run() {
+  public run(): void {
     this.burger.handlerListener();
     profileLinkGuard();
-    console.log(await getProducts());
   }
 }
