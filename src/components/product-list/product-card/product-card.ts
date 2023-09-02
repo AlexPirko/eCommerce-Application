@@ -43,7 +43,7 @@ export default class ProductCard {
     }
   }
 
-  private setDeatailedButtonClickEventHandler() {
+  private setDeatailedButtonClickEventHandler(): void {
     const button: HTMLButtonElement | null = this._element.querySelector('.button__detailed');
     button?.addEventListener('click', (): void => {});
   }
