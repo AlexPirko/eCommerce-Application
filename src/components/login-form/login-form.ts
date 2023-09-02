@@ -142,7 +142,7 @@ export class LoginForm {
     return text;
   }
 
-  public getElement() {
+  public getElement(): HTMLFormElement {
     return this.form;
   }
 }

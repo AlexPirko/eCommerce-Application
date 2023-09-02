@@ -9,6 +9,7 @@ import {
   CustomerToken,
   MyCustomerSignin,
   ProductPagedQueryResponse,
+  ProductProjection,
   ProductProjectionPagedQueryResponse,
   QueryParam,
   createApiBuilderFromCtpClient,
@@ -133,6 +134,17 @@ export default class ApiServices {
           offset: offset,
         },
       })
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+  }
+
+  public async getProductByKey(key: string): Promise<ClientResponse<ProductProjection>> {
+    return this._apiRoot
+      .productProjections()
+      .withKey({ key })
+      .get()
       .execute()
       .catch((error) => {
         throw error;

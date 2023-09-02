@@ -4,12 +4,14 @@
   text-align: center;
   grid-area: A;
 }
-.catalog-page {
+
+.product-list__container {
+  margin-bottom: 2%;
   display: grid;
   gap: 1%;
   grid-template-columns: 23% 66%;
-  grid-template-areas: 
-                  "A A"
-                  "B C"
-                  "D D";
+  grid-template-areas:
+    'A A'
+    'B C'
+    'D D';
 }

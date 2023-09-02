@@ -37,6 +37,8 @@ export default class ProductFilterForm {
           FIRST_PAGE_NUMBER
         );
         console.log(productsData);
+        const product: CardParams = await this._productServices.getProductByKey('c-r6');
+        console.log(product);
       } catch (error) {
         console.log(error);
       }
