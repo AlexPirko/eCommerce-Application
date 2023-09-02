@@ -4,6 +4,7 @@ import { saveEdit, editMode } from './common-blocks';
 import { Address } from '@commercetools/platform-sdk';
 import { validate } from '@lib/utils/validate';
 import { deleteAddress } from './updateCustomer';
+import { uniqueID } from '@lib/utils/randomNumber';
 
 // eslint-disable-next-line max-lines-per-function
 async function createAddressBlock(
@@ -26,7 +27,7 @@ async function createAddressBlock(
   if (city !== undefined) {
     const cityInput: HTMLDivElement = new InputBlock({
       type: 'text',
-      id: '',
+      id: uniqueID(),
       label: 'City',
       placeholder: '',
       name: 'city',
@@ -38,7 +39,7 @@ async function createAddressBlock(
   if (streetName !== undefined) {
     const streetInput: HTMLDivElement = new InputBlock({
       type: 'text',
-      id: '',
+      id: uniqueID(),
       label: 'Street',
       placeholder: '',
       name: 'streetName',
@@ -50,7 +51,7 @@ async function createAddressBlock(
   if (postalCode !== undefined) {
     const postalCodeInput: HTMLDivElement = new InputBlock({
       type: 'text',
-      id: '',
+      id: uniqueID(),
       label: 'Postal Code',
       placeholder: '',
       name: `${type}-postal-form`,
@@ -152,6 +153,7 @@ async function adressesBtns(
   const editBtn: HTMLButtonElement = document.createElement('button');
   const deleteBtn: HTMLButtonElement = document.createElement('button');
   editBtn.textContent = 'Edit';
+  editBtn.classList.add('edit-address-btn');
   editBtn.setAttribute('data-type', type);
   deleteBtn.textContent = 'Delete';
   deleteBtn.classList.add('delete-btn');
@@ -167,6 +169,7 @@ async function adressesBtns(
     editBtn.textContent = 'Save';
     cancelBtn.disabled = true;
     cancelBtn.textContent = 'Cancel';
+    cancelBtn.classList.add('cancel-address-btn');
     deleteBtn.classList.add('none');
     cancelBtn.addEventListener('click', (ev): void => {
       ev.preventDefault();
@@ -204,10 +207,10 @@ function setDefaultAddress(type: string, addressForm: HTMLFormElement): void {
     const allDefaults: NodeListOf<Element> = document.querySelectorAll(`[name='${defaultName}']`);
     allDefaults.forEach((radio): void => {
       (<HTMLInputElement>radio).checked = false;
-      radio.closest('.address-form')?.classList.remove('defaultAddress');
+      radio.closest('.address-form')?.classList.add('unsetDefault');
     });
     (<HTMLInputElement>radioDefault).checked = true;
-    radioDefault.closest('.address-form')?.classList.add('defaultAddress');
+    radioDefault.closest('.address-form')?.classList.add('setDefault');
   });
 }
 
@@ -246,9 +249,9 @@ export function createShippingAdresses({
         'shipping',
         id
       );
-      if (address.id === defaultShippingAddressId) addAddressBtn('shipping', wrapper, id);
       wrapper.append(curAddress);
     });
+    addAddressBtn('shipping', wrapper, id);
   }
   return wrapper;
 }
@@ -276,9 +279,9 @@ export function createBillingAdresses({
         'billing',
         id
       );
-      if (address.id === defaultBillingAddressId) addAddressBtn('billing', wrapper, id);
       wrapper.append(curAddress);
     });
+    addAddressBtn('billing', wrapper, id);
   }
 
   return wrapper;

@@ -67,15 +67,34 @@ export default async function createPersonalInfoBlock({
 
   const btnText: string = 'personal info';
   const btn: HTMLButtonElement = createEditBtn({ text: `${btnText}` });
-  formUserInfo.append(btn);
+  const cancelBtn = document.createElement('button');
+  cancelBtn.classList.add('waves-effect', 'waves-light', 'btn', 'none', 'cancel-info-btn');
+  cancelBtn.textContent = 'Cancel';
+  formUserInfo.append(btn, cancelBtn);
+
+  cancelBtn.addEventListener('click', async (ev): Promise<void> => {
+    ev.preventDefault();
+    cancelBtn.classList.add('none');
+    formUserInfo.replaceWith(
+      await createPersonalInfoBlock({
+        email,
+        firstName,
+        lastName,
+        dateOfBirth,
+        id,
+      })
+    );
+  });
 
   formUserInfo.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
     ev.preventDefault();
     if (btn.textContent === `Save ${btnText}`) {
       await saveEdit(formUserInfo, btn, id, `${btnText}`);
+      cancelBtn.classList.add('none');
     } else {
       editMode(formUserInfo);
       btn.textContent = `Save ${btnText}`;
+      cancelBtn.classList.remove('none');
     }
   });
   return formUserInfo;

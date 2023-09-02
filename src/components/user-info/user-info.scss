@@ -1,7 +1,32 @@
+.error-toast {
+  background-color: red;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+.success-toast {
+  background-color: green;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
 .user-info-wrapper {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+}
+
+.submit-password {
+  margin-right: 10px;
+}
+
+.cancel-btn,
+.submit-password {
+  margin-top: 10px;
+}
+
+.password-wrapper {
+  width: 320px;
 }
 
 .info-wrapper {
@@ -12,7 +37,12 @@
 }
 
 .user-info {
-  max-width: 300px;
+  width: 320px;
+}
+
+.cancel-info-btn {
+  display: block;
+  margin: 0 auto;
 }
 
 .edit-btn {
@@ -20,25 +50,21 @@
   margin: 20px auto;
 }
 
-.different {
-  background-color: red;
-  border-radius: 10px;
-}
-.error-toast {
-  background-color: red;
-  border-radius: 10px;
-  font-size: 20px;
-
-}
-.success-toast {
-  background-color: green;
-  border-radius: 10px;
-  font-size: 20px;
-}
-
-.password-wrapper {
-  max-width: 300px;
-
+.edit-address-btn {
+  cursor: pointer;
+  position: absolute;
+  top: 30px;
+  right: 5px;
+  border: 1px solid #00e676 ;
+  transition: .3s ease;
+  padding: 5px;
+  background-color: #00e676 ;
+  color: white;
+  
+  &:hover {
+    background-color: transparent;
+    color: #00e676 ;
+  }
 }
 
 .addresses {
@@ -51,7 +77,14 @@
   order: -1;
 }
 
+.unsetDefault {
+  background-color: transparent;
+}
 
+.setDefault {
+  background-color: #ede7f6;
+
+}
 
 .addresses-wrapper {
   gap: 10px;
@@ -70,11 +103,10 @@
 .address-form {
   position: relative;
   border: 1px solid grey;
-padding: 5px;
-
+  padding: 5px;
 }
 
-.delete-btn {
+.delete-btn,.cancel-address-btn {
   position: absolute;
   top: 5px;
   right: 5px;

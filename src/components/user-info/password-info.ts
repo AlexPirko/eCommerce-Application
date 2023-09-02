@@ -42,6 +42,7 @@ function editPassword(
   res: Customer
 ) {
   editBtn.disabled = true;
+  editBtn.classList.add('none');
   passwordInput.replaceWith(
     new InputBlock({
       type: 'password',
@@ -74,16 +75,17 @@ function editPassword(
   }).create;
 
   const submitBtn: HTMLButtonElement = document.createElement('button');
-  submitBtn.classList.add('btn');
+  submitBtn.classList.add('btn', 'submit-password');
   submitBtn.textContent = 'Change Password';
   const cancelBtn: HTMLButtonElement = document.createElement('button');
-  cancelBtn.classList.add('btn');
+  cancelBtn.classList.add('btn', 'cancel-btn');
   cancelBtn.textContent = 'Cancel';
 
   cancelBtn.addEventListener('click', async (ev: MouseEvent) => {
     ev.preventDefault();
     passwordWrapper.replaceWith(await createPasswordBlock(res));
     editBtn.disabled = false;
+    editBtn.classList.remove('none');
   });
 
   submitBtn.addEventListener('click', async (ev) => {
