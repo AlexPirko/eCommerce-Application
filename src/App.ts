@@ -79,13 +79,13 @@ export default class App {
       {
         path: `${Paths.CATALOG}`,
         callback: () => {
-          this.setContent(Paths.CATALOG, new Catalog('', this.router));
+          this.setContent(Paths.CATALOG, new Catalog(''));
         },
       },
       {
         path: `${Paths.CATALOG}/${PRODUCT_SELECTOR}`,
         callback: (key) => {
-          this.setContent(Paths.CATALOG, new Catalog(key, this.router));
+          this.setContent(Paths.CATALOG, new Catalog(key));
         },
       },
       {

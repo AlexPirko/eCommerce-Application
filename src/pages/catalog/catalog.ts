@@ -7,7 +7,6 @@ import ProductFilterForm from '@components/products-filter-form/products-filter-
 import ProductListComponent from '@components/product-list/product-list';
 import CatalogPaginationComponent from '@components/pagination-nav/pagination-nav';
 import DetailedCard from '@components/detailed-product-card/detailed-card';
-import Router from '@components/router/router';
 import createHTMLElement from '@lib/utils/create-html-element';
 
 export default class Catalog extends ComponentView {
@@ -16,7 +15,7 @@ export default class Catalog extends ComponentView {
   private pageNav: CatalogPaginationComponent;
   private detailedCard: DetailedCard;
 
-  constructor(key: string = '', router: Router) {
+  constructor(key: string = '') {
     const params: Params = {
       tagName: 'section',
       classNames: ['catalog-page'],
@@ -35,7 +34,7 @@ export default class Catalog extends ComponentView {
       if (key) {
         console.log(key /* Здесь будет функция инициализирующая создание страницы с детальной инфо detailedCard()*/);
       } else {
-        console.log(router /* Здесь будет функция инициализирующая создание страниц с картами товров*/);
+        /* empty */
       }
 
       this.configureView();

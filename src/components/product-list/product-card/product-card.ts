@@ -1,17 +1,22 @@
 import './product-card.scss';
 
 import createElementFromHtml from '@lib/utils/create-element-from-html';
-import cardTemplate from './product-card.html';
 import { CardParams } from '@lib/types/params-interface';
+import cardTemplate from './product-card.html';
+import { Paths } from '@components/router/paths';
+import Router from '@components/router/router';
 
 export default class ProductCard {
   private _element: HTMLDivElement;
   private _cardParams: CardParams;
+  router: Router;
 
   constructor(cardParams: CardParams) {
+    this.router = new Router(null);
     this._element = createElementFromHtml<HTMLDivElement>(cardTemplate);
     this._cardParams = cardParams;
     this.setCard();
+    this.setDeatailedButtonClickEventHandler();
   }
 
   private setCard(): void {
@@ -45,7 +50,13 @@ export default class ProductCard {
 
   private setDeatailedButtonClickEventHandler(): void {
     const button: HTMLButtonElement | null = this._element.querySelector('.button__detailed');
-    button?.addEventListener('click', (): void => {});
+    button?.addEventListener('click', (): void => {
+      this.buttonClickHandler(`${Paths.CATALOG}/${this._cardParams.key}`);
+    });
+  }
+
+  private buttonClickHandler(path: string) {
+    this.router.navigate(path);
   }
 
   public get element(): HTMLDivElement {
