@@ -22,7 +22,7 @@ export default class Profile extends ComponentView {
       text: 'Profile',
     };
     const titleElementBuilder: ElementBuilder = new ElementBuilder(titleParams);
-    const user = await new UserInfo().createUserInfoPage();
+    const user: HTMLDivElement = await new UserInfo().createUserInfoPage();
     this.viewElementBuilder.addInnerElement(titleElementBuilder);
     this.viewElementBuilder.addInnerElement(user);
   }

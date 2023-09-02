@@ -4,7 +4,7 @@ import ApiServices from '@lib/api/api-services';
 
 const api: ApiServices = new ApiServices();
 
-export async function createPasswordBlock(res: Customer) {
+export async function createPasswordBlock(res: Customer): Promise<HTMLFormElement> {
   const passwordWrapper: HTMLFormElement = document.createElement('form');
   passwordWrapper.classList.add('password-wrapper');
   const title: HTMLHeadingElement = document.createElement('h5');
@@ -25,7 +25,7 @@ export async function createPasswordBlock(res: Customer) {
     const editBtn: HTMLButtonElement = document.createElement('button');
     editBtn.classList.add('btn');
     editBtn.textContent = 'Edit Password';
-    editBtn.addEventListener('click', (ev) => {
+    editBtn.addEventListener('click', (ev: MouseEvent): void => {
       ev.preventDefault();
       editPassword(editBtn, passwordInput, passwordWrapper, res);
     });
@@ -40,7 +40,7 @@ function editPassword(
   passwordInput: HTMLDivElement,
   passwordWrapper: HTMLFormElement,
   res: Customer
-) {
+): void {
   editBtn.disabled = true;
   editBtn.classList.add('none');
   passwordInput.replaceWith(
@@ -81,14 +81,14 @@ function editPassword(
   cancelBtn.classList.add('btn', 'cancel-btn');
   cancelBtn.textContent = 'Cancel';
 
-  cancelBtn.addEventListener('click', async (ev: MouseEvent) => {
+  cancelBtn.addEventListener('click', async (ev: MouseEvent): Promise<void> => {
     ev.preventDefault();
     passwordWrapper.replaceWith(await createPasswordBlock(res));
     editBtn.disabled = false;
     editBtn.classList.remove('none');
   });
 
-  submitBtn.addEventListener('click', async (ev) => {
+  submitBtn.addEventListener('click', async (ev: MouseEvent): Promise<void> => {
     ev.preventDefault();
     await submitPassword(passwordWrapper, res, editBtn);
   });

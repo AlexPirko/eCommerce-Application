@@ -2,7 +2,7 @@ import ApiServices from '@lib/api/api-services';
 import { CustomerUpdateAction, ClientResponse, Customer, Address } from '@commercetools/platform-sdk';
 import { TAddressCapitalize, TAddress } from '@lib/types/user-info-types';
 
-const api = new ApiServices();
+const api: ApiServices = new ApiServices();
 
 export async function updateCustomerInfo(formData: FormData, id: string): Promise<void> {
   const customerRes: ClientResponse<Customer> = await api.getCustomer(id);
@@ -60,7 +60,7 @@ export async function addNewAddress(
         },
       ],
     })
-    .then((res): void => {
+    .then((res: Customer): void => {
       const typeUp: TAddressCapitalize = type === 'billing' ? 'Billing' : 'Shipping';
       let isDefault: boolean = false;
       if (cancelBtn) {

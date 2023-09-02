@@ -8,17 +8,17 @@ import { createPasswordBlock } from './password-info';
 import { createShippingAdresses, createBillingAdresses } from './addresses';
 
 export class UserInfo {
-  services: ApiServices;
+  public services: ApiServices;
   constructor() {
     this.services = new ApiServices();
   }
 
-  async getInfo(): Promise<Customer> {
+  private async getInfo(): Promise<Customer> {
     const res: ClientResponse<Customer> = await this.services.getCurrentCustomer();
     return res.body;
   }
 
-  async createUserInfoPage(): Promise<HTMLDivElement> {
+  public async createUserInfoPage(): Promise<HTMLDivElement> {
     const wrapper: HTMLDivElement = document.createElement('div');
     wrapper.classList.add('user-info-wrapper');
     try {
@@ -37,7 +37,7 @@ export class UserInfo {
     }
   }
 
-  async createAdressesBlock(res: Customer): Promise<HTMLDivElement> {
+  private async createAdressesBlock(res: Customer): Promise<HTMLDivElement> {
     const adressesBlock: HTMLDivElement = document.createElement('div');
     const title: HTMLHeadElement = document.createElement('h5');
     title.textContent = 'Addresses Information';

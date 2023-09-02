@@ -21,7 +21,7 @@ async function createAddressBlock(
   addressForm.append(btns);
 
   if (country !== undefined) {
-    const countries = countriesBlock(type, addressForm);
+    const countries: HTMLDivElement = countriesBlock(type, addressForm);
     addressForm.append(countries);
   }
   if (city !== undefined) {
@@ -108,8 +108,8 @@ function countriesBlock(addressType: string, form: HTMLFormElement): HTMLDivElem
     }
   }
 
-  input1.addEventListener('change', () => onChange(input1));
-  input2.addEventListener('change', () => onChange(input2));
+  input1.addEventListener('change', (): void => onChange(input1));
+  input2.addEventListener('change', (): void => onChange(input2));
 
   span1.textContent = 'Russia';
   span2.textContent = 'USA';
@@ -157,7 +157,7 @@ async function adressesBtns(
   editBtn.setAttribute('data-type', type);
   deleteBtn.textContent = 'Delete';
   deleteBtn.classList.add('delete-btn');
-  deleteBtn.addEventListener('click', async (ev): Promise<void> => {
+  deleteBtn.addEventListener('click', async (ev: MouseEvent): Promise<void> => {
     ev.preventDefault();
     if (id !== undefined) {
       await deleteAddress(customerId, id, type, addressForm);
@@ -171,14 +171,14 @@ async function adressesBtns(
     cancelBtn.textContent = 'Cancel';
     cancelBtn.classList.add('cancel-address-btn');
     deleteBtn.classList.add('none');
-    cancelBtn.addEventListener('click', (ev): void => {
+    cancelBtn.addEventListener('click', (ev: MouseEvent): void => {
       ev.preventDefault();
       addressForm.remove();
     });
     btnsWrapper.append(cancelBtn);
   }
 
-  editBtn.addEventListener('click', async (ev): Promise<void> => {
+  editBtn.addEventListener('click', async (ev: MouseEvent): Promise<void> => {
     ev.preventDefault();
     if (editBtn.textContent === 'Edit') {
       editMode(addressForm);
@@ -214,7 +214,7 @@ function setDefaultAddress(type: string, addressForm: HTMLFormElement): void {
   });
 }
 
-function addAddressBtn(type: 'billing' | 'shipping', wrapper: HTMLDivElement, id: string) {
+function addAddressBtn(type: 'billing' | 'shipping', wrapper: HTMLDivElement, id: string): void {
   const addBtn: HTMLButtonElement = document.createElement('button');
   addBtn.textContent = `Add new ${type} Address`;
   addBtn.classList.add('waves-effect', 'waves-light', 'add-btn', 'btn');
