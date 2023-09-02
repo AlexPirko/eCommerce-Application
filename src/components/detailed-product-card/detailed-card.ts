@@ -13,8 +13,10 @@ export default class DetailedCard extends ComponentView {
   private _cardsPerPage: number;
   private _pageNumber: number;
   protected data: CardParams[] | undefined;
+  protected key: string;
+  protected params: CardParams | undefined;
 
-  constructor() {
+  constructor(key: string) {
     const params: Params = {
       tagName: 'section',
       classNames: ['section-cart'],
@@ -25,6 +27,7 @@ export default class DetailedCard extends ComponentView {
 
     this._cardsPerPage = 500;
     this._pageNumber = 1;
+    this.key = key;
 
     this.detailedCardContainer = createHTMLElement('div', ['detailed-cart', 'row']);
     this.slider = createHTMLElement('div', ['slider']);
@@ -38,12 +41,13 @@ export default class DetailedCard extends ComponentView {
       .getPageProductsData(this._cardsPerPage, this._pageNumber)
       .catch((error) => error);
     this.data = cardsParams;
+    this.params = this.data?.find((item) => item.key === this.key);
     this.configureView();
   }
 
   private createDetailedCardHtml(): string {
     let price: number;
-    if (this.data?.[0].price) price = this.data?.[0].price / 100;
+    if (this.params?.price) price = this.params?.price / 100;
     return `
       <div class='row top-bar'>
         <div class='col s12 m6 l7 breadcrumbs'>
@@ -64,9 +68,9 @@ export default class DetailedCard extends ComponentView {
       </div>
       <div class='col s12 m6 l7 product-info'>
         <div class='product-info-container'>
-          <h2 class='product-details-name'>${this.data?.[0].name}</h2>
-          <p class='detail-info'>Brand: <span>${this.data?.[0].brand}</span></p>
-          <p class='detail-description'>${this.data?.[0].description}</p>
+          <h2 class='product-details-name'>${this.params?.name}</h2>
+          <p class='detail-info'>Brand: <span>${this.params?.brand}</span></p>
+          <p class='detail-description'>${this.params?.description}</p>
         </div>
       </div>
       <div class='col s6 l5 product-images'></div>
@@ -77,16 +81,16 @@ export default class DetailedCard extends ComponentView {
     return `
       <div class="carousel carousel-slider center">
         <div class="carousel-item" id='1' href="#one!">
-          <img class="modal-image" src=${this.data?.[2].imgUrls[1]}>
+          <img class="modal-image" src=${this.params?.imgUrls[0]}>
         </div>
         <div class="carousel-item" id='2' href="#two!">
-          <img class="modal-image" src=${this.data?.[2].imgUrls[2]}>
+          <img class="modal-image" src=${this.params?.imgUrls[1]}>
         </div>
         <div class="carousel-item" id='3' href="#three!">
-          <img class="modal-image" src=${this.data?.[2].imgUrls[3]}>
+          <img class="modal-image" src=${this.params?.imgUrls[2]}>
         </div>
         <div class="carousel-item" id='0' href="#four!">
-          <img class="modal-image" src=${this.data?.[2].imgUrls[0]}>
+          <img class="modal-image" src=${this.params?.imgUrls[3]}>
         </div>
       </div>      
     `;
@@ -102,14 +106,14 @@ export default class DetailedCard extends ComponentView {
     this.mainSliderInit(carousel[1]);
   }
 
-  private modalSliderInit(el: HTMLElement): void {
+  private mainSliderInit(el: HTMLElement): void {
+    M.AutoInit();
     M.Carousel.init(el, {
       indicators: true,
     });
   }
 
-  private mainSliderInit(el: HTMLElement): void {
-    M.AutoInit();
+  private modalSliderInit(el: HTMLElement): void {
     M.Carousel.init(el, {
       indicators: true,
     });

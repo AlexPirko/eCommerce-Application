@@ -9,6 +9,7 @@ import { CustomerDraft } from '@commercetools/platform-sdk';
 import { getFormFieldsAsCustomerDraft } from '@lib/utils/get-form-fields';
 import ApiServices from '@lib/api/api-services';
 import Router from '@components/router/router';
+import { Paths } from '@components/router/paths';
 
 export class RegisterForm extends LoginForm {
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
@@ -47,7 +48,7 @@ export class RegisterForm extends LoginForm {
               .then(() => {
                 localStorage.setItem('login', 'true');
                 handleVisibility();
-                router.navigate(`http://${window.location.host}`);
+                router.navigate(`${Paths.MAIN}`);
               })
               .catch((error) => {
                 throw error;

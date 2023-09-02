@@ -79,7 +79,7 @@ export default class App {
       {
         path: `${Paths.CATALOG}`,
         callback: () => {
-          this.setContent(Paths.CATALOG, new Catalog(''));
+          this.setContent(Paths.CATALOG, new Catalog());
         },
       },
       {

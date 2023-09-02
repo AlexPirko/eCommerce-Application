@@ -9,7 +9,7 @@ import Router from '@components/router/router';
 export default class ProductCard {
   private _element: HTMLDivElement;
   private _cardParams: CardParams;
-  router: Router;
+  public router: Router;
 
   constructor(cardParams: CardParams) {
     this.router = new Router(null);
@@ -55,7 +55,7 @@ export default class ProductCard {
     });
   }
 
-  private buttonClickHandler(path: string) {
+  private buttonClickHandler(path: string): void {
     this.router.navigate(path);
   }
 

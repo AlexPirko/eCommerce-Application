@@ -13,7 +13,7 @@ export default class Catalog extends ComponentView {
   private filterForm: ProductFilterForm;
   private productList: ProductListComponent;
   private pageNav: CatalogPaginationComponent;
-  private detailedCard: DetailedCard;
+  // private detailedCard: DetailedCard;
 
   constructor(key: string = '') {
     const params: Params = {
@@ -24,28 +24,19 @@ export default class Catalog extends ComponentView {
     };
     super(params);
 
-    this.detailedCard = new DetailedCard();
     this.productList = new ProductListComponent();
     this.filterForm = new ProductFilterForm();
     this.pageNav = new CatalogPaginationComponent(1);
 
-    if (typeof key === 'string') {
-      this.configureDetailedCard();
-      if (key) {
-        console.log(key /* Здесь будет функция инициализирующая создание страницы с детальной инфо detailedCard()*/);
-      } else {
-        /* empty */
-      }
-
-      this.configureView();
+    if (key) {
+      const detailedCard = new DetailedCard(key);
+      this.viewElementBuilder.addInnerElement(detailedCard.getElement());
+    } else {
+      this.configureCatalogView();
     }
   }
 
-  private configureDetailedCard(): void {
-    this.viewElementBuilder.addInnerElement(this.detailedCard.getElement());
-  }
-
-  private configureView(): void {
+  private configureCatalogView(): void {
     const titleParams: Params = {
       tagName: 'h2',
       classNames: ['catalog-title'],
