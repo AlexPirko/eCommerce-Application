@@ -1,7 +1,7 @@
-import { ClientResponse, Product, ProductPagedQueryResponse } from '@commercetools/platform-sdk';
+import { ClientResponse, Product, ProductPagedQueryResponse, ProductProjection } from '@commercetools/platform-sdk';
 import ApiServices from '@lib/api/api-services';
 import { CardParams } from '@lib/types/params-interface';
-import { getProductResponseAsCardData } from '@lib/utils/get-product-data';
+import { getProductProjectionResponseAsCardData, getProductResponseAsCardData } from '@lib/utils/get-product-data';
 
 export default class ProductServices {
   private static _instance: ProductServices;
@@ -28,5 +28,12 @@ export default class ProductServices {
     const pageCardParams: CardParams[] = results.map((product) => getProductResponseAsCardData(product));
 
     return pageCardParams;
+  }
+
+  public async getProductByKey(key: string): Promise<CardParams> {
+    const response: ClientResponse<ProductProjection> = await this.api.getProductByKey(key).catch((error) => error);
+
+    const cardParams: CardParams = getProductProjectionResponseAsCardData(response.body);
+    return cardParams;
   }
 }

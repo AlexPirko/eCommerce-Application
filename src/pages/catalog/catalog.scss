@@ -1,9 +1,17 @@
-// .catalog-page {
-//   display: grid;
-//   gap: 1%;
-//   grid-template-columns: 23% 66%;
-//   grid-template-areas:
-//                   "A A"
-//                   "B C"
-//                   "D D";
-// }
+.catalog-title {
+  display: block;
+  width: 100%;
+  text-align: center;
+  grid-area: A;
+}
+
+.product-list__container {
+  margin-bottom: 2%;
+  display: grid;
+  gap: 1%;
+  grid-template-columns: 23% 66%;
+  grid-template-areas:
+    'A A'
+    'B C'
+    'D D';
+}
