@@ -59,7 +59,7 @@ export async function addNewAddress(
         },
       ],
     })
-    .then((res): void => {
+    .then((res: ClientResponse<Customer>): void => {
       const typeUp: TAddressCapitalize = type === 'billing' ? 'Billing' : 'Shipping';
       let isDefault: boolean = false;
       if (cancelBtn) {
