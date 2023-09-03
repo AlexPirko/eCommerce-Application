@@ -29,7 +29,7 @@ export default class Catalog extends ComponentView {
     this.pageNav = new CatalogPaginationComponent(1);
 
     if (key) {
-      const detailedCard = new DetailedCard(key);
+      const detailedCard: DetailedCard = new DetailedCard(key);
       this.viewElementBuilder.addInnerElement(detailedCard.getElement());
     } else {
       this.configureCatalogView();
