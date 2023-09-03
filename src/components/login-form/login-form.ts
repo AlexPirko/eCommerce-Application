@@ -58,6 +58,7 @@ export class LoginForm {
       label: 'Email',
       placeholder: 'Enter your email',
       name: 'email',
+      disabled: false,
     }).create;
 
     const passwordInput: HTMLDivElement = new InputBlock({
@@ -66,6 +67,7 @@ export class LoginForm {
       label: 'Password',
       placeholder: 'Enter your password',
       name: 'password',
+      disabled: false,
     }).create;
 
     return { emailInput, passwordInput };
