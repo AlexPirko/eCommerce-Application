@@ -1,3 +1,4 @@
+import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 
 export default function handleVisibility(): void {
@@ -26,6 +27,6 @@ export default function handleVisibility(): void {
     e.preventDefault();
     localStorage.clear();
     handleVisibility();
-    router.navigate(`http://${window.location.host}`);
+    router.navigate(`${Paths.LOGIN}`);
   });
 }

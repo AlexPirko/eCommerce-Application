@@ -7,6 +7,7 @@ import { IForm } from '@lib/types/input-interface';
 import createHTMLElement from '@lib/utils/create-html-element';
 import ApiServices from '@lib/api/api-services';
 import Router from '@components/router/router';
+import { Paths } from '@components/router/paths';
 
 export class LoginForm {
   protected form: HTMLFormElement;
@@ -122,7 +123,7 @@ export class LoginForm {
           .then(() => {
             this.onSubmit();
             handleVisibility();
-            router.navigate(`http://${window.location.host}`);
+            router.navigate(`${Paths.MAIN}`);
             M.toast({ html: 'You are successfuly login', classes: 'rounded' });
           })
           .catch((error) => {
@@ -133,6 +134,7 @@ export class LoginForm {
   }
 
   protected registerLink(redirectText: string): HTMLParagraphElement {
+    console.log(redirectText);
     const text: HTMLParagraphElement = document.createElement('p');
     text.textContent = this.linkText;
     const link: HTMLAnchorElement = document.createElement('a');

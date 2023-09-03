@@ -45,3 +45,9 @@ h6 {
     background-color: $color-four !important;
   }
 }
+
+.container {
+  max-width: 1600px;
+  padding: 0 15px;
+  margin: auto;
+}
