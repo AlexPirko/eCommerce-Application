@@ -1,0 +1,131 @@
+.error-toast {
+  background-color: red;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+.success-toast {
+  background-color: green;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+.user-info-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.submit-password {
+  margin-right: 10px;
+}
+
+.cancel-btn,
+.submit-password {
+  margin-top: 10px;
+}
+
+.password-wrapper {
+  width: 320px;
+}
+
+.info-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.user-info {
+  width: 320px;
+}
+
+.cancel-info-btn {
+  display: block;
+  margin: 0 auto;
+}
+
+.edit-btn {
+  display: block;
+  margin: 20px auto;
+}
+
+.edit-address-btn {
+  cursor: pointer;
+  position: absolute;
+  top: 30px;
+  right: 5px;
+  border: 1px solid #00e676 ;
+  transition: .3s ease;
+  padding: 5px;
+  background-color: #00e676 ;
+  color: white;
+  
+  &:hover {
+    background-color: transparent;
+    color: #00e676 ;
+  }
+}
+
+.addresses {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.defaultAddress {
+  background-color: #ede7f6;
+  order: -1;
+}
+
+.unsetDefault {
+  background-color: transparent;
+}
+
+.setDefault {
+  background-color: #ede7f6;
+
+}
+
+.addresses-wrapper {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+
+  .add-btn {
+    order: 2;
+  }
+
+  h5 {
+    order: -1;
+  }
+}
+
+.address-form {
+  position: relative;
+  border: 1px solid grey;
+  padding: 5px;
+}
+
+.delete-btn,.cancel-address-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: transparent;
+  border: 1px solid red;
+  color: red;
+  padding: 2px;
+  transition: .3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: red;
+    color: white;
+  }
+}
+
+.none {
+  display: none;
+}

@@ -5,6 +5,7 @@ export interface IInput {
   value?: string;
   placeholder: string;
   name: string;
+  disabled: boolean;
 }
 
 export interface IForm {

@@ -8,14 +8,16 @@ export class Input {
   private classNames: string[];
   private placeholder: string;
   public value: string;
+  private disabled: boolean;
 
-  constructor({ type = 'text', id, classNames = [''], placeholder, value = '', name }: IInput) {
+  constructor({ type = 'text', id, classNames = [''], placeholder, value = '', name, disabled = false }: IInput) {
     this.type = type;
     this.id = id;
     this.classNames = classNames;
     this.placeholder = placeholder;
     this.value = value;
     this.name = name;
+    this.disabled = disabled;
   }
 
   private createInputElement(): HTMLInputElement {
@@ -27,6 +29,10 @@ export class Input {
     input.setAttribute('placeholder', this.placeholder ?? '');
     input.setAttribute('value', this.value ?? '');
     input.setAttribute('name', this.name);
+    if (this.disabled) {
+      input.setAttribute('disabled', `${this.disabled}`);
+    }
+    if (this.classNames[0] !== '') input.classList.add(...this.classNames);
     input.addEventListener('input', (): void => {
       if (input.closest('.none')) {
         input.classList.remove('invalid');

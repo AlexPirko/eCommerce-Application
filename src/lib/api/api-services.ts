@@ -13,6 +13,8 @@ import {
   ProductProjectionPagedQueryResponse,
   QueryParam,
   createApiBuilderFromCtpClient,
+  CustomerUpdate,
+  CustomerChangePassword,
 } from '@commercetools/platform-sdk';
 import CtpClientBuilder from './api-client-builder';
 import { ctpParams } from './client-credemtials';
@@ -75,6 +77,19 @@ export default class ApiServices {
     return response.json();
   }
 
+  public async updateCustomer(customerId: string, customerData: CustomerUpdate): Promise<Customer> {
+    console.log(JSON.stringify(customerData));
+    const response: Response = await fetch(`${ctpParams.CTP_API_URL}/ecommerce-app/customers/${customerId}`, {
+      method: 'POST',
+      body: JSON.stringify(customerData),
+      headers: {
+        Authorization: `Bearer ${this._tokenCache.get().token}`,
+        ContentType: 'application/json',
+      },
+    });
+    return response.json();
+  }
+
   public async getCustomer(customerId: string): Promise<ClientResponse<Customer>> {
     return this._apiRoot
       .customers()
@@ -87,6 +102,7 @@ export default class ApiServices {
   }
 
   public async getCurrentCustomer(): Promise<ClientResponse<Customer>> {
+    console.log(this._apiRoot.me());
     return this._apiRoot
       .me()
       .get()
@@ -153,6 +169,7 @@ export default class ApiServices {
   }
 
   public async customerLogin(customerData: MyCustomerSignin): Promise<ClientResponse<CustomerSignInResult>> {
+    this._tokenCache = new ClientTokenCache();
     this.setApiClient(customerData.email, customerData.password);
     const response: ClientResponse<CustomerSignInResult> = await this._apiRoot
       .me()
@@ -164,6 +181,22 @@ export default class ApiServices {
       });
     const refreshToken: string | undefined = this.getTokenCache().get().refreshToken;
     if (refreshToken) localStorage.setItem('refreshToken', `${refreshToken}`);
+    console.log(refreshToken);
     return response;
+  }
+
+  public async changePassword(passwordData: CustomerChangePassword): Promise<Customer> {
+    const response: Response = await fetch(`${ctpParams.CTP_API_URL}/ecommerce-app/customers/password`, {
+      method: 'POST',
+      body: JSON.stringify(passwordData),
+      headers: {
+        Authorization: `Bearer ${this._tokenCache.get().token}`,
+        ContentType: 'application/json',
+      },
+    });
+    if (response.status === 400) {
+      throw new Error();
+    }
+    return response.json();
   }
 }

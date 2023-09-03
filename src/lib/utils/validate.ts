@@ -25,11 +25,19 @@ export class Validate {
     return passwordRegex.test(value);
   }
 
-  public postCode(value: string, name: string): boolean {
-    const ruRadio: HTMLElement | null =
-      name === 'billing-postal'
-        ? document.querySelector('[name="billing-country"]')
-        : document.querySelector('[name="shipping-country"]');
+  public postCode(value: string, name: string, input: HTMLInputElement): boolean {
+    let ruRadio: HTMLElement | null;
+    if (name === 'billing-postal') {
+      ruRadio = document.querySelector('[name="billing-country"]');
+    } else if (name === 'shipping-postal') {
+      ruRadio = document.querySelector('[name="shipping-country"]');
+    } else if (name === 'billing-postal-form') {
+      const form = input.closest('form');
+      ruRadio = form?.querySelector('[name="billing-country"]') ?? null;
+    } else {
+      const form = input.closest('form');
+      ruRadio = form?.querySelector('[name="shipping-country"]') ?? null;
+    }
     if (ruRadio !== null) {
       return (<HTMLInputElement>ruRadio).checked === true ? ruPost.test(value) : usPost.test(value);
     }
@@ -64,7 +72,7 @@ export function validate(value: string, input: HTMLInputElement): boolean {
       isError = !validator.noSpec(value);
     } else if (type === textInputs.POST) {
       const name = input.name;
-      isError = !validator.postCode(value, name);
+      isError = !validator.postCode(value, name, input);
     } else {
       isError = !(value.length > 0);
     }
@@ -125,10 +133,18 @@ export function passwordErrorMsg(value: string): string {
 }
 
 export function postErrorMsg(value: string, input: HTMLInputElement): string {
-  const ruRadio: HTMLElement | null =
-    input.name === 'billing-postal'
-      ? document.querySelector('[name="billing-country"]')
-      : document.querySelector('[name="shipping-country"]');
+  let ruRadio: HTMLElement | null;
+  if (input.name === 'billing-postal') {
+    ruRadio = document.querySelector('[name="billing-country"]');
+  } else if (input.name === 'shipping-postal') {
+    ruRadio = document.querySelector('[name="shipping-country"]');
+  } else if (input.name === 'billing-postal-form') {
+    const form = input.closest('form');
+    ruRadio = form?.querySelector('[name="billing-country"]') ?? null;
+  } else {
+    const form = input.closest('form');
+    ruRadio = form?.querySelector('[name="shipping-country"]') ?? null;
+  }
 
   if (ruRadio !== null) {
     if ((<HTMLInputElement>ruRadio).checked === true) {
