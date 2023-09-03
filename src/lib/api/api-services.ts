@@ -78,16 +78,19 @@ export default class ApiServices {
   }
 
   public async updateCustomer(customerId: string, customerData: CustomerUpdate): Promise<Customer> {
-    console.log(JSON.stringify(customerData));
-    const response: Response = await fetch(`${ctpParams.CTP_API_URL}/ecommerce-app/customers/${customerId}`, {
-      method: 'POST',
-      body: JSON.stringify(customerData),
-      headers: {
-        Authorization: `Bearer ${this._tokenCache.get().token}`,
-        ContentType: 'application/json',
-      },
-    });
-    return response.json();
+    try {
+      const response: Response = await fetch(`${ctpParams.CTP_API_URL}/ecommerce-app/customers/${customerId}`, {
+        method: 'POST',
+        body: JSON.stringify(customerData),
+        headers: {
+          Authorization: `Bearer ${this._tokenCache.get().token}`,
+          ContentType: 'application/json',
+        },
+      });
+      return response.json();
+    } catch (er) {
+      throw Error();
+    }
   }
 
   public async getCustomer(customerId: string): Promise<ClientResponse<Customer>> {

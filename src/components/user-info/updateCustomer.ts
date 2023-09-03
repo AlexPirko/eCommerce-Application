@@ -85,6 +85,9 @@ export async function addNewAddress(
         })
         .then((): void => {
           M.toast({ html: 'Successfully changed info', classes: 'success-toast' });
+        })
+        .catch((er: Error): void => {
+          M.toast({ html: er.message, classes: 'error-toast' });
         });
     })
     .catch((er: Error): void => {
