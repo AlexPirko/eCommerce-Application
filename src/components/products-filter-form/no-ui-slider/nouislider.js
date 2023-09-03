@@ -1,4 +1,4 @@
-// eslint-disable
+
 /*!
  * Materialize 1.0.0-rc.2 (http://materializecss.com)
  * Copyright 2014-2015 Materialize

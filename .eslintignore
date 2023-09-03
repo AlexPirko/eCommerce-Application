@@ -2,4 +2,4 @@ webpack.prod.config.js
 webpack.dev.config.js
 webpack.config.js
 jest.config.js
-src/components/products-filter-form/no-ui-slider/
+src/components/products-filter-form/no-ui-slider

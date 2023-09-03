@@ -63,7 +63,7 @@ export default class ProductFilterForm {
   public setBrandFilter() {
     const brandCheckBox: HTMLDivElement = this._element.querySelector('.brand__wrapper') as HTMLDivElement;
     const brandContainer: HTMLDivElement = this._element.querySelector('.brand-filter') as HTMLDivElement;
-    for (let i = 3; i < 6; i++) {
+    for (let i = 1; i < 3; i++) {
       const brandCheckBoxClone: HTMLDivElement = brandCheckBox.cloneNode(true) as HTMLDivElement;
       const brandCheckBoxCloneLabel: HTMLLabelElement = brandCheckBoxClone.querySelector('label') as HTMLLabelElement;
       const brandCheckBoxCloneInput: HTMLInputElement = brandCheckBoxClone.querySelector('input') as HTMLInputElement;
