@@ -1,5 +1,5 @@
 import { RouteParams, RequestParams } from '@lib/types/params-interface';
-import { Paths } from './paths';
+import { Paths, PRODUCT_SELECTOR } from './paths';
 import SetRouterHistory from './set-router-history';
 
 export default class Router {
@@ -30,7 +30,7 @@ export default class Router {
   }
 
   private changeUrlHandler(params: RequestParams): void {
-    const currUrl: string = params.resource === '' ? params.path : `${params.path}/${params.resource}`;
+    const currUrl: string = params.resource === '' ? params.path : `${params.path}/${PRODUCT_SELECTOR}`;
     const route: RouteParams | undefined = this.routes?.find((item) => item.path === currUrl);
 
     if (!route) {
