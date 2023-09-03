@@ -20,7 +20,7 @@ export default class ProductCard {
 
     Object.keys(this._cardParams).forEach((key) => {
       if (key !== 'imgUrls') {
-        this.setTextElementsInfo(key);
+        this.setTextElementContent(key);
       }
     });
   }
@@ -30,7 +30,7 @@ export default class ProductCard {
     images.forEach((imag, index) => imag.setAttribute('src', this._cardParams.imgUrls[index]));
   }
 
-  private setTextElementsInfo(textElementClass: string): void {
+  private setTextElementContent(textElementClass: string): void {
     const textElement: HTMLSpanElement | null = this._element.querySelector(`.${textElementClass}`);
 
     type CardParamsKey = keyof typeof this._cardParams;

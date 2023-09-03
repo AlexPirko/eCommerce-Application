@@ -1,5 +1,75 @@
-.products-filter-form {
-  margin: 0;
+.product-filter-form {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1rem;
   grid-area: B;
-  align-items: center;
+  align-items: center !important;
+}
+
+.price-slider {
+  margin-top: 3rem;
+}
+
+.price-filter {
+  width: 90%;
+  padding: 5%;
+  margin-bottom: 2rem;
+  margin-left: 5%;
+  background-color: #F6F7F8;
+}
+
+.price-header {
+  display: block;
+  font-size: 2rem;
+}
+
+.price-ranger {
+  font-size: 1.8rem;
+  margin-top: 2rem;
+
+  &__left-value {
+    margin-left: 5%;
+  }
+}
+
+.brand-filter {
+  width: 90%;
+  padding: 5%;
+  margin-bottom: 2rem;
+  margin-left: 5%;
+  background-color: #F6F7F8;
+}
+
+.brand__wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.color-filter {
+  width: 90%;
+  padding: 5%;
+  margin-bottom: 2rem;
+  margin-left: 5%;
+  background-color: #F6F7F8;
+}
+
+.color__wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.size-filter {
+  width: 90%;
+  padding: 5%;
+  margin-bottom: 2rem;
+  margin-left: 5%;
+  background-color: #F6F7F8;
+}
+
+.size__wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
