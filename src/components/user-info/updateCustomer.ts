@@ -1,5 +1,5 @@
 import ApiServices from '@lib/api/api-services';
-import { CustomerUpdateAction, ClientResponse, Customer, Address } from '@commercetools/platform-sdk';
+import { MyCustomerUpdateAction, ClientResponse, Customer, Address } from '@commercetools/platform-sdk';
 import { TAddressCapitalize, TAddress } from '@lib/types/user-info-types';
 
 const api: ApiServices = new ApiServices();
@@ -7,7 +7,7 @@ const api: ApiServices = new ApiServices();
 export async function updateCustomerInfo(formData: FormData, id: string): Promise<void> {
   const customerRes: ClientResponse<Customer> = await api.getCustomer(id);
   api
-    .updateCustomer(id, {
+    .updateCustomer({
       version: customerRes.body.version,
       actions: [
         {
@@ -32,7 +32,6 @@ export async function updateCustomerInfo(formData: FormData, id: string): Promis
       M.toast({ html: 'Successfully changed info', classes: 'success-toast' });
     })
     .catch((er: Error): void => {
-      console.log(er);
       M.toast({ html: er.message, classes: 'error-toast' });
     });
 }
@@ -46,7 +45,7 @@ export async function addNewAddress(
 ): Promise<void> {
   const customerRes: ClientResponse<Customer> = await api.getCustomer(id);
   api
-    .updateCustomer(id, {
+    .updateCustomer({
       version: customerRes.body.version,
       actions: [
         {
@@ -60,7 +59,7 @@ export async function addNewAddress(
         },
       ],
     })
-    .then((res: Customer): void => {
+    .then((res: ClientResponse<Customer>): void => {
       const typeUp: TAddressCapitalize = type === 'billing' ? 'Billing' : 'Shipping';
       let isDefault: boolean = false;
       if (cancelBtn) {
@@ -71,11 +70,11 @@ export async function addNewAddress(
         if (defaultAd !== null && defaultAd !== null) isDefault = (<HTMLInputElement>defaultAd).checked;
         cancelBtn.remove();
       }
-      const addresses: Address[] = res.addresses;
+      const addresses: Address[] = res.body.addresses;
       const newAdId: string | undefined = addresses[addresses.length - 1].id;
       api
-        .updateCustomer(id, {
-          version: res.version,
+        .updateCustomer({
+          version: res.body.version,
           actions: [
             {
               action: isDefault ? `setDefault${typeUp}Address` : `add${typeUp}AddressId`,
@@ -85,6 +84,9 @@ export async function addNewAddress(
         })
         .then((): void => {
           M.toast({ html: 'Successfully changed info', classes: 'success-toast' });
+        })
+        .catch((er: Error): void => {
+          M.toast({ html: er.message, classes: 'error-toast' });
         });
     })
     .catch((er: Error): void => {
@@ -105,12 +107,12 @@ export async function updateAddress(
   const typeUp: TAddressCapitalize = type === 'billing' ? 'Billing' : 'Shipping';
   const defaultName: 'setDefaultBillingAddress' | 'setDefaultShippingAddress' = `setDefault${typeUp}Address`;
   let isDefault: boolean = false;
-  const defaultId: CustomerUpdateAction = {
+  const defaultId: MyCustomerUpdateAction = {
     action: defaultName,
     addressId: addressId,
   };
 
-  const actonsAr: CustomerUpdateAction[] = [
+  const actonsAr: MyCustomerUpdateAction[] = [
     {
       action: 'changeAddress',
       addressId: addressId,
@@ -129,7 +131,7 @@ export async function updateAddress(
 
   const customerRes: ClientResponse<Customer> = await api.getCustomer(id);
   api
-    .updateCustomer(id, {
+    .updateCustomer({
       version: customerRes.body.version,
       actions: actonsAr,
     })
@@ -151,7 +153,7 @@ export async function deleteAddress(
   const customerRes: ClientResponse<Customer> = await api.getCustomer(id);
 
   api
-    .updateCustomer(id, {
+    .updateCustomer({
       version: customerRes.body.version,
       actions: [
         {
