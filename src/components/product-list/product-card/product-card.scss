@@ -1,3 +1,5 @@
+@import '../../../assets/styles/global.scss';
+
 .card {
   display: flex;
   width: 100%;
@@ -9,6 +11,11 @@
   margin-bottom: 3%;
   width: 40%;
   box-sizing: border-box;
+  & img {
+    height: 220px;
+    width: auto !important;
+    margin: 0 auto;
+  }
 }
 
 .card-content {
@@ -31,7 +38,7 @@
 }
 
 .card__product-price {
-  display:flex;
+  display: flex;
   column-gap: 2%;
   font-size: 2rem;
   font-weight: 700;
@@ -51,15 +58,35 @@
   width: 12rem;
   padding: 2%;
   align-items: center;
-  color: #33A0FF;
+  color: #33a0ff;
+  @include tablet {
+    width: 4rem;
+  }
 
-  &>span {
-    height: 1.6rem;
+  & > span {
     text-align: center;
+    @include tablet {
+      display: none;
+    }
   }
 }
 
-.price {
+.button__detailed {
+  padding: 0 1rem;
+}
+
+.discount {
   font-weight: 900;
-  color: #40BFFF;
+  color: #40bfff;
+}
+
+.price {
+  font-weight: 500;
+  text-decoration: line-through;
+}
+
+.without-discount {
+  font-weight: 900;
+  color: #40bfff;
+  text-decoration: none;
 }

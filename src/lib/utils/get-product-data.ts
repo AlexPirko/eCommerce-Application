@@ -3,6 +3,7 @@ import { CardParams } from '@lib/types/params-interface';
 
 export function getProductResponseAsCardData(product: Product): CardParams {
   const productData: ProductData = product.masterData.current;
+  console.log(productData);
 
   const imgUrls: string[] | undefined = productData.masterVariant.images?.map((image) => image.url);
 
@@ -13,6 +14,7 @@ export function getProductResponseAsCardData(product: Product): CardParams {
     type: productData.masterVariant.attributes?.[0].value as string,
     brand: productData.masterVariant.attributes?.[1].value as string,
     price: productData.masterVariant.prices?.[0].value.centAmount as number,
+    discount: productData.masterVariant.prices?.[0].discounted?.value.centAmount as number,
     key: product.key as string,
   };
 
@@ -29,6 +31,7 @@ export function getProductProjectionResponseAsCardData(product: ProductProjectio
     type: product.masterVariant.attributes?.[0].value as string,
     brand: product.masterVariant.attributes?.[1].value as string,
     price: product.masterVariant.prices?.[0].value.centAmount as number,
+    discount: product.masterVariant.prices?.[0].discounted?.value.centAmount as number,
     key: product.key as string,
   };
 

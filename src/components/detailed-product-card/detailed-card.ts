@@ -31,8 +31,16 @@ export default class DetailedCard extends ComponentView {
 
     this.detailedCardContainer = createHTMLElement('div', ['detailed-cart', 'row']);
     this.slider = createHTMLElement('div', ['slider']);
+    this.checkModal();
     this.imageModal = createHTMLElement('div', ['image-modal']);
     this.getPromise();
+  }
+
+  private checkModal(): void {
+    const previousModal: HTMLDivElement = document.querySelector('.image-modal') as HTMLDivElement;
+    if (previousModal) {
+      previousModal.remove();
+    }
   }
 
   private async getPromise(): Promise<void> {
@@ -47,7 +55,16 @@ export default class DetailedCard extends ComponentView {
 
   private createDetailedCardHtml(): string {
     let price: number;
-    if (this.params?.price) price = this.params?.price / 100;
+    let oldPrice: number;
+    if (this.params?.discount) {
+      price = this.params?.discount / 100;
+      oldPrice = this.params?.price / 100;
+    }
+    if (!this.params?.discount && this.params?.price) {
+      price = this.params?.price / 100;
+      oldPrice = 0;
+    }
+
     return `
       <div class='row top-bar'>
         <div class='col s12 m6 l7 breadcrumbs'>
@@ -60,7 +77,10 @@ export default class DetailedCard extends ComponentView {
           </ul>
         </div>
         <div class='btn-container col s12 m6 l5'>
-            <div class='detail-price'>Price: ${changeCurrencyFormat(price!)}</div>
+            <div class='price-container'>
+              <div class='detail-price'>${changeCurrencyFormat(price!)}</div>
+              <div class='detail-old-price'>${changeCurrencyFormat(oldPrice!)}</div>
+            </div>
             <div class='detail-buttons'>
               <button class='waves-effect waves-light btn-small add-button'><i class="menu-cart material-icons">shopping_cart</i>Add to Cart</button>
             </div>
