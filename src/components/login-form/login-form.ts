@@ -1,12 +1,13 @@
 import './login-form.scss';
 import M from 'materialize-css';
+import handleVisibility from '@lib/utils/handle-visibility';
 import 'materialize-css/dist/css/materialize.min.css';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
 import createHTMLElement from '@lib/utils/create-html-element';
 import ApiServices from '@lib/api/api-services';
 import Router from '@components/router/router';
-import toggleNavBtn from '@lib/utils/toggle-nav-btn';
+import { Paths } from '@components/router/paths';
 
 export class LoginForm {
   protected form: HTMLFormElement;
@@ -58,6 +59,7 @@ export class LoginForm {
       label: 'Email',
       placeholder: 'Enter your email',
       name: 'email',
+      disabled: false,
     }).create;
 
     const passwordInput: HTMLDivElement = new InputBlock({
@@ -66,6 +68,7 @@ export class LoginForm {
       label: 'Password',
       placeholder: 'Enter your password',
       name: 'password',
+      disabled: false,
     }).create;
 
     return { emailInput, passwordInput };
@@ -119,8 +122,8 @@ export class LoginForm {
           .customerLogin({ email, password })
           .then(() => {
             this.onSubmit();
-            toggleNavBtn();
-            router.navigate(`http://${window.location.host}`);
+            handleVisibility();
+            router.navigate(`${Paths.MAIN}`);
             M.toast({ html: 'You are successfuly login', classes: 'rounded' });
           })
           .catch((error) => {
@@ -131,6 +134,7 @@ export class LoginForm {
   }
 
   protected registerLink(redirectText: string): HTMLParagraphElement {
+    console.log(redirectText);
     const text: HTMLParagraphElement = document.createElement('p');
     text.textContent = this.linkText;
     const link: HTMLAnchorElement = document.createElement('a');
@@ -140,7 +144,7 @@ export class LoginForm {
     return text;
   }
 
-  public getElement() {
+  public getElement(): HTMLFormElement {
     return this.form;
   }
 }

@@ -1,0 +1,50 @@
+<form class="product-filter-form">
+  <div class="row">
+    <div class="input-field col s6">
+      <i class="large material-icons prefix">find_in_page</i>
+      <input id="product-search__input" type="text" class="validate product-search__input">
+      <label class="product-search__label" for="product-search__input">Search</label>
+    </div>
+  </div>
+  <div class="sort__wrapper">
+    <label class="sort-label">Sorting</label>
+    <select class="browser-default sort-parameter" name="sort-parameter">
+      <option value="" disabled selected>Parameter</option>
+      <option value="price">Price</option>
+      <option value="name">Name</option>
+    </select>
+    <label></label>
+    <select class="browser-default sort-type" name="sort-type">
+      <option value="" disabled selected>Type</option>
+      <option value="asc">asc</option>
+      <option value="desc">desc</option>
+    </select>
+  </div>
+  <div class="price-filter">
+    <span class="price-header">Prices</span>
+    <div class="price-ranger">
+      <span class="price-ranger__text">Ranger:</span>
+      <span name='min-value' class="price-ranger__left-value">1</span>
+      <span>-</span>
+      <span name='max-value' class="price-ranger__right-value">2</span>
+    </div>
+    <div class="price-slider"></div>
+  </div>
+  <div class="brand-filter">
+    <span class="brand-header">Brands:</span>
+  </div>
+  <div class="type-filter">
+    <span class="type-header">Types:</span>
+  </div>
+  <div class="kind-filter">
+    <span class="kind-header">Kinds:</span>
+  </div>
+  <div class="filter-buttons__wrapper">
+    <button class="products-filter-form__button btn waves-effect waves-light">
+      Apply
+    </button>
+    <button type="button" class="products-filter-reset__button btn waves-effect waves-light">
+      Reset
+    </button>
+  </div>
+</form>

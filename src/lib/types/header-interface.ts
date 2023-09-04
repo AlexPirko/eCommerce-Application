@@ -1,7 +1,7 @@
 export interface HeaderTitle {
   MAIN: string;
   CATALOG: string;
-  ACCOUNT: string;
+  PROFILE: string;
   ABOUT: string;
   CART: string;
   SIGNUP: string;

@@ -4,6 +4,7 @@ import createHTMLElement from '@lib/utils/create-html-element';
 import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';
 import Router from '@components/router/router';
+import { Paths } from '@components/router/paths';
 
 export default class Main extends ComponentView {
   isLogin!: boolean;
@@ -50,18 +51,17 @@ export default class Main extends ComponentView {
     signupTitle.addEventListener('click', (e: Event): void => {
       e.preventDefault();
       if (!isLogin) {
-        router.navigate(`http://${window.location.host}/signup`);
+        router.navigate(`${Paths.SIGNUP}`);
       } else {
-        router.navigate(`http://${window.location.host}`);
+        router.navigate(`${Paths.MAIN}`);
       }
     });
 
-    loginTitle.addEventListener('click', (e: Event): void => {
-      e.preventDefault();
+    loginTitle.addEventListener('click', (): void => {
       if (!isLogin) {
-        router.navigate(`http://${window.location.host}/login`);
+        router.navigate(`${Paths.LOGIN}`);
       } else {
-        router.navigate(`http://${window.location.host}`);
+        router.navigate(`${Paths.MAIN}`);
       }
     });
 

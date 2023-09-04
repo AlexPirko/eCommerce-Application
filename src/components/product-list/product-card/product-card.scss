@@ -1,0 +1,106 @@
+@import '../../../assets/styles/global.scss';
+
+.card {
+  display: flex;
+  width: 100%;
+}
+
+.card-image {
+  margin: 1%;
+  margin-bottom: 3%;
+  width: 40%;
+  box-sizing: border-box;
+  & img {
+    height: 170px;
+    width: auto !important;
+    margin: 0 auto;
+    @include laptop {
+      height: 100px;
+    }
+  }
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.8rem;
+  padding: 1rem !important;
+  width: 60%;
+}
+
+.card__product-name {
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+
+.card__product-rate {
+  display: flex;
+  column-gap: 2%;
+  line-height: 2rem;
+}
+
+.card__product-price {
+  display: flex;
+  column-gap: 2%;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 3.6rem;
+}
+
+.card__buttons {
+  display: flex;
+  column-gap: 2%;
+  height: 4.6rem;
+}
+
+.button__add-to-cart {
+  display: flex;
+  justify-content: space-around;
+  height: 4.6rem;
+  width: 12rem;
+  padding: 2%;
+  align-items: center;
+  color: #33a0ff;
+  @include tablet {
+    width: 4rem;
+  }
+
+  & > span {
+    text-align: center;
+    @include tablet {
+      display: none;
+    }
+  }
+}
+
+.button__filter {
+  display: none;
+  @include tablet {
+    display: block;
+  }
+}
+
+.icon__filter {
+  color: #33a0ff;
+  padding: 0 5px;
+}
+
+.button__detailed {
+  padding: 0 1rem;
+}
+
+.discount {
+  font-weight: 900;
+  color: #40bfff;
+}
+
+.price {
+  font-weight: 500;
+  text-decoration: line-through;
+}
+
+.without-discount {
+  font-weight: 900;
+  color: #40bfff;
+  text-decoration: none;
+}

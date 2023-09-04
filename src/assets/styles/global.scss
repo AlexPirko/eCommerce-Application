@@ -11,15 +11,31 @@ body {
   font-family: Arial, sans-serif;
   font-style: normal;
   line-height: 160%;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 main {
-  height: 90vh;
+  flex: 1 0 auto;
 }
 
 nav ul a {
   color: $color-seven;
   font-size: 2rem;
+}
+
+h4 {
+  font-size: 1.8rem !important;
+  font-weight: 700 !important;
+}
+
+h5 {
+  font-size: 1.3rem !important;
+}
+
+h6 {
+  font-size: 1.2rem !important;
 }
 
 .btn,
@@ -30,8 +46,8 @@ nav ul a {
   }
 }
 
-.page-container {
+.container {
   max-width: 1600px;
-  padding: 0 25px;
+  padding: 0 15px;
   margin: auto;
 }

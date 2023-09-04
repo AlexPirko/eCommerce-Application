@@ -9,11 +9,17 @@ import {
   CustomerToken,
   MyCustomerSignin,
   ProductPagedQueryResponse,
+  ProductProjection,
+  ProductProjectionPagedQueryResponse,
   createApiBuilderFromCtpClient,
+  MyCustomerUpdate,
+  CustomerChangePassword,
+  SuggestionResult,
 } from '@commercetools/platform-sdk';
 import CtpClientBuilder from './api-client-builder';
-import { ctpParams } from './client-credemtials';
+import { ctpParams } from './client-credentials';
 import ClientTokenCache from './token-cache';
+import { QueryArgs } from '@lib/types/query-args-interface';
 
 export default class ApiServices {
   private static _instance: ApiServices;
@@ -72,6 +78,16 @@ export default class ApiServices {
     return response.json();
   }
 
+  public async updateCustomer(customerData: MyCustomerUpdate): Promise<ClientResponse<Customer>> {
+    return this._apiRoot
+      .me()
+      .post({
+        body: customerData,
+      })
+      .execute()
+      .catch((er) => er);
+  }
+
   public async getCustomer(customerId: string): Promise<ClientResponse<Customer>> {
     return this._apiRoot
       .customers()
@@ -93,9 +109,50 @@ export default class ApiServices {
       });
   }
 
-  public async getProducts(): Promise<ClientResponse<ProductPagedQueryResponse>> {
+  public async getProductsBySearch(queryArgs: QueryArgs): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> {
+    return this._apiRoot
+      .productProjections()
+      .search()
+      .get({ queryArgs })
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+  }
+
+  public async getProductsSuggestion(queryArgs: QueryArgs): Promise<ClientResponse<SuggestionResult>> {
+    // queryArgs = {
+    //   'searchKeywords.en-US':'can', fuzzy:true, staged:true, limit:5
+    // }
+    return this._apiRoot
+      .productProjections()
+      .suggest()
+      .get({ queryArgs })
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+  }
+
+  public async getAllProducts(limit: number, offset: number): Promise<ClientResponse<ProductPagedQueryResponse>> {
     return this._apiRoot
       .products()
+      .get({
+        queryArgs: {
+          limit: limit,
+          offset: offset,
+        },
+      })
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+  }
+
+  public async getProductByKey(key: string): Promise<ClientResponse<ProductProjection>> {
+    return this._apiRoot
+      .productProjections()
+      .withKey({ key })
       .get()
       .execute()
       .catch((error) => {
@@ -121,6 +178,7 @@ export default class ApiServices {
   }
 
   public async customerLogin(customerData: MyCustomerSignin): Promise<ClientResponse<CustomerSignInResult>> {
+    this._tokenCache = new ClientTokenCache();
     this.setApiClient(customerData.email, customerData.password);
     const response: ClientResponse<CustomerSignInResult> = await this._apiRoot
       .me()
@@ -133,5 +191,20 @@ export default class ApiServices {
     const refreshToken: string | undefined = this.getTokenCache().get().refreshToken;
     if (refreshToken) localStorage.setItem('refreshToken', `${refreshToken}`);
     return response;
+  }
+
+  public async changePassword(passwordData: CustomerChangePassword): Promise<Customer> {
+    const response: Response = await fetch(`${ctpParams.CTP_API_URL}/ecommerce-app/customers/password`, {
+      method: 'POST',
+      body: JSON.stringify(passwordData),
+      headers: {
+        Authorization: `Bearer ${this._tokenCache.get().token}`,
+        ContentType: 'application/json',
+      },
+    });
+    if (response.status === 400) {
+      throw new Error();
+    }
+    return response.json();
   }
 }

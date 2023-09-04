@@ -11,6 +11,7 @@ describe('InputBlock class', () => {
       placeholder: 'Test Placeholder',
       value: '',
       name: 'test name',
+      disabled: false,
     });
 
     expect(inputBlock).toBeInstanceOf(InputBlock);
@@ -25,6 +26,7 @@ describe('InputBlock class', () => {
       placeholder: 'Test Placeholder',
       value: '',
       name: 'test name',
+      disabled: false,
     });
 
     const label = inputBlock.createLabel();
@@ -42,6 +44,7 @@ describe('InputBlock class', () => {
       placeholder: 'Test Placeholder',
       value: '',
       name: 'test name',
+      disabled: false,
     });
 
     const input = document.createElement('input');
@@ -67,6 +70,7 @@ describe('InputBlock class', () => {
       placeholder: 'Test Placeholder',
       value: '',
       name: 'test name',
+      disabled: false,
     });
 
     const label = inputBlock.passwordInput(input);

@@ -3,6 +3,7 @@ const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const DotEnv = require('dotenv-webpack');
 
 const baseConfig = {
   entry: path.resolve(__dirname, './src/index'),
@@ -52,6 +53,9 @@ const baseConfig = {
   resolve: {
     extensions: ['.ts', '.js'],
     plugins: [new TsconfigPathsPlugin({})],
+    fallback: {
+      process: false,
+    },
   },
   output: {
     filename: '[name].js',
@@ -65,6 +69,7 @@ const baseConfig = {
       filename: 'index.html',
     }),
     new CleanWebpackPlugin(),
+    new DotEnv(),
   ],
 };
 

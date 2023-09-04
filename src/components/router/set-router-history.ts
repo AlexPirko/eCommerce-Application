@@ -33,6 +33,6 @@ export default class SetRouterHistory {
   }
 
   private setHistory(url: string): void {
-    window.history.pushState(null, '', url);
+    window.history.pushState(null, '', `/${url}`);
   }
 }

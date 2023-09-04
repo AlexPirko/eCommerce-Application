@@ -1,8 +1,11 @@
 import '@assets/styles/global.scss';
-import toggleNavBtn from '@lib/utils/toggle-nav-btn';
-import { Paths } from '@components/router/paths';
+import handleVisibility from '@lib/utils/handle-visibility';
+import profileLinkGuard from '@lib/utils/profile-link-guard';
+import { Paths, PRODUCT_SELECTOR } from '@components/router/paths';
 import Router from '@components/router/router';
 import Header from '@layouts/header/header';
+import MainFooter from '@layouts/main-footer/main-footer';
+import Footer from '@layouts/footer/footer';
 import CreateBurger from '@layouts/header/create-burger/create-burger';
 import ApiServices from '@lib/api/api-services';
 import ComponentView from '@lib/services/component-view';
@@ -13,19 +16,24 @@ import Main from '@pages/main/main';
 import NotFound from '@pages/not-found/not-found';
 import PageContainer from '@pages/page-container';
 import SignUp from '@pages/sign-up/sign-up';
+import Profile from '@pages/profile/profile';
 
 export default class App {
   private static container: HTMLElement = document.getElementById('body') as HTMLElement;
   private router: Router;
-  private pageContainer: PageContainer | null;
   private header: Header | null;
+  private pageContainer: PageContainer | null;
+  private mainFooter: MainFooter | null;
+  private footer: Footer | null;
   private _apiServices: ApiServices;
   private burger: CreateBurger;
 
   constructor() {
     this._apiServices = new ApiServices();
-    this.pageContainer = null;
     this.header = null;
+    this.pageContainer = null;
+    this.mainFooter = null;
+    this.footer = null;
     this.burger = new CreateBurger();
 
     const routes: RouteParams[] = this.createRoutes();
@@ -34,18 +42,22 @@ export default class App {
     this.createView();
 
     document.addEventListener('DOMContentLoaded', () => {
-      toggleNavBtn();
+      handleVisibility();
     });
   }
 
   private createView(): void {
-    this.pageContainer = new PageContainer();
     this.header = new Header(this.router);
     this.header.getHtmlElement()?.append(this.burger.createBurgerElement());
+    this.mainFooter = new MainFooter();
+    this.pageContainer = new PageContainer();
+    this.footer = new Footer();
 
     App.container.append(
       this.header.getHtmlElement() as HTMLElement,
-      this.pageContainer.getHtmlElement() as HTMLElement
+      this.pageContainer.getHtmlElement() as HTMLElement,
+      this.mainFooter.getHtmlElement() as HTMLElement,
+      this.footer.getHtmlElement() as HTMLElement
     );
   }
 
@@ -71,12 +83,20 @@ export default class App {
         },
       },
       {
+        path: `${Paths.CATALOG}/${PRODUCT_SELECTOR}`,
+        callback: (key) => {
+          this.setContent(Paths.CATALOG, new Catalog(key));
+        },
+      },
+      {
         path: `${Paths.ABOUT}`,
         callback: () => {},
       },
       {
-        path: `${Paths.ACCOUNT}`,
-        callback: () => {},
+        path: `${Paths.PROFILE}`,
+        callback: () => {
+          this.setContent(Paths.PROFILE, new Profile());
+        },
       },
       {
         path: `${Paths.SIGNUP}`,
@@ -106,5 +126,6 @@ export default class App {
 
   public run(): void {
     this.burger.handlerListener();
+    profileLinkGuard();
   }
 }

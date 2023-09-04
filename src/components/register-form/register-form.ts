@@ -1,4 +1,5 @@
 import './register-form.scss';
+import handleVisibility from '@lib/utils/handle-visibility';
 import InputBlock from '../common/input/Input-block';
 import { IForm } from '@lib/types/input-interface';
 import { addressTypes, textInputs } from 'src/lib/types/enum';
@@ -8,7 +9,7 @@ import { CustomerDraft } from '@commercetools/platform-sdk';
 import { getFormFieldsAsCustomerDraft } from '@lib/utils/get-form-fields';
 import ApiServices from '@lib/api/api-services';
 import Router from '@components/router/router';
-import toggleNavBtn from '@lib/utils/toggle-nav-btn';
+import { Paths } from '@components/router/paths';
 
 export class RegisterForm extends LoginForm {
   constructor({ titleText, descText, btnText, linkText, redirectText, onSubmit }: IForm) {
@@ -46,8 +47,8 @@ export class RegisterForm extends LoginForm {
               .customerLogin({ email: email, password: password as string })
               .then(() => {
                 localStorage.setItem('login', 'true');
-                toggleNavBtn();
-                router.navigate(`http://${window.location.host}`);
+                handleVisibility();
+                router.navigate(`${Paths.MAIN}`);
               })
               .catch((error) => {
                 throw error;
@@ -72,18 +73,21 @@ export class RegisterForm extends LoginForm {
       label: textInputs.STREET,
       placeholder: 'Street',
       name: `${addressType.toLowerCase()}-street`,
+      disabled: false,
     });
     const cityInput: InputBlock = new InputBlock({
       id: `${addressType.toLowerCase()}City`,
       label: textInputs.CITY,
       placeholder: 'City',
       name: `${addressType.toLowerCase()}-city`,
+      disabled: false,
     });
     const postalInput: InputBlock = new InputBlock({
       id: `${addressType.toLowerCase()}Postal`,
       label: `${textInputs.POST} Code`,
       placeholder: 'Postal Code',
       name: `${addressType.toLowerCase()}-postal`,
+      disabled: false,
     });
     const countriesCheckBox: HTMLDivElement = this.countries(addressType);
     const addressCheckboxes: HTMLDivElement = this.getAddressCheckboxes(addressType);
@@ -104,6 +108,7 @@ export class RegisterForm extends LoginForm {
       id: 5,
       label: `${textInputs.FIRST} Name`,
       placeholder: 'Enter your First Name',
+      disabled: false,
       name: 'firstName',
     });
 
@@ -112,6 +117,7 @@ export class RegisterForm extends LoginForm {
       label: `${textInputs.LAST} Name`,
       placeholder: 'Enter your Last Name',
       name: 'lastName',
+      disabled: false,
     });
     const date: Date = new Date();
     const dateInput: InputBlock = new InputBlock({
@@ -120,6 +126,7 @@ export class RegisterForm extends LoginForm {
       label: `${textInputs.DATE} of Birth`,
       placeholder: date.toLocaleDateString('Ru-ru'),
       name: `dateOfBirth`,
+      disabled: false,
     });
     fragment.append(firstNameInput.create, lastNameInput.create, dateInput.create);
     return fragment;
