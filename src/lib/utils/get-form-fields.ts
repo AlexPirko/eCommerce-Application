@@ -38,6 +38,9 @@ export function getFormFieldsAsFilterData(form: HTMLFormElement, price: string[]
   //   facet: 'variants.price.centAmount:45900',
   // }
   const formData: FormData = new FormData(form);
+  for (const key of formData.keys()) {
+    console.log(key);
+  }
   const filterData: FilterData = {
     price: `variants.price.centAmount:range (${Number(price[0]) * 100} to ${Number(price[1]) * 100})`,
     brands: getAttributeFilterData(formData, 'brand'),
@@ -45,10 +48,12 @@ export function getFormFieldsAsFilterData(form: HTMLFormElement, price: string[]
     kinds: getAttributeFilterData(formData, 'kind'),
   };
 
-  const sortData: SortData = {
-    // price: 'price asc',
-    name: 'name.en-US asc',
-  };
+  const sortData: SortData = {};
+  if (formData.get('sort-parameter') === 'name') {
+    sortData.name = `name.en-US ${formData.get('sort-type')}`;
+  } else if (formData.get('sort-parameter') === 'price') {
+    sortData.price = `price ${formData.get('sort-type')}`;
+  }
 
   const filterParams: QueryArgs = {
     filter: Object.values(filterData),

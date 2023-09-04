@@ -71,7 +71,6 @@ export default class ProductCard {
   private changePriceStyle(): void {
     const discount: HTMLDivElement = this._element.querySelector('.discount') as HTMLDivElement;
     const price: HTMLDivElement = this._element.querySelector('.price') as HTMLDivElement;
-    console.log(discount);
     if (discount.innerText === '') {
       price.classList.add('without-discount');
     }

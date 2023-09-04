@@ -18,6 +18,7 @@ export default class ProductFilterForm {
   private _productServices: ProductServices;
   private _priceSlider: noUiSlider.target;
   private _allProductData: CardParams[];
+
   constructor() {
     this._element = createElementFromHtml<HTMLFormElement>(teamplate);
     this._productServices = new ProductServices();
@@ -54,7 +55,6 @@ export default class ProductFilterForm {
         })
         .catch((error: Error): Error => error);
     });
-    console.log(this._element.innerHTML);
   }
 
   private async createPriceSlider(): Promise<void> {
@@ -142,9 +142,9 @@ export default class ProductFilterForm {
   }
 
   private setSortingTypeSelect() {
-    document.addEventListener('DOMContentLoaded', function () {
-      const elems = document.querySelectorAll('select');
-      const instances = M.FormSelect.init(elems, { classes: 'selected' });
+    document.addEventListener('DOMContentLoaded', function (): void {
+      const elems: NodeListOf<HTMLSelectElement> = document.querySelectorAll('select');
+      const instances: M.FormSelect[] = M.FormSelect.init(elems, { classes: 'selected' });
       console.log(instances);
     });
   }

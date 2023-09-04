@@ -3,6 +3,7 @@ import createElementFromHtml from '@lib/utils/create-element-from-html';
 
 export class FilterCheckboxComponent {
   private _element: HTMLDivElement;
+
   constructor(attributeName: string, attributeValue: string) {
     this._element = createElementFromHtml<HTMLDivElement>(teamplate);
     this.setCheckbox(attributeName, attributeValue);
