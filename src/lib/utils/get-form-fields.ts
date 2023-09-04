@@ -42,6 +42,7 @@ export function getFormFieldsAsFilterData(form: HTMLFormElement, price: string[]
     price: `variants.price.centAmount:range (${Number(price[0]) * 100} to ${Number(price[1]) * 100})`,
     brands: getAttributeFilterData(formData, 'brand'),
     types: getAttributeFilterData(formData, 'type'),
+    kinds: getAttributeFilterData(formData, 'kind'),
   };
 
   const sortData: SortData = {

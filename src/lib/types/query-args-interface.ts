@@ -27,7 +27,7 @@ export interface FilterData {
   price: string;
   brands?: string;
   types?: string;
-  kind?: string;
+  kinds?: string;
 }
 
 export interface SortData {

@@ -37,7 +37,7 @@
   }
 }
 
-.brand-filter, .type-filter {
+.brand-filter, .type-filter, .kind-filter {
   width: 90%;
   padding: 5%;
   margin-bottom: 2rem;
@@ -45,7 +45,7 @@
   background-color: #F6F7F8;
 }
 
-.brand__wrapper, .type__wrapper {
+.filter-checkbox__wrapper {
   display: flex;
   flex-direction: row;
   justify-content: space-between;

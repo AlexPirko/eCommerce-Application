@@ -11,6 +11,7 @@ import { getFormFieldsAsFilterData } from '@lib/utils/get-form-fields';
 import { CardParams } from '@lib/types/params-interface';
 import { QueryArgs } from '@lib/types/query-args-interface';
 import ProductListComponent from '@components/product-list/product-list';
+import { FilterCheckboxComponent } from './filter-checkbox/filter-checkbox';
 
 export default class ProductFilterForm {
   private _element: HTMLFormElement;
@@ -32,7 +33,8 @@ export default class ProductFilterForm {
     this.setPriceFilter();
     this.setBrandFilter();
     this.setTypeFilter();
-    this.setColorFilter();
+    this.setKindFilter();
+    this._element.style.display = 'flex';
     this.setFormSubmitEventHandler();
   }
 
@@ -83,87 +85,32 @@ export default class ProductFilterForm {
 
   private setBrandFilter(): void {
     const uniqueBrands: Set<string> = new Set<string>();
-    this._allProductData.forEach((item) => uniqueBrands.add(item.brand));
-    const brandCheckBox: HTMLDivElement = this._element.querySelector('.brand__wrapper') as HTMLDivElement;
+    this._allProductData.forEach((cardParams: CardParams) => uniqueBrands.add(cardParams.brand));
     const brandContainer: HTMLDivElement = this._element.querySelector('.brand-filter') as HTMLDivElement;
-    uniqueBrands.forEach((item) => {
-      const brandCheckBoxClone: HTMLDivElement = brandCheckBox.cloneNode(true) as HTMLDivElement;
-
-      const brandCheckBoxCloneLabel: HTMLLabelElement = brandCheckBoxClone.querySelector('label') as HTMLLabelElement;
-      brandCheckBoxCloneLabel.setAttribute('for', `brand-${item}`);
-
-      const brandCheckBoxCloneInput: HTMLInputElement = brandCheckBoxClone.querySelector('input') as HTMLInputElement;
-      brandCheckBoxCloneInput.setAttribute('id', `brand-${item}`);
-      brandCheckBoxCloneInput.setAttribute('name', `brand-${item}`);
-
-      const brandCheckBoxSpan: HTMLSpanElement = brandCheckBoxClone.querySelector('span') as HTMLSpanElement;
-      brandCheckBoxSpan.innerHTML = item;
-
-      brandCheckBox.remove();
-
-      brandContainer.append(brandCheckBoxClone);
+    uniqueBrands.forEach((brandName) => {
+      const brandCheckBox: HTMLDivElement = new FilterCheckboxComponent('brand', brandName).element;
+      brandContainer.append(brandCheckBox);
     });
   }
 
   private setTypeFilter() {
     const uniqueTypes: Set<string> = new Set<string>();
-    this._allProductData.forEach((item) => uniqueTypes.add(item.type));
-    const typeCheckBox: HTMLDivElement = this._element.querySelector('.type__wrapper') as HTMLDivElement;
+    this._allProductData.forEach((cardParams: CardParams) => uniqueTypes.add(cardParams.type));
     const typeContainer: HTMLDivElement = this._element.querySelector('.type-filter') as HTMLDivElement;
-    uniqueTypes.forEach((item) => {
-      const typeCheckBoxClone: HTMLDivElement = typeCheckBox.cloneNode(true) as HTMLDivElement;
-
-      const typeCheckBoxCloneLabel: HTMLLabelElement = typeCheckBoxClone.querySelector('label') as HTMLLabelElement;
-      typeCheckBoxCloneLabel.setAttribute('for', `type-${item}`);
-
-      const typeCheckBoxCloneInput: HTMLInputElement = typeCheckBoxClone.querySelector('input') as HTMLInputElement;
-      typeCheckBoxCloneInput.setAttribute('id', `type-${item}`);
-      typeCheckBoxCloneInput.setAttribute('name', `type-${item}`);
-
-      const typeCheckBoxSpan: HTMLSpanElement = typeCheckBoxClone.querySelector('span') as HTMLSpanElement;
-      typeCheckBoxSpan.innerHTML = item;
-
-      typeCheckBox.remove();
-
-      typeContainer.append(typeCheckBoxClone);
+    uniqueTypes.forEach((typeName) => {
+      const typeCheckBox: HTMLDivElement = new FilterCheckboxComponent('type', typeName).element;
+      typeContainer.append(typeCheckBox);
     });
   }
 
   private setKindFilter() {
     const uniqueKinds: Set<string> = new Set<string>();
-    this._allProductData.forEach((item) => uniqueKinds.add(item.kind));
-    const kindCheckBox: HTMLDivElement = this._element.querySelector('.kind__wrapper') as HTMLDivElement;
+    this._allProductData.forEach((cardParams: CardParams) => uniqueKinds.add(cardParams.kind));
     const kindContainer: HTMLDivElement = this._element.querySelector('.kind-filter') as HTMLDivElement;
-    uniqueKinds.forEach((item) => {
-      const kindCheckBoxClone: HTMLDivElement = kindCheckBox.cloneNode(true) as HTMLDivElement;
-
-      const kindCheckBoxCloneLabel: HTMLLabelElement = kindCheckBoxClone.querySelector('label') as HTMLLabelElement;
-      kindCheckBoxCloneLabel.setAttribute('for', `kind-${item}`);
-
-      const kindCheckBoxCloneInput: HTMLInputElement = kindCheckBoxClone.querySelector('input') as HTMLInputElement;
-      kindCheckBoxCloneInput.setAttribute('id', `kind-${item}`);
-      kindCheckBoxCloneInput.setAttribute('name', `kind-${item}`);
-
-      const kindCheckBoxSpan: HTMLSpanElement = kindCheckBoxClone.querySelector('span') as HTMLSpanElement;
-      kindCheckBoxSpan.innerHTML = item;
-
-      kindCheckBox.remove();
-
-      kindContainer.append(kindCheckBoxClone);
+    uniqueKinds.forEach((kindName) => {
+      const kindCheckBox: HTMLDivElement = new FilterCheckboxComponent('kind', kindName).element;
+      kindContainer.append(kindCheckBox);
     });
-  }
-
-  private setColorFilter() {
-    const colorCheckBox: HTMLDivElement = this._element.querySelector('.color__wrapper') as HTMLDivElement;
-    const colorContainer: HTMLDivElement = this._element.querySelector('.color-filter') as HTMLDivElement;
-    for (let i = 0; i < 3; i++) {
-      const colorCheckBoxClone: HTMLDivElement = colorCheckBox.cloneNode(true) as HTMLDivElement;
-      const colorCheckBoxCloneLabel: HTMLLabelElement = colorCheckBoxClone.querySelector('label') as HTMLLabelElement;
-      const colorCheckBoxCloneInput: HTMLInputElement = colorCheckBoxClone.querySelector('input') as HTMLInputElement;
-      colorCheckBoxCloneLabel.setAttribute('for', `color-${i}`);
-      colorCheckBoxCloneInput.setAttribute('id', `color-${i}`);
-      colorContainer.append(colorCheckBoxClone);
-    }
   }
 
   private async getAllProductData(): Promise<CardParams[]> {
