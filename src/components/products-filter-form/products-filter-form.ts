@@ -38,6 +38,7 @@ export default class ProductFilterForm {
     this.setResetButton();
     this.setSortingTypeSelect();
     this.setFormSubmitEventHandler();
+    this.createMobileFilterBar();
   }
 
   private setFormSubmitEventHandler() {
@@ -146,6 +147,28 @@ export default class ProductFilterForm {
       const elems: NodeListOf<HTMLSelectElement> = document.querySelectorAll('select');
       const instances: M.FormSelect[] = M.FormSelect.init(elems, { classes: 'selected' });
       console.log(instances);
+    });
+  }
+
+  public createMobileFilterBar(): void {
+    const filterBtn: NodeListOf<HTMLButtonElement> | null = document.querySelectorAll('.button__filter');
+    const productList: HTMLDivElement = document.querySelector('.product-list') as HTMLDivElement;
+    const backgroundElem: HTMLDivElement = document.querySelector('.background-element') as HTMLDivElement;
+
+    filterBtn.forEach((btn) =>
+      btn.addEventListener('click', (): void => {
+        productList.style.display = 'none';
+        backgroundElem.style.display = 'block';
+        backgroundElem.style.opacity = '0.7';
+        this._element.classList.add('active');
+      })
+    );
+
+    backgroundElem.addEventListener('click', (): void => {
+      productList.style.display = 'block';
+      backgroundElem.style.opacity = '1';
+      backgroundElem.style.display = 'none';
+      this._element.classList.remove('active');
     });
   }
 
