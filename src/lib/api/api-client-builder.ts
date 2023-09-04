@@ -7,7 +7,7 @@ import {
   RefreshAuthMiddlewareOptions,
   TokenCache,
 } from '@commercetools/sdk-client-v2';
-import { ctpParams } from './client-credemtials';
+import { ctpParams } from './client-credentials';
 
 export default class CtpClientBuilder {
   private _httpMiddlewareOptions: HttpMiddlewareOptions;

@@ -54,7 +54,6 @@ export default class ProductFilterForm {
   }
 
   private async createPriceSlider(): Promise<void> {
-    console.log(this._allProductData);
     const slider: noUiSlider.target = this._element.querySelector('.price-slider') as noUiSlider.target;
     noUiSlider.create(slider, {
       start: [20000 / 100, this._allProductData[this._allProductData.length - 1].price / 100],
@@ -69,7 +68,6 @@ export default class ProductFilterForm {
         decimals: 0,
       }),
     });
-    console.log(slider.noUiSlider?.get());
 
     this._priceSlider = slider;
   }
@@ -86,7 +84,6 @@ export default class ProductFilterForm {
   private setBrandFilter(): void {
     const uniqueBrands: Set<string> = new Set<string>();
     this._allProductData.forEach((item) => uniqueBrands.add(item.brand));
-    console.log(uniqueBrands);
     const brandCheckBox: HTMLDivElement = this._element.querySelector('.brand__wrapper') as HTMLDivElement;
     const brandContainer: HTMLDivElement = this._element.querySelector('.brand-filter') as HTMLDivElement;
     uniqueBrands.forEach((item) => {
@@ -109,12 +106,11 @@ export default class ProductFilterForm {
   }
 
   private setTypeFilter() {
-    const uniqueBrands: Set<string> = new Set<string>();
-    this._allProductData.forEach((item) => uniqueBrands.add(item.type));
-    console.log(uniqueBrands);
+    const uniqueTypes: Set<string> = new Set<string>();
+    this._allProductData.forEach((item) => uniqueTypes.add(item.type));
     const typeCheckBox: HTMLDivElement = this._element.querySelector('.type__wrapper') as HTMLDivElement;
     const typeContainer: HTMLDivElement = this._element.querySelector('.type-filter') as HTMLDivElement;
-    uniqueBrands.forEach((item) => {
+    uniqueTypes.forEach((item) => {
       const typeCheckBoxClone: HTMLDivElement = typeCheckBox.cloneNode(true) as HTMLDivElement;
 
       const typeCheckBoxCloneLabel: HTMLLabelElement = typeCheckBoxClone.querySelector('label') as HTMLLabelElement;
@@ -134,12 +130,11 @@ export default class ProductFilterForm {
   }
 
   private setKindFilter() {
-    const uniqueBrands: Set<string> = new Set<string>();
-    this._allProductData.forEach((item) => uniqueBrands.add(item.type));
-    console.log(uniqueBrands);
+    const uniqueKinds: Set<string> = new Set<string>();
+    this._allProductData.forEach((item) => uniqueKinds.add(item.kind));
     const kindCheckBox: HTMLDivElement = this._element.querySelector('.kind__wrapper') as HTMLDivElement;
     const kindContainer: HTMLDivElement = this._element.querySelector('.kind-filter') as HTMLDivElement;
-    uniqueBrands.forEach((item) => {
+    uniqueKinds.forEach((item) => {
       const kindCheckBoxClone: HTMLDivElement = kindCheckBox.cloneNode(true) as HTMLDivElement;
 
       const kindCheckBoxCloneLabel: HTMLLabelElement = kindCheckBoxClone.querySelector('label') as HTMLLabelElement;

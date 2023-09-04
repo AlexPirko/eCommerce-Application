@@ -27,6 +27,7 @@ export interface CardParams {
   description: string;
   type: string;
   brand: string;
+  kind: string;
   price: number;
   discount: number;
   key: string;
