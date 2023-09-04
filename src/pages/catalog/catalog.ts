@@ -7,16 +7,15 @@ import ProductFilterForm from '@components/products-filter-form/products-filter-
 import ProductListComponent from '@components/product-list/product-list';
 import CatalogPaginationComponent from '@components/pagination-nav/pagination-nav';
 import DetailedCard from '@components/detailed-product-card/detailed-card';
-import Router from '@components/router/router';
 import createHTMLElement from '@lib/utils/create-html-element';
 
 export default class Catalog extends ComponentView {
   private filterForm: ProductFilterForm;
   private productList: ProductListComponent;
   private pageNav: CatalogPaginationComponent;
-  private detailedCard: DetailedCard;
+  // private detailedCard: DetailedCard;
 
-  constructor(key: string = '', router: Router) {
+  constructor(key: string = '') {
     const params: Params = {
       tagName: 'section',
       classNames: ['catalog-page'],
@@ -25,28 +24,19 @@ export default class Catalog extends ComponentView {
     };
     super(params);
 
-    this.detailedCard = new DetailedCard();
     this.productList = new ProductListComponent();
     this.filterForm = new ProductFilterForm();
     this.pageNav = new CatalogPaginationComponent(1);
 
-    if (typeof key === 'string') {
-      this.configureDetailedCard();
-      if (key) {
-        console.log(key /* Здесь будет функция инициализирующая создание страницы с детальной инфо detailedCard()*/);
-      } else {
-        console.log(router /* Здесь будет функция инициализирующая создание страниц с картами товров*/);
-      }
-
-      this.configureView();
+    if (key) {
+      const detailedCard: DetailedCard = new DetailedCard(key);
+      this.viewElementBuilder.addInnerElement(detailedCard.getElement());
+    } else {
+      this.configureCatalogView();
     }
   }
 
-  private configureDetailedCard(): void {
-    this.viewElementBuilder.addInnerElement(this.detailedCard.getElement());
-  }
-
-  private configureView(): void {
+  private configureCatalogView(): void {
     const titleParams: Params = {
       tagName: 'h2',
       classNames: ['catalog-title'],
