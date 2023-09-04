@@ -7,7 +7,7 @@
 }
 
 .price-slider {
-  margin-top: 3rem;
+  margin-top: 2rem;
 }
 
 .price-filter {
@@ -24,15 +24,20 @@
 }
 
 .price-ranger {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   margin-top: 2rem;
 
+  &__text {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
   &__left-value {
-    margin-left: 5%;
+    margin-left: 10%;
   }
 }
 
-.brand-filter {
+.brand-filter, .type-filter {
   width: 90%;
   padding: 5%;
   margin-bottom: 2rem;
@@ -40,7 +45,7 @@
   background-color: #F6F7F8;
 }
 
-.brand__wrapper {
+.brand__wrapper, .type__wrapper {
   display: flex;
   flex-direction: row;
   justify-content: space-between;

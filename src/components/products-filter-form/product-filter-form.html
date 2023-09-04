@@ -3,9 +3,9 @@
     <span class="price-header">Prices</span>
     <div class="price-ranger">
       <span class="price-ranger__text">Ranger:</span>
-      <span class="price-ranger__left-value">1</span>
+      <span name='min-value' class="price-ranger__left-value">1</span>
       <span>-</span>
-      <span class="price-ranger__right-value">2</span>
+      <span name='max-value' class="price-ranger__right-value">2</span>
     </div>
     <div class="price-slider"></div>
   </div>
@@ -14,11 +14,23 @@
     <div class="brand__wrapper">
       <p class="brand-checkbox">
         <label for="brand1">
-          <input type="checkbox" class="filled-in brand" id="brand1"/>
+          <input type="checkbox" class="filled-in brand" id="brand1" name="brand-1"/>
           <span>Brand name</span>
         </label>
       </p>
       <span class="brand-count">(99)</span>
+    </div>
+  </div>
+  <div class="type-filter">
+    <span class="type-header">Types:</span>
+    <div class="type__wrapper">
+      <p class="type-checkbox">
+        <label for="type1">
+          <input type="checkbox" class="filled-in type" id="type1" name="type-1"/>
+          <span>Type name</span>
+        </label>
+      </p>
+      <span class="type-count">(99)</span>
     </div>
   </div>
   <div class="color-filter">
