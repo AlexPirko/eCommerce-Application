@@ -39,7 +39,7 @@ export default class NotFound extends ComponentView {
     img.src = mainImage;
     img.classList.add('not-found__image');
 
-    const info: HTMLDivElement = createHTMLElement('div', ['info-wrapper']);
+    const info: HTMLDivElement = createHTMLElement('div', ['page-info-wrapper']);
     const infoTitle: HTMLHeadingElement = createHTMLElement('h3', ['info-title']);
     infoTitle.textContent = '...page not found';
 

@@ -54,15 +54,14 @@ export default class DetailedCard extends ComponentView {
   }
 
   private createDetailedCardHtml(): string {
-    let price: number;
-    let oldPrice: number;
+    let price: string = '';
+    let oldPrice: string = '';
     if (this.params?.discount) {
-      price = this.params?.discount / 100;
-      oldPrice = this.params?.price / 100;
+      price = changeCurrencyFormat(this.params?.discount / 100);
+      oldPrice = changeCurrencyFormat(this.params?.price / 100);
     }
     if (!this.params?.discount && this.params?.price) {
-      price = this.params?.price / 100;
-      oldPrice = 0;
+      price = changeCurrencyFormat(this.params?.price / 100);
     }
 
     return `
@@ -78,8 +77,8 @@ export default class DetailedCard extends ComponentView {
         </div>
         <div class='btn-container col s12 m6 l5'>
             <div class='price-container'>
-              <div class='detail-price'>${changeCurrencyFormat(price!)}</div>
-              <div class='detail-old-price'>${changeCurrencyFormat(oldPrice!)}</div>
+              <div class='detail-price'>${price}</div>
+              <div class='detail-old-price'>${oldPrice}</div>
             </div>
             <div class='detail-buttons'>
               <button class='waves-effect waves-light btn-small add-button'><i class="menu-cart material-icons">shopping_cart</i>Add to Cart</button>

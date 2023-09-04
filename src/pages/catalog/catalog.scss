@@ -1,3 +1,5 @@
+@import '../../assets/styles/constants';
+
 .catalog-title {
   display: block;
   width: 100%;
@@ -6,7 +8,7 @@
 }
 
 .product-list__container {
-  margin-bottom: 6%;
+  margin-bottom: 2%;
   display: grid;
   gap: 1%;
   grid-template-columns: 23% 66%;
@@ -14,4 +16,11 @@
     'A A'
     'B C'
     'D D';
+  @include laptop {
+    grid-template-columns: 34% 60%;
+  }
+
+  @include tablet {
+    grid-template-columns: 5% 90%;
+  }
 }

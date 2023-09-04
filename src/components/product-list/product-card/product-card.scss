@@ -11,9 +11,12 @@
   width: 40%;
   box-sizing: border-box;
   & img {
-    height: 220px;
+    height: 170px;
     width: auto !important;
     margin: 0 auto;
+    @include laptop {
+      height: 100px;
+    }
   }
 }
 
@@ -68,6 +71,18 @@
       display: none;
     }
   }
+}
+
+.button__filter {
+  display: none;
+  @include tablet {
+    display: block;
+  }
+}
+
+.icon__filter {
+  color: #33a0ff;
+  padding: 0 5px;
 }
 
 .button__detailed {

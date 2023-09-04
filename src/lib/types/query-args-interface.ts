@@ -22,3 +22,15 @@ export interface QueryArgs {
   expand?: string | string[];
   [key: string]: QueryParam;
 }
+
+export interface FilterData {
+  price: string;
+  brands?: string;
+  types?: string;
+  kinds?: string;
+}
+
+export interface SortData {
+  price?: string;
+  name?: string;
+}

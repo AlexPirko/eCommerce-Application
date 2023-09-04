@@ -1,4 +1,6 @@
 import { CustomerDraft } from '@commercetools/platform-sdk';
+import { FilterData, QueryArgs, SortData } from '@lib/types/query-args-interface';
+import { getAttributeFilterData } from './attribute-filter-data';
 
 export function getFormFieldsAsCustomerDraft(form: HTMLFormElement): CustomerDraft {
   const formData: FormData = new FormData(form);
@@ -28,4 +30,34 @@ export function getFormFieldsAsCustomerDraft(form: HTMLFormElement): CustomerDra
     defaultShippingAddress: formData.get('defaultShippingAddress') ? 1 : undefined,
   };
   return customerData;
+}
+
+export function getFormFieldsAsFilterData(form: HTMLFormElement, price: string[]): QueryArgs {
+  // const queryArgs: {} = {
+  //   'text.en-US':'name: "Canon"',
+  //   facet: 'variants.price.centAmount:45900',
+  // }
+  const formData: FormData = new FormData(form);
+  for (const key of formData.keys()) {
+    console.log(key);
+  }
+  const filterData: FilterData = {
+    price: `variants.price.centAmount:range (${Number(price[0]) * 100} to ${Number(price[1]) * 100})`,
+    brands: getAttributeFilterData(formData, 'brand'),
+    types: getAttributeFilterData(formData, 'type'),
+    kinds: getAttributeFilterData(formData, 'kind'),
+  };
+
+  const sortData: SortData = {};
+  if (formData.get('sort-parameter') === 'name') {
+    sortData.name = `name.en-US ${formData.get('sort-type')}`;
+  } else if (formData.get('sort-parameter') === 'price') {
+    sortData.price = `price ${formData.get('sort-type')}`;
+  }
+
+  const filterParams: QueryArgs = {
+    filter: Object.values(filterData),
+    sort: Object.values(sortData),
+  };
+  return filterParams;
 }

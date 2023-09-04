@@ -1,7 +1,8 @@
-import { ClientResponse, Product, ProductPagedQueryResponse, ProductProjection } from '@commercetools/platform-sdk';
+import { ClientResponse, ProductProjection, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
 import ApiServices from '@lib/api/api-services';
 import { CardParams } from '@lib/types/params-interface';
-import { getProductProjectionResponseAsCardData, getProductResponseAsCardData } from '@lib/utils/get-product-data';
+import { QueryArgs } from '@lib/types/query-args-interface';
+import { getProductProjectionResponseAsCardData } from '@lib/utils/get-product-data';
 
 export default class ProductServices {
   private static _instance: ProductServices;
@@ -19,13 +20,17 @@ export default class ProductServices {
     const limit: number = cardsPerPage;
     const offset: number = cardsPerPage * (pageNumber - 1);
 
-    const response: ClientResponse<ProductPagedQueryResponse> = await this.api
-      .getAllProducts(limit, offset)
+    const response: ClientResponse<ProductProjectionPagedQueryResponse> = await this.api
+      .getProductsBySearch({
+        limit: limit,
+        offset: offset,
+        sort: 'price asc',
+      })
       .catch((error) => error);
 
-    const results: Product[] = response.body.results;
+    const results: ProductProjection[] = response.body.results;
 
-    const pageCardParams: CardParams[] = results.map((product) => getProductResponseAsCardData(product));
+    const pageCardParams: CardParams[] = results.map((product) => getProductProjectionResponseAsCardData(product));
 
     return pageCardParams;
   }
@@ -35,5 +40,35 @@ export default class ProductServices {
 
     const cardParams: CardParams = getProductProjectionResponseAsCardData(response.body);
     return cardParams;
+  }
+
+  public async getAllProductsData(): Promise<CardParams[]> {
+    const limit: number = 500;
+    const offset: number = 0;
+
+    const response: ClientResponse<ProductProjectionPagedQueryResponse> = await this.api
+      .getProductsBySearch({
+        limit: limit,
+        offset: offset,
+        sort: 'price asc',
+      })
+      .catch((error) => error);
+    const results: ProductProjection[] = response.body.results;
+    const pageCardParams: CardParams[] = results.map((product) => getProductProjectionResponseAsCardData(product));
+
+    return pageCardParams;
+  }
+
+  public async getProductsDataBySearch(queryArgs: QueryArgs): Promise<CardParams[]> {
+    queryArgs.limit = 500;
+    queryArgs.offset = 0;
+
+    const response: ClientResponse<ProductProjectionPagedQueryResponse> = await this.api
+      .getProductsBySearch(queryArgs)
+      .catch((error) => error);
+    const results: ProductProjection[] = response.body.results;
+    const pageCardParams: CardParams[] = results.map((product) => getProductProjectionResponseAsCardData(product));
+
+    return pageCardParams;
   }
 }

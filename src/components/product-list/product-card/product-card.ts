@@ -27,7 +27,7 @@ export default class ProductCard {
 
     Object.keys(this._cardParams).forEach((key) => {
       if (key !== 'imgUrls') {
-        this.setTextElementsInfo(key);
+        this.setTextElementContent(key);
       }
     });
   }
@@ -37,7 +37,7 @@ export default class ProductCard {
     images.forEach((imag, index) => imag.setAttribute('src', this._cardParams.imgUrls[index]));
   }
 
-  private setTextElementsInfo(textElementClass: string): void {
+  private setTextElementContent(textElementClass: string): void {
     const textElement: HTMLSpanElement | null = this._element.querySelector(`.${textElementClass}`);
 
     type CardParamsKey = keyof typeof this._cardParams;
@@ -69,16 +69,11 @@ export default class ProductCard {
   }
 
   private changePriceStyle(): void {
-    const discount: NodeListOf<HTMLElement> = document.querySelectorAll('.discount');
-    const price: NodeListOf<HTMLElement> = document.querySelectorAll('.price');
-    discount.forEach((elem: HTMLElement) => {
-      console.log(elem);
-      if (elem.innerText === '') {
-        price.forEach((priceElem: HTMLElement) => {
-          priceElem.classList.add('without-discount');
-        });
-      }
-    });
+    const discount: HTMLDivElement = this._element.querySelector('.discount') as HTMLDivElement;
+    const price: HTMLDivElement = this._element.querySelector('.price') as HTMLDivElement;
+    if (discount.innerText === '') {
+      price.classList.add('without-discount');
+    }
   }
 
   private buttonClickHandler(path: string): void {

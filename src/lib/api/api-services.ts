@@ -11,14 +11,15 @@ import {
   ProductPagedQueryResponse,
   ProductProjection,
   ProductProjectionPagedQueryResponse,
-  QueryParam,
   createApiBuilderFromCtpClient,
   MyCustomerUpdate,
   CustomerChangePassword,
+  SuggestionResult,
 } from '@commercetools/platform-sdk';
 import CtpClientBuilder from './api-client-builder';
-import { ctpParams } from './client-credemtials';
+import { ctpParams } from './client-credentials';
 import ClientTokenCache from './token-cache';
+import { QueryArgs } from '@lib/types/query-args-interface';
 
 export default class ApiServices {
   private static _instance: ApiServices;
@@ -99,7 +100,6 @@ export default class ApiServices {
   }
 
   public async getCurrentCustomer(): Promise<ClientResponse<Customer>> {
-    console.log(this._apiRoot.me());
     return this._apiRoot
       .me()
       .get()
@@ -109,12 +109,24 @@ export default class ApiServices {
       });
   }
 
-  public async getProductsBySearch(queryArgs: {
-    queryParam: QueryParam;
-  }): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> {
+  public async getProductsBySearch(queryArgs: QueryArgs): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> {
     return this._apiRoot
       .productProjections()
       .search()
+      .get({ queryArgs })
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+  }
+
+  public async getProductsSuggestion(queryArgs: QueryArgs): Promise<ClientResponse<SuggestionResult>> {
+    // queryArgs = {
+    //   'searchKeywords.en-US':'can', fuzzy:true, staged:true, limit:5
+    // }
+    return this._apiRoot
+      .productProjections()
+      .suggest()
       .get({ queryArgs })
       .execute()
       .catch((error) => {
@@ -178,7 +190,6 @@ export default class ApiServices {
       });
     const refreshToken: string | undefined = this.getTokenCache().get().refreshToken;
     if (refreshToken) localStorage.setItem('refreshToken', `${refreshToken}`);
-    console.log(refreshToken);
     return response;
   }
 
