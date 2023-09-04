@@ -34,7 +34,7 @@ export default class ProductFilterForm {
     this.setBrandFilter();
     this.setTypeFilter();
     this.setKindFilter();
-    this._element.style.display = 'flex';
+    this.setResetButton();
     this.setFormSubmitEventHandler();
   }
 
@@ -53,6 +53,7 @@ export default class ProductFilterForm {
         })
         .catch((error: Error): Error => error);
     });
+    console.log(this._element.innerHTML);
   }
 
   private async createPriceSlider(): Promise<void> {
@@ -116,6 +117,27 @@ export default class ProductFilterForm {
   private async getAllProductData(): Promise<CardParams[]> {
     const result: CardParams[] = await this._productServices.getAllProductsData().catch((error) => error);
     return result;
+  }
+
+  private setResetButton() {
+    const resetButton: HTMLButtonElement = this._element.querySelector(
+      '.products-filter-reset__button'
+    ) as HTMLButtonElement;
+    resetButton.addEventListener('click', async (e: MouseEvent): Promise<void> => {
+      e.preventDefault();
+      const formInputs: NodeListOf<HTMLInputElement> = this._element.querySelectorAll('input');
+      formInputs.forEach((input: HTMLInputElement): void => {
+        switch (input.type) {
+          case 'checkbox':
+          case 'radio':
+            input.checked = false;
+        }
+        this._priceSlider.noUiSlider?.set([
+          20000 / 100,
+          this._allProductData[this._allProductData.length - 1].price / 100,
+        ]);
+      });
+    });
   }
 
   public get element(): HTMLFormElement {

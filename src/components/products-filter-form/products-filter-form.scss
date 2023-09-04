@@ -78,3 +78,11 @@
   flex-direction: row;
   justify-content: space-between;
 }
+
+.filter-buttons__wrapper {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  row-gap: 2rem;
+  column-gap: 2rem;
+}
