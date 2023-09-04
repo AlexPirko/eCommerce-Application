@@ -86,3 +86,31 @@
   row-gap: 2rem;
   column-gap: 2rem;
 }
+
+.sort__wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 90%;
+  padding: 5%;
+  margin-bottom: 2rem;
+  margin-left: 5%;
+  background-color: #F6F7F8;
+}
+
+.sort-label {
+  display: block;
+  width: 100%;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: black;
+  margin-bottom: 1rem;
+}
+
+.sort-parameter {
+  width: 50%;
+}
+
+.sort-type {
+  width: 30%;
+}

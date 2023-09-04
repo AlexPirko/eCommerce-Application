@@ -1,4 +1,18 @@
 <form class="product-filter-form">
+  <div class="sort__wrapper">
+    <label class="sort-label">Sorting</label>
+    <select class="browser-default sort-parameter" name="sort-parameter">
+      <option value="" disabled selected>Parameter</option>
+      <option value="1">Price</option>
+      <option value="2">Name</option>
+    </select>
+    <label></label>
+    <select class="browser-default sort-type" name="'sort-type">
+      <option value="" disabled selected>Type</option>
+      <option value="1">asc</option>
+      <option value="2">desc</option>
+    </select>
+  </div>
   <div class="price-filter">
     <span class="price-header">Prices</span>
     <div class="price-ranger">

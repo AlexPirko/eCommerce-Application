@@ -35,6 +35,7 @@ export default class ProductFilterForm {
     this.setTypeFilter();
     this.setKindFilter();
     this.setResetButton();
+    this.setSortingTypeSelect();
     this.setFormSubmitEventHandler();
   }
 
@@ -137,6 +138,14 @@ export default class ProductFilterForm {
           this._allProductData[this._allProductData.length - 1].price / 100,
         ]);
       });
+    });
+  }
+
+  private setSortingTypeSelect() {
+    document.addEventListener('DOMContentLoaded', function () {
+      const elems = document.querySelectorAll('select');
+      const instances = M.FormSelect.init(elems, { classes: 'selected' });
+      console.log(instances);
     });
   }
 
