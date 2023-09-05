@@ -5,6 +5,8 @@ import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
 import { CardParams, Params } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
 import ProductServices from '@lib/services/data services/product-services';
+import { Paths } from '@components/router/paths';
+import Router from '@components/router/router';
 
 export default class DetailedCard extends ComponentView {
   protected detailedCardContainer: HTMLDivElement;
@@ -66,14 +68,8 @@ export default class DetailedCard extends ComponentView {
 
     return `
       <div class='row top-bar'>
-        <div class='col s12 m6 l7 breadcrumbs'>
-          <ul class='breadcrumbs-list'>
-            <li><a href="#!" class="breadcrumb-item">First</a></li>
-            <li>>></li>
-            <li><a href="#!" class="breadcrumb-item">Second</a></li>
-            <li>>></li>
-            <li><a href="#!" class="breadcrumb-item">Third</a></li>
-          </ul>
+        <div class='col s12 m6 l7 button-to-catalog-container'>
+          <button class='waves-effect waves-light btn-small button-to-catalog'><i class="menu-cart material-icons">subdirectory_arrow_left</i>Back</button>
         </div>
         <div class='btn-container col s12 m6 l5'>
             <div class='price-container'>
@@ -123,6 +119,7 @@ export default class DetailedCard extends ComponentView {
     const carousel: NodeListOf<HTMLElement> = document.querySelectorAll('.carousel') as NodeListOf<HTMLElement>;
     this.imageModalInit(carousel[0]);
     this.mainSliderInit(carousel[1]);
+    this.backToCatalog();
   }
 
   private mainSliderInit(el: HTMLElement): void {
@@ -186,6 +183,14 @@ export default class DetailedCard extends ComponentView {
   private createMainSlider(): HTMLDivElement {
     this.slider.innerHTML = this.createCarousel();
     return this.slider;
+  }
+
+  private backToCatalog(): void {
+    const router: Router = new Router(null);
+    const btnToCatalog: HTMLButtonElement = document.querySelector('.button-to-catalog') as HTMLButtonElement;
+    btnToCatalog.addEventListener('click', (): void => {
+      router.navigate(`${Paths.CATALOG}`);
+    });
   }
 
   public getElement(): HTMLDivElement {
