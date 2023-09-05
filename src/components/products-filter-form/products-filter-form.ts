@@ -41,7 +41,8 @@ export default class ProductFilterForm {
     this.createMobileFilterBar();
   }
 
-  private setFormSubmitEventHandler() {
+  private setFormSubmitEventHandler(): void {
+    const backgroundElem: HTMLDivElement = document.querySelector('.background-element') as HTMLDivElement;
     this._element.addEventListener('submit', async (e: SubmitEvent): Promise<void> => {
       e.preventDefault();
       const priceRange: string[] = this._priceSlider.noUiSlider?.get() as string[];
@@ -55,6 +56,12 @@ export default class ProductFilterForm {
           this._element.insertAdjacentElement('afterend', newProductList);
         })
         .catch((error: Error): Error => error);
+
+      if (window.innerWidth <= 600) {
+        this._element.classList.remove('active');
+        backgroundElem.style.opacity = '1';
+        backgroundElem.style.display = 'none';
+      }
     });
   }
 
@@ -77,7 +84,7 @@ export default class ProductFilterForm {
     this._priceSlider = slider;
   }
 
-  private setPriceFilter() {
+  private setPriceFilter(): void {
     const leftValue: HTMLSpanElement = this._element.querySelector('.price-ranger__left-value') as HTMLSpanElement;
     const rightValue: HTMLSpanElement = this._element.querySelector('.price-ranger__right-value') as HTMLSpanElement;
     this._priceSlider.noUiSlider?.on('update', (values: (string | number)[]): void => {
@@ -96,7 +103,7 @@ export default class ProductFilterForm {
     });
   }
 
-  private setTypeFilter() {
+  private setTypeFilter(): void {
     const uniqueTypes: Set<string> = new Set<string>();
     this._allProductData.forEach((cardParams: CardParams) => uniqueTypes.add(cardParams.type));
     const typeContainer: HTMLDivElement = this._element.querySelector('.type-filter') as HTMLDivElement;
@@ -106,7 +113,7 @@ export default class ProductFilterForm {
     });
   }
 
-  private setKindFilter() {
+  private setKindFilter(): void {
     const uniqueKinds: Set<string> = new Set<string>();
     this._allProductData.forEach((cardParams: CardParams) => uniqueKinds.add(cardParams.kind));
     const kindContainer: HTMLDivElement = this._element.querySelector('.kind-filter') as HTMLDivElement;
@@ -121,7 +128,7 @@ export default class ProductFilterForm {
     return result;
   }
 
-  private setResetButton() {
+  private setResetButton(): void {
     const resetButton: HTMLButtonElement = this._element.querySelector(
       '.products-filter-reset__button'
     ) as HTMLButtonElement;
@@ -142,7 +149,7 @@ export default class ProductFilterForm {
     });
   }
 
-  private setSortingTypeSelect() {
+  private setSortingTypeSelect(): void {
     document.addEventListener('DOMContentLoaded', function (): void {
       const elems: NodeListOf<HTMLSelectElement> = document.querySelectorAll('select');
       const instances: M.FormSelect[] = M.FormSelect.init(elems, { classes: 'selected' });
@@ -155,7 +162,7 @@ export default class ProductFilterForm {
     const productList: HTMLDivElement = document.querySelector('.product-list') as HTMLDivElement;
     const backgroundElem: HTMLDivElement = document.querySelector('.background-element') as HTMLDivElement;
 
-    filterBtn.forEach((btn) =>
+    filterBtn.forEach((btn: HTMLButtonElement): void =>
       btn.addEventListener('click', (): void => {
         productList.style.display = 'none';
         backgroundElem.style.display = 'block';
