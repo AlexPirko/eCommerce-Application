@@ -9,27 +9,31 @@ import createElementFromHtml from '@lib/utils/create-element-from-html';
 import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
 import { getFormFieldsAsFilterData } from '@lib/utils/get-form-fields';
 import { CardParams } from '@lib/types/params-interface';
-import { QueryArgs } from '@lib/types/query-args-interface';
+import { QueryArgs, SearchResult } from '@lib/types/query-args-interface';
 import ProductListComponent from '@components/product-list/product-list';
 import { FilterCheckboxComponent } from './filter-checkbox/filter-checkbox';
+import { FacetResults, TermFacetResult } from '@commercetools/platform-sdk';
 
 export default class ProductFilterForm {
   private _element: HTMLFormElement;
   private _productServices: ProductServices;
   private _priceSlider: noUiSlider.target;
   private _allProductData: CardParams[];
+  private _facets: FacetResults;
 
   constructor() {
     this._element = createElementFromHtml<HTMLFormElement>(teamplate);
     this._productServices = new ProductServices();
     this._priceSlider = {} as noUiSlider.target;
     this._allProductData = [];
+    this._facets = {} as FacetResults;
     this.setProductFilterForm();
   }
 
   private async setProductFilterForm(): Promise<void> {
-    this._allProductData = await this.getAllProductData();
-    console.log(this._allProductData);
+    const searchResult: SearchResult = await this.getAllProductData();
+    this._allProductData = searchResult.pageCardParams;
+    this._facets = searchResult.facets;
     this.createPriceSlider();
     this.setPriceFilter();
     this.setBrandFilter();
@@ -49,10 +53,10 @@ export default class ProductFilterForm {
       const queryArgs: QueryArgs = getFormFieldsAsFilterData(this._element, priceRange);
       this._productServices
         .getProductsDataBySearch(queryArgs)
-        .then((res: CardParams[]): void => {
+        .then((res: SearchResult): void => {
           const productList: HTMLDivElement = this._element.nextElementSibling as HTMLDivElement;
           productList.remove();
-          const newProductList: HTMLDivElement = new ProductListComponent(res).element;
+          const newProductList: HTMLDivElement = new ProductListComponent(res.pageCardParams).element;
           this._element.insertAdjacentElement('afterend', newProductList);
         })
         .catch((error: Error): Error => error);
@@ -96,9 +100,10 @@ export default class ProductFilterForm {
   private setBrandFilter(): void {
     const uniqueBrands: Set<string> = new Set<string>();
     this._allProductData.forEach((cardParams: CardParams) => uniqueBrands.add(cardParams.brand));
+    const facetValue: TermFacetResult = this._facets['brand'] as TermFacetResult;
     const brandContainer: HTMLDivElement = this._element.querySelector('.brand-filter') as HTMLDivElement;
     uniqueBrands.forEach((brandName) => {
-      const brandCheckBox: HTMLDivElement = new FilterCheckboxComponent('brand', brandName).element;
+      const brandCheckBox: HTMLDivElement = new FilterCheckboxComponent('brand', brandName, facetValue).element;
       brandContainer.append(brandCheckBox);
     });
   }
@@ -106,9 +111,10 @@ export default class ProductFilterForm {
   private setTypeFilter(): void {
     const uniqueTypes: Set<string> = new Set<string>();
     this._allProductData.forEach((cardParams: CardParams) => uniqueTypes.add(cardParams.type));
+    const facetValue: TermFacetResult = this._facets['type'] as TermFacetResult;
     const typeContainer: HTMLDivElement = this._element.querySelector('.type-filter') as HTMLDivElement;
     uniqueTypes.forEach((typeName) => {
-      const typeCheckBox: HTMLDivElement = new FilterCheckboxComponent('type', typeName).element;
+      const typeCheckBox: HTMLDivElement = new FilterCheckboxComponent('type', typeName, facetValue).element;
       typeContainer.append(typeCheckBox);
     });
   }
@@ -116,15 +122,16 @@ export default class ProductFilterForm {
   private setKindFilter(): void {
     const uniqueKinds: Set<string> = new Set<string>();
     this._allProductData.forEach((cardParams: CardParams) => uniqueKinds.add(cardParams.kind));
+    const facetValue: TermFacetResult = this._facets['kind'] as TermFacetResult;
     const kindContainer: HTMLDivElement = this._element.querySelector('.kind-filter') as HTMLDivElement;
     uniqueKinds.forEach((kindName) => {
-      const kindCheckBox: HTMLDivElement = new FilterCheckboxComponent('kind', kindName).element;
+      const kindCheckBox: HTMLDivElement = new FilterCheckboxComponent('kind', kindName, facetValue).element;
       kindContainer.append(kindCheckBox);
     });
   }
 
-  private async getAllProductData(): Promise<CardParams[]> {
-    const result: CardParams[] = await this._productServices.getAllProductsData().catch((error) => error);
+  private async getAllProductData(): Promise<SearchResult> {
+    const result: SearchResult = await this._productServices.getAllProductsData().catch((error) => error);
     return result;
   }
 

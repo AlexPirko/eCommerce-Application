@@ -134,7 +134,6 @@ export class LoginForm {
   }
 
   protected registerLink(redirectText: string): HTMLParagraphElement {
-    console.log(redirectText);
     const text: HTMLParagraphElement = document.createElement('p');
     text.textContent = this.linkText;
     const link: HTMLAnchorElement = document.createElement('a');

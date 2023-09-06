@@ -10,11 +10,11 @@ import {
   MyCustomerSignin,
   ProductPagedQueryResponse,
   ProductProjection,
-  ProductProjectionPagedQueryResponse,
   createApiBuilderFromCtpClient,
   MyCustomerUpdate,
   CustomerChangePassword,
   SuggestionResult,
+  ProductProjectionPagedSearchResponse,
 } from '@commercetools/platform-sdk';
 import CtpClientBuilder from './api-client-builder';
 import { ctpParams } from './client-credentials';
@@ -109,7 +109,9 @@ export default class ApiServices {
       });
   }
 
-  public async getProductsBySearch(queryArgs: QueryArgs): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> {
+  public async getProductsBySearch(
+    queryArgs: QueryArgs
+  ): Promise<ClientResponse<ProductProjectionPagedSearchResponse>> {
     return this._apiRoot
       .productProjections()
       .search()
