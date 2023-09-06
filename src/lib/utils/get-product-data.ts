@@ -3,7 +3,6 @@ import { CardParams } from '@lib/types/params-interface';
 
 export function getProductResponseAsCardData(product: Product): CardParams {
   const productData: ProductData = product.masterData.current;
-  console.log(productData);
 
   const imgUrls: string[] | undefined = productData.masterVariant.images?.map((image) => image.url);
 
