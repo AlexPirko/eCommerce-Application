@@ -193,18 +193,14 @@ export default class ApiServices {
     return response;
   }
 
-  public async changePassword(passwordData: CustomerChangePassword): Promise<Customer> {
-    const response: Response = await fetch(`${ctpParams.CTP_API_URL}/ecommerce-app/customers/password`, {
-      method: 'POST',
-      body: JSON.stringify(passwordData),
-      headers: {
-        Authorization: `Bearer ${this._tokenCache.get().token}`,
-        ContentType: 'application/json',
-      },
-    });
-    if (response.status === 400) {
-      throw new Error();
-    }
-    return response.json();
+  public async changePassword(passwordData: CustomerChangePassword) {
+    return this._apiRoot
+      .me()
+      .password()
+      .post({
+        body: passwordData,
+      })
+      .execute()
+      .catch((er) => er);
   }
 }
