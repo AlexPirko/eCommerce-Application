@@ -90,7 +90,17 @@ export default class App {
       },
       {
         path: `${Paths.ABOUT}`,
-        callback: () => {},
+        callback: async () => {
+          const { default: About } = await import('@pages/about-us/about-us');
+          this.setContent(Paths.ABOUT, new About());
+        },
+      },
+      {
+        path: `${Paths.CART}`,
+        callback: async () => {
+          const { default: Cart } = await import('@pages/cart/cart');
+          this.setContent(Paths.CART, new Cart());
+        },
       },
       {
         path: `${Paths.PROFILE}`,

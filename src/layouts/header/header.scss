@@ -18,7 +18,7 @@
     padding: 0 10rem;
   }
   @include laptop {
-    padding: 0 5rem;
+    padding: 0 3rem;
   }
   @include tablet {
     flex-wrap: wrap;
@@ -40,10 +40,3 @@
     z-index: 10;
   }
 }
-
-// .nav-profile {
-//   display: none;
-//   &.active {
-//     display: block;
-//   }
-// }
