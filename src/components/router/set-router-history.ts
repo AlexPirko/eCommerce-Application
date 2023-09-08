@@ -2,8 +2,8 @@ import { RequestParams } from '@lib/types/params-interface';
 
 export default class SetRouterHistory {
   private cb: (arg0: RequestParams) => void;
-  event: keyof WindowEventMap;
-  handler: (url: string) => void;
+  public event: keyof WindowEventMap;
+  public handler: (url: string) => void;
 
   constructor(cb: (arg0: RequestParams) => void) {
     this.cb = cb;
@@ -38,11 +38,11 @@ export default class SetRouterHistory {
     this.cb(result);
   }
 
-  disable() {
+  public disable(): void {
     window.removeEventListener(this.event, this.handler as unknown as EventListenerOrEventListenerObject);
   }
 
-  setHistory(url: string): void {
+  public setHistory(url: string): void {
     window.history.pushState(null, '', `/${url}`);
   }
 }

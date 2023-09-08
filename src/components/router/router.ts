@@ -10,7 +10,7 @@ export default class Router {
 
   private routerHistory!: SetRouterHistory;
 
-  handler: SetRouterHistory | undefined;
+  public handler: SetRouterHistory | undefined;
 
   constructor(routes: RouteParams[] | null) {
     if (Router._instance) {
@@ -22,16 +22,20 @@ export default class Router {
     this.handler = new SetRouterHistory(this.changeUrlHandler.bind(this));
     this.setHashHandler();
 
-    Router._instance = this;
-  }
+    document.addEventListener('DOMContentLoaded', () => {
+      this.handler?.navigate('');
+    });
 
-  setHashHandler() {
-    this.handler?.disable();
-    this.handler = new HashRouter(this.changeUrlHandler.bind(this));
+    Router._instance = this;
   }
 
   public navigate(url: string): void {
     this.handler?.navigate(url);
+  }
+
+  private setHashHandler(): void {
+    this.handler?.disable();
+    this.handler = new HashRouter(this.changeUrlHandler.bind(this));
   }
 
   private changeUrlHandler(params: RequestParams): void {

@@ -9,7 +9,8 @@ export default class HashRouter extends SetRouterHistory {
 
     window.addEventListener(this.event, this.handler as unknown as EventListenerOrEventListenerObject);
   }
-  setHistory(url: string) {
+
+  public setHistory(url: string): void {
     window.location.href = `${window.location.href.replace(/#(.*)$/, '')}#${url}`;
   }
 }
