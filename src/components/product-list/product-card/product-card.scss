@@ -17,6 +17,7 @@
   margin-bottom: 3%;
   width: 40%;
   box-sizing: border-box;
+  cursor: default !important;
   & img {
     height: 170px;
     width: auto !important;
@@ -68,6 +69,7 @@
   padding: 2%;
   align-items: center;
   color: #33a0ff;
+  cursor: pointer;
   @include tablet {
     width: 4rem;
   }
@@ -94,6 +96,7 @@
 
 .button__detailed {
   padding: 0 1rem;
+  cursor: pointer;
 }
 
 .discount {
