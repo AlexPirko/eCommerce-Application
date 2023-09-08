@@ -141,7 +141,7 @@ export default class DetailedCard extends ComponentView {
     const carouselItem: HTMLCollection = carousel.children;
     for (const item of carouselItem) {
       if (item) {
-        item.addEventListener('click', (event: Event) => {
+        item.addEventListener('click', (event: Event | MouseEvent) => {
           event.preventDefault();
           if (event?.target) {
             this.toggleModal();

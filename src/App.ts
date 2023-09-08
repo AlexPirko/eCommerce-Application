@@ -80,7 +80,7 @@ export default class App {
       },
       {
         path: `${Paths.CATALOG}/${PRODUCT_SELECTOR}`,
-        callback: async (key) => {
+        callback: async (key: string) => {
           const { default: Catalog } = await import('@pages/catalog/catalog');
           this.setContent(Paths.CATALOG, new Catalog(key));
         },
