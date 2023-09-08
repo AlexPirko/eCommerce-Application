@@ -7,6 +7,7 @@ import ComponentView from '@lib/services/component-view';
 import ProductServices from '@lib/services/data services/product-services';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
+import M from 'materialize-css';
 
 export default class DetailedCard extends ComponentView {
   protected detailedCardContainer: HTMLDivElement;
@@ -139,13 +140,15 @@ export default class DetailedCard extends ComponentView {
     const carousel: HTMLElement = this.slider.firstElementChild as HTMLElement;
     const carouselItem: HTMLCollection = carousel.children;
     for (const item of carouselItem) {
-      item.addEventListener('click', (event: Event) => {
-        event.preventDefault();
-        if (event?.target) {
-          this.toggleModal();
-          this.modalSliderInit(el);
-        }
-      });
+      if (item) {
+        item.addEventListener('click', (event: Event | MouseEvent) => {
+          event.preventDefault();
+          if (event?.target) {
+            this.toggleModal();
+            this.modalSliderInit(el);
+          }
+        });
+      }
     }
   }
 
@@ -188,9 +191,11 @@ export default class DetailedCard extends ComponentView {
   private backToCatalog(): void {
     const router: Router = new Router(null);
     const btnToCatalog: HTMLButtonElement = document.querySelector('.button-to-catalog') as HTMLButtonElement;
-    btnToCatalog.addEventListener('click', (): void => {
-      router.navigate(`${Paths.CATALOG}`);
-    });
+    if (btnToCatalog) {
+      btnToCatalog.addEventListener('click', (): void => {
+        router.navigate(`${Paths.CATALOG}`);
+      });
+    }
   }
 
   public getElement(): HTMLDivElement {

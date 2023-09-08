@@ -10,13 +10,7 @@ import CreateBurger from '@layouts/header/create-burger/create-burger';
 import ApiServices from '@lib/api/api-services';
 import ComponentView from '@lib/services/component-view';
 import { RouteParams } from '@lib/types/params-interface';
-import Catalog from '@pages/catalog/catalog';
-import Login from '@pages/login/login';
-import Main from '@pages/main/main';
-import NotFound from '@pages/not-found/not-found';
 import PageContainer from '@pages/page-container';
-import SignUp from '@pages/sign-up/sign-up';
-import Profile from '@pages/profile/profile';
 
 export default class App {
   private static container: HTMLElement = document.getElementById('body') as HTMLElement;
@@ -61,58 +55,68 @@ export default class App {
     );
   }
 
-  // eslint-disable-next-line max-lines-per-function
   private createRoutes(): RouteParams[] {
     return [
       {
         path: ``,
-        callback: () => {
+        callback: async () => {
+          const { default: Main } = await import('@pages/main/main');
           this.setContent(Paths.MAIN, new Main());
         },
       },
       {
         path: `${Paths.MAIN}`,
-        callback: () => {
+        callback: async () => {
+          const { default: Main } = await import('@pages/main/main');
           this.setContent(Paths.MAIN, new Main());
         },
       },
       {
         path: `${Paths.CATALOG}`,
-        callback: () => {
+        callback: async () => {
+          const { default: Catalog } = await import('@pages/catalog/catalog');
           this.setContent(Paths.CATALOG, new Catalog());
         },
       },
       {
         path: `${Paths.CATALOG}/${PRODUCT_SELECTOR}`,
-        callback: (key) => {
+        callback: async (key: string) => {
+          const { default: Catalog } = await import('@pages/catalog/catalog');
           this.setContent(Paths.CATALOG, new Catalog(key));
         },
       },
       {
         path: `${Paths.ABOUT}`,
-        callback: () => {},
+        callback: async () => {
+          const { default: Main } = await import('@pages/main/main');
+          this.setContent(Paths.MAIN, new Main());
+        },
       },
       {
         path: `${Paths.PROFILE}`,
-        callback: () => {
+        callback: async () => {
+          const { default: Profile } = await import('@pages/profile/profile');
           this.setContent(Paths.PROFILE, new Profile());
         },
       },
       {
         path: `${Paths.SIGNUP}`,
-        callback: () => {
+        callback: async () => {
+          const { default: SignUp } = await import('@pages/sign-up/sign-up');
           this.setContent(Paths.SIGNUP, new SignUp());
         },
       },
       {
         path: `${Paths.LOGIN}`,
-        callback: () => {
+        callback: async () => {
+          const { default: Login } = await import('@pages/login/login');
           this.setContent(Paths.LOGIN, new Login());
         },
       },
       {
         path: `${Paths.NOT_FOUND}`,
-        callback: () => {
+        callback: async () => {
+          const { default: NotFound } = await import('@pages/not-found/not-found');
           this.setContent(Paths.NOT_FOUND as string, new NotFound());
         },
       },

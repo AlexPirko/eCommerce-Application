@@ -16,7 +16,6 @@
     "@typescript-eslint/no-explicit-any": "error",
     "no-debugger": "off",
     "no-console": 0,
-    "max-lines-per-function": ["error", 44],
     "prettier/prettier": [
       "error",
       {

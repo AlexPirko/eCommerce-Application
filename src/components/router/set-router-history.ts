@@ -2,14 +2,20 @@ import { RequestParams } from '@lib/types/params-interface';
 
 export default class SetRouterHistory {
   private cb: (arg0: RequestParams) => void;
+  public event: keyof WindowEventMap;
+  public handler: (url: string) => void;
 
   constructor(cb: (arg0: RequestParams) => void) {
     this.cb = cb;
 
-    window.addEventListener('popstate', this.navigate.bind(this));
+    this.handler = this.navigate.bind(this);
+
+    this.event = 'popstate';
+
+    window.addEventListener(this.event, this.handler as unknown as EventListenerOrEventListenerObject);
   }
 
-  public navigate(url: string | PopStateEvent): void {
+  public navigate(url: string): void {
     if (typeof url === 'string') {
       this.setHistory(url);
     }
@@ -32,7 +38,11 @@ export default class SetRouterHistory {
     this.cb(result);
   }
 
-  private setHistory(url: string): void {
+  public disable(): void {
+    window.removeEventListener(this.event, this.handler as unknown as EventListenerOrEventListenerObject);
+  }
+
+  public setHistory(url: string): void {
     window.history.pushState(null, '', `/${url}`);
   }
 }
