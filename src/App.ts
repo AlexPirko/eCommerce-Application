@@ -88,8 +88,15 @@ export default class App {
       {
         path: `${Paths.ABOUT}`,
         callback: async () => {
-          const { default: Main } = await import('@pages/main/main');
-          this.setContent(Paths.MAIN, new Main());
+          const { default: About } = await import('@pages/about-us/about-us');
+          this.setContent(Paths.ABOUT, new About());
+        },
+      },
+      {
+        path: `${Paths.CART}`,
+        callback: async () => {
+          const { default: Cart } = await import('@pages/cart/cart');
+          this.setContent(Paths.CART, new Cart());
         },
       },
       {

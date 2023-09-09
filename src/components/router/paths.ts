@@ -4,7 +4,7 @@ const Paths: HeaderTitle = {
   MAIN: 'main',
   CATALOG: 'catalog',
   PROFILE: 'profile',
-  ABOUT: 'about',
+  ABOUT: 'aboutus',
   CART: 'cart',
   SIGNUP: 'signup',
   LOGIN: 'login',
