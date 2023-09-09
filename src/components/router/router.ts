@@ -1,6 +1,7 @@
 import { RouteParams, RequestParams } from '@lib/types/params-interface';
 import { Paths, PRODUCT_SELECTOR } from './paths';
 import SetRouterHistory from './set-router-history';
+import HashRouter from './hash-router';
 
 export default class Router {
   private static _instance: Router;
@@ -9,6 +10,8 @@ export default class Router {
 
   private routerHistory!: SetRouterHistory;
 
+  public handler: SetRouterHistory | undefined;
+
   constructor(routes: RouteParams[] | null) {
     if (Router._instance) {
       return Router._instance;
@@ -16,17 +19,23 @@ export default class Router {
 
     this.routes = routes;
 
-    this.routerHistory = new SetRouterHistory(this.changeUrlHandler.bind(this));
+    this.handler = new SetRouterHistory(this.changeUrlHandler.bind(this));
+    this.setHashHandler();
 
     document.addEventListener('DOMContentLoaded', () => {
-      this.routerHistory.navigate('');
+      this.handler?.navigate('');
     });
 
     Router._instance = this;
   }
 
-  public navigate(url: string | PopStateEvent): void {
-    this.routerHistory.navigate(url);
+  public navigate(url: string): void {
+    this.handler?.navigate(url);
+  }
+
+  private setHashHandler(): void {
+    this.handler?.disable();
+    this.handler = new HashRouter(this.changeUrlHandler.bind(this));
   }
 
   private changeUrlHandler(params: RequestParams): void {
