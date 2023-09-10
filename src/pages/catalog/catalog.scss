@@ -22,5 +22,7 @@
 
   @include tablet {
     grid-template-columns: 5% 90%;
+    gap: 5px;
+    justify-items: start;
   }
 }

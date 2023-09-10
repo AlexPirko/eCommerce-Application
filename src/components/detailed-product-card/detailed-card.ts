@@ -89,7 +89,7 @@ export default class DetailedCard extends ComponentView {
           <p class='detail-description'>${this.params?.description}</p>
         </div>
       </div>
-      <div class='col s6 l5 product-images'></div>
+      <div class='col s12 m6 l5 product-images'></div>
     `;
   }
 
@@ -127,12 +127,14 @@ export default class DetailedCard extends ComponentView {
     M.AutoInit();
     M.Carousel.init(el, {
       indicators: true,
+      duration: 400,
     });
   }
 
   private modalSliderInit(el: HTMLElement): void {
     M.Carousel.init(el, {
       indicators: true,
+      duration: 200,
     });
   }
 
