@@ -31,4 +31,5 @@ export interface CardParams {
   price: number;
   discount: number;
   key: string;
+  sku: string;
 }

@@ -121,6 +121,7 @@ export class LoginForm {
         api
           .customerLogin({ email, password })
           .then(() => {
+            localStorage.removeItem('anonymousId');
             this.onSubmit();
             handleVisibility();
             router.navigate(`${Paths.MAIN}`);

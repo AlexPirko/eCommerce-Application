@@ -16,6 +16,7 @@ export function getProductResponseAsCardData(product: Product): CardParams {
     price: productData.masterVariant.prices?.[0].value.centAmount as number,
     discount: productData.masterVariant.prices?.[0].discounted?.value.centAmount as number,
     key: product.key as string,
+    sku: productData.masterVariant.sku as string,
   };
 
   return cardParams;
@@ -34,6 +35,7 @@ export function getProductProjectionResponseAsCardData(product: ProductProjectio
     price: product.masterVariant.prices?.[0].value.centAmount as number,
     discount: product.masterVariant.prices?.[0].discounted?.value.centAmount as number,
     key: product.key as string,
+    sku: product.masterVariant.sku as string,
   };
 
   return cardParams;

@@ -3,6 +3,7 @@ import './cart.scss';
 import { Params } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
 import ElementBuilder from '@lib/services/element-builder';
+import CartMain from '@components/cart/cart-main';
 
 export default class Cart extends ComponentView {
   constructor() {
@@ -23,6 +24,8 @@ export default class Cart extends ComponentView {
       text: 'cart',
     };
     const titleElementBuilder: ElementBuilder = new ElementBuilder(titleParams);
+    const cartMain = new CartMain();
     this.viewElementBuilder.addInnerElement(titleElementBuilder);
+    this.viewElementBuilder.addInnerElement(cartMain.element);
   }
 }

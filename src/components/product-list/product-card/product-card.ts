@@ -6,6 +6,8 @@ import { CardParams } from '@lib/types/params-interface';
 import cardTemplate from './product-card.html';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
+import ApiServices from '@lib/api/api-services';
+import { Cart, ClientResponse } from '@commercetools/platform-sdk';
 
 export default class ProductCard {
   private _element: HTMLDivElement;
@@ -18,11 +20,13 @@ export default class ProductCard {
     this._cardParams = cardParams;
     this.setCard();
     this.setDeatailedButtonClickEventHandler();
-    this.changePriceStyle();
+    this.setAddToCartClickHandler();
+    this.setPriceStyle();
   }
 
   private setCard(): void {
     this._element.dataset.key = this._cardParams.key;
+    this._element.dataset.sku = this._cardParams.sku;
     this.setImagesUrl();
 
     Object.keys(this._cardParams).forEach((key) => {
@@ -64,11 +68,21 @@ export default class ProductCard {
   private setDeatailedButtonClickEventHandler(): void {
     const button: HTMLButtonElement | null = this._element.querySelector('.button__detailed');
     button?.addEventListener('click', (): void => {
-      this.buttonClickHandler(`${Paths.CATALOG}/${this._cardParams.key}`);
+      this.detailButtonClickHandler(`${Paths.CATALOG}/${this._cardParams.key}`);
     });
   }
 
-  private changePriceStyle(): void {
+  private setAddToCartClickHandler(): void {
+    const button: HTMLButtonElement | null = this._element.querySelector('.button__add-to-cart');
+    button?.addEventListener('click', async (): Promise<void> => {
+      const api = new ApiServices();
+      const sku = this._element.dataset.sku;
+      const response: ClientResponse<Cart> = await api.createCart({ currency: 'USD', lineItems: [{ sku: sku }] });
+      console.log(response);
+    });
+  }
+
+  private setPriceStyle(): void {
     const discount: HTMLDivElement = this._element.querySelector('.discount') as HTMLDivElement;
     const price: HTMLDivElement = this._element.querySelector('.price') as HTMLDivElement;
     if (discount.innerText === '') {
@@ -76,7 +90,7 @@ export default class ProductCard {
     }
   }
 
-  private buttonClickHandler(path: string): void {
+  private detailButtonClickHandler(path: string): void {
     this.router.navigate(path);
   }
 
