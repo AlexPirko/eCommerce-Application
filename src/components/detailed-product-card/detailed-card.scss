@@ -154,43 +154,14 @@ button.btn-small {
 
 div.slider,
 div.carousel.carousel-slider {
-  height: 460px;
+  height: 400px;
   width: 100%;
   top: 20%;
-  @include desctop {
-    top: 30%;
-  }
-  @include tablet {
-    height: 400px;
-    width: 110%;
-  }
-}
-
-div.carousel.carousel-slider {
-  @include large-desctop {
-    left: 5%;
-  }
-  @include desctop {
-    left: 8%;
-  }
-  @include laptop {
-    top: 40%;
-  }
-  @include tablet {
-    top: 25%;
-    left: 40%;
-  }
 }
 
 .carousel .carousel-item img {
   width: auto !important;
   height: 70%;
-  @include large-desctop {
-    height: 58%;
-  }
-  @include desctop {
-    height: 40%;
-  }
 }
 
 div.carousel .indicators {

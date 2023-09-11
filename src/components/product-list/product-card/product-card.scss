@@ -25,14 +25,6 @@
   @include tablet {
     padding-top: 10px;
   }
-  & img {
-    height: 170px;
-    width: auto !important;
-    margin: 0 auto;
-    @include laptop {
-      height: 100px;
-    }
-  }
 }
 
 .card-content {
