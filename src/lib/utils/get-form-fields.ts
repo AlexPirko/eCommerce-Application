@@ -1,5 +1,5 @@
 import { CustomerDraft } from '@commercetools/platform-sdk';
-import { FilterData, QueryArgs, SortData } from '@lib/types/query-args-interface';
+import { FilterData, QueryArgs, SortData } from '@lib/types/filter-form-interface';
 import { getAttributeFilterData } from './attribute-filter-data';
 import { getFacetData } from './get-facet-data';
 

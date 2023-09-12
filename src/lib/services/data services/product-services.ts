@@ -7,7 +7,7 @@ import {
 } from '@commercetools/platform-sdk';
 import ApiServices from '@lib/api/api-services';
 import { CardParams } from '@lib/types/params-interface';
-import { QueryArgs, SearchResult } from '@lib/types/query-args-interface';
+import { QueryArgs, SearchResult } from '@lib/types/filter-form-interface';
 import { getProductProjectionResponseAsCardData } from '@lib/utils/get-product-data';
 
 export default class ProductServices {

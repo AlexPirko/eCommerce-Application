@@ -7,7 +7,6 @@ import cardTemplate from './product-card.html';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 import ApiServices from '@lib/api/api-services';
-import { Cart, ClientResponse } from '@commercetools/platform-sdk';
 
 export default class ProductCard {
   private _element: HTMLDivElement;
@@ -20,7 +19,7 @@ export default class ProductCard {
     this._cardParams = cardParams;
     this.setCard();
     this.setDeatailedButtonClickEventHandler();
-    this.setAddToCartClickHandler();
+    this.setAddToCartButtonClickHandler();
     this.setPriceStyle();
   }
 
@@ -72,13 +71,22 @@ export default class ProductCard {
     });
   }
 
-  private setAddToCartClickHandler(): void {
+  private setAddToCartButtonClickHandler(): void {
     const button: HTMLButtonElement | null = this._element.querySelector('.button__add-to-cart');
     button?.addEventListener('click', async (): Promise<void> => {
       const api = new ApiServices();
       const sku = this._element.dataset.sku;
-      const response: ClientResponse<Cart> = await api.createCart({ currency: 'USD', lineItems: [{ sku: sku }] });
-      console.log(response);
+      await api
+        .getActiveCart()
+        .then(async (res): Promise<void> => {
+          await api
+            .updateCart(res.body.id, { version: res.body.version, actions: [{ action: 'addLineItem', sku: sku }] })
+            .catch((error) => error);
+        })
+        .catch(async (error) => {
+          await api.createCart({ currency: 'USD', lineItems: [{ sku: sku }] }).catch((error) => error);
+          return error;
+        });
     });
   }
 
