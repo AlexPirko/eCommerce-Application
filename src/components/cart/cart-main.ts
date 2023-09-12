@@ -35,7 +35,11 @@ export default class CartMain {
             directDiscount: res.body.directDiscounts,
           };
         })
-        .catch((error) => error);
+        .catch((error) => {
+          this._cartProductData = [];
+          this._cartData = null;
+          return error;
+        });
       console.log('this._cartDat:');
       console.log(this._cartData);
       console.log('this._cartProductData:');
