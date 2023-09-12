@@ -3,19 +3,21 @@ import './cart-main.scss';
 
 import { Cart, ClientResponse } from '@commercetools/platform-sdk';
 import ApiServices from '@lib/api/api-services';
-import { CardParams } from '@lib/types/params-interface';
+import { CardParams, CartData } from '@lib/types/params-interface';
 import createElementFromHtml from '@lib/utils/create-element-from-html';
 import { getCartResponseAsCardData } from '@lib/utils/get-product-data';
 
 export default class CartMain {
   private _element: HTMLDivElement;
   private _cartProductData: CardParams[];
+  private _cartData: CartData | null;
   private _api: ApiServices;
 
   constructor() {
     this._element = createElementFromHtml<HTMLDivElement>(template);
     this._api = new ApiServices();
     this._cartProductData = [];
+    this._cartData = null;
     this.setGetCartButtonEventHandler();
     this.setDeleteCartButtonEventHandler();
   }
@@ -23,9 +25,20 @@ export default class CartMain {
   private setGetCartButtonEventHandler(): void {
     const button: HTMLButtonElement = this._element.querySelector('.button__get-cart') as HTMLButtonElement;
     button.addEventListener('click', async (): Promise<void> => {
-      const response: ClientResponse<Cart> = await this._api.getActiveCart().catch((error) => error);
-      this._cartProductData = response.body.lineItems.map((item) => getCartResponseAsCardData(item));
-      console.log();
+      await this._api
+        .getActiveCart()
+        .then(async (res: ClientResponse<Cart>): Promise<void> => {
+          this._cartProductData = res.body.lineItems.map((item) => getCartResponseAsCardData(item));
+          this._cartData = {
+            totalPrice: res.body.totalPrice.centAmount,
+            discountCodes: res.body.discountCodes,
+            directDiscount: res.body.directDiscounts,
+          };
+        })
+        .catch((error) => error);
+      console.log('this._cartDat:');
+      console.log(this._cartData);
+      console.log('this._cartProductData:');
       console.log(this._cartProductData);
     });
   }

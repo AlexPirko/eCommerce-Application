@@ -80,7 +80,7 @@ export default class ProductCard {
       const api = new ApiServices();
       const sku = this._element.dataset.sku;
       button.disabled = true;
-      await api
+      api
         .getActiveCart()
         .then(async (res): Promise<void> => {
           await api
