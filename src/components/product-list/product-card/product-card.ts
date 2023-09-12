@@ -11,12 +11,14 @@ import ApiServices from '@lib/api/api-services';
 export default class ProductCard {
   private _element: HTMLDivElement;
   private _cardParams: CardParams;
+  private _isInCart: boolean;
   public router: Router;
 
-  constructor(cardParams: CardParams) {
+  constructor(cardParams: CardParams, isInCart: boolean) {
     this.router = new Router(null);
     this._element = createElementFromHtml<HTMLDivElement>(cardTemplate);
     this._cardParams = cardParams;
+    this._isInCart = isInCart;
     this.setCard();
     this.setDeatailedButtonClickEventHandler();
     this.setAddToCartButtonClickHandler();
@@ -73,9 +75,11 @@ export default class ProductCard {
 
   private setAddToCartButtonClickHandler(): void {
     const button: HTMLButtonElement | null = this._element.querySelector('.button__add-to-cart');
+    if (this._isInCart && button) button.disabled = true;
     button?.addEventListener('click', async (): Promise<void> => {
       const api = new ApiServices();
       const sku = this._element.dataset.sku;
+      button.disabled = true;
       await api
         .getActiveCart()
         .then(async (res): Promise<void> => {

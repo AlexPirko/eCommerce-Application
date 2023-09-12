@@ -90,6 +90,18 @@
       display: none;
     }
   }
+
+  &:disabled {
+    color: grey;
+
+    &:hover {
+      cursor: default;
+    }
+
+    & .cart-icon {
+      fill: rgba(179, 177, 177, 0.9) !important;
+    }
+  }
 }
 
 .button__filter {

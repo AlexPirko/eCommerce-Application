@@ -13,7 +13,7 @@ export async function updateViewService(pageProducts: CardParams[]): Promise<voi
   currentProductList.forEach((card) => card.remove());
 
   pageProducts.forEach((cardData) => {
-    const productCardComponent: ProductCard = new ProductCard(cardData);
+    const productCardComponent: ProductCard = new ProductCard(cardData, false);
     productList?.append(productCardComponent.element);
   });
 }

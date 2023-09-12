@@ -15,9 +15,10 @@ export default class CartMain {
     this._api = new ApiServices();
     this._cartData = {} as Cart;
     this.setGetCartButtonEventHandler();
+    this.setDeleteCartButtonEventHandler();
   }
 
-  private setGetCartButtonEventHandler() {
+  private setGetCartButtonEventHandler(): void {
     const button: HTMLButtonElement = this._element.querySelector('.button__get-cart') as HTMLButtonElement;
     button.addEventListener('click', async (): Promise<void> => {
       const response: ClientResponse<Cart> = await this._api.getActiveCart().catch((error) => error);
@@ -25,6 +26,14 @@ export default class CartMain {
     });
   }
 
+  private setDeleteCartButtonEventHandler(): void {
+    const button: HTMLButtonElement = this._element.querySelector('.button__delete-cart') as HTMLButtonElement;
+    button.addEventListener('click', async (): Promise<void> => {
+      const res: ClientResponse<Cart> = await this._api.getActiveCart().catch((error) => error);
+      await this._api.deleteCart(res.body.id, res.body.version).catch((error) => error);
+      this._cartData = res.body;
+    });
+  }
   public get element(): HTMLDivElement {
     return this._element;
   }

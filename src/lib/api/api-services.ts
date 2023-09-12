@@ -282,4 +282,21 @@ export default class ApiServices {
       });
     return response;
   }
+
+  public async deleteCart(id: string, version: number): Promise<ClientResponse<Cart>> {
+    const response: ClientResponse<Cart> = await this._apiRoot
+      .me()
+      .carts()
+      .withId({ ID: id })
+      .delete({
+        queryArgs: {
+          version: version,
+        },
+      })
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+    return response;
+  }
 }
