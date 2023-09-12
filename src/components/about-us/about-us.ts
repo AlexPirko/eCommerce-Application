@@ -27,7 +27,7 @@ const team: member[] = [
     github: 'https://github.com/alexpirko',
     position: 'Team Lead, Frontend Developer',
     description:
-      "Olexander is into photography, capturing life's brightest moments. Seeking to broaden his horizons, Olexander enrolled in a frontend course at RS School. He emerged as a true leader of the group. It was Olexander who proposed the idea of creating a web application that would merge his two passions - photography and programming. The team was inspired by this concept, and together they crafted an amazing project that received high praise from fellow students and the mentor. This is how Olexander became a talented frontend developer capable of uniting the best of both worlds in a single project.",
+      "Olexander is into photography, capturing life's brightest moments. Seeking to broaden his horizons, Olexander enrolled in a frontend course at RS School. He emerged as a true leader of the group. It was Olexander who proposed the idea of creating a web application that would merge his two passions - photography and programming. The team was inspired by this concept, and together they crafted an amazing project that received high praise from fellow students and the mentor.",
     photo: Alex,
     quote: AlexQuote,
   },
@@ -64,7 +64,7 @@ type member = {
 };
 
 export class AboutUs {
-  createAboutPage() {
+  createAboutPage(): HTMLDivElement {
     const wrapper: HTMLDivElement = document.createElement('div');
     const rsLogo: string = `
       <a class="logo-link" href="https://rs.school/" target="_blank">
@@ -76,12 +76,12 @@ export class AboutUs {
     return wrapper;
   }
 
-  createTeamSection() {
-    const teamWrapper = document.createElement('div');
-    const teamList = document.createElement('ul');
+  createTeamSection(): HTMLDivElement {
+    const teamWrapper: HTMLDivElement = document.createElement('div');
+    const teamList: HTMLUListElement = document.createElement('ul');
     teamList.classList.add('team-list');
 
-    team.forEach((member: member) => {
+    team.forEach((member: member): void => {
       teamList.insertAdjacentHTML('beforeend', this.createDeveloper(member));
     });
 
@@ -89,7 +89,7 @@ export class AboutUs {
     return teamWrapper;
   }
 
-  createDeveloper({ name, location, github, position, description, photo, quote }: member) {
+  createDeveloper({ name, location, github, position, description, photo, quote }: member): string {
     return `
     <li class="team-list-item">
       <img class="item-photo" src='${photo}' alt="${name}" />
