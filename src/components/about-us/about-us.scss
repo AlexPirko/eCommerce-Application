@@ -1,0 +1,64 @@
+.logo-img {
+  width: 150px;
+  margin: 20px auto;
+  display: block;
+}
+
+
+.team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+
+}
+
+.team-list-item {
+  width: 75%;
+  display: flex;
+  gap: 20px;
+  border: 1px solid #b39ddb;
+  border-radius: 30px;
+  align-items: center;
+  padding: 10px 15px;
+
+  .item-photo {
+    height: 300px;
+    width: 300px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border-radius: 100%;
+  }
+
+  .item-github-img {
+    height: 30px;
+    width: 30px;
+  }
+
+  .item-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .item-location {
+    color: #b39ddb;
+    margin: 0;
+    margin-bottom: 10px;
+  }
+
+  .item-quote {
+    border-radius: 10px;
+  }
+
+  .item-position {
+    color: #673ab7;
+  }
+
+  .item-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+  }
+}
