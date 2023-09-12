@@ -5,7 +5,7 @@ import logo from './../../assets/images/logo-rsschool.png';
 import githubIcon from './../../assets/images/github.png';
 
 export class AboutUs {
-  createAboutPage(): HTMLDivElement {
+  public createAboutPage(): HTMLDivElement {
     const wrapper: HTMLDivElement = document.createElement('div');
     const rsLogo: string = `
       <a class="logo-link" href="https://rs.school/" target="_blank">
@@ -17,7 +17,7 @@ export class AboutUs {
     return wrapper;
   }
 
-  createTeamSection(): HTMLDivElement {
+  private createTeamSection(): HTMLDivElement {
     const teamWrapper: HTMLDivElement = document.createElement('div');
     const teamList: HTMLUListElement = document.createElement('ul');
     teamList.classList.add('team-list');
@@ -30,7 +30,7 @@ export class AboutUs {
     return teamWrapper;
   }
 
-  createDeveloper({ name, location, github, position, description, photo, quote }: TMember): string {
+  private createDeveloper({ name, location, github, position, description, photo, quote }: TMember): string {
     return `
     <li class="team-list-item">
       <img class="item-photo" src='${photo}' alt="${name}" />
