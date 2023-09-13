@@ -8,6 +8,7 @@ import ProductServices from '@lib/services/data services/product-services';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 import M from 'materialize-css';
+import ApiServices from '@lib/api/api-services';
 
 export default class DetailedCard extends ComponentView {
   protected detailedCardContainer: HTMLDivElement;
@@ -18,6 +19,7 @@ export default class DetailedCard extends ComponentView {
   protected data: CardParams[] | undefined;
   protected key: string;
   protected params: CardParams | undefined;
+  public _isInCart: boolean;
 
   constructor(key: string) {
     const params: Params = {
@@ -31,6 +33,7 @@ export default class DetailedCard extends ComponentView {
     this._cardsPerPage = 500;
     this._pageNumber = 1;
     this.key = key;
+    this._isInCart = false;
 
     this.detailedCardContainer = createHTMLElement('div', ['detailed-cart', 'row']);
     this.slider = createHTMLElement('div', ['slider']);
@@ -54,6 +57,7 @@ export default class DetailedCard extends ComponentView {
     this.data = cardsParams;
     this.params = this.data?.find((item) => item.key === this.key);
     this.configureView();
+    this.handleAddToCartButton();
   }
 
   private createDetailedCardHtml(): string {
@@ -78,7 +82,8 @@ export default class DetailedCard extends ComponentView {
               <div class='detail-old-price'>${oldPrice}</div>
             </div>
             <div class='detail-buttons'>
-              <button class='waves-effect waves-light btn-small add-button'><i class="menu-cart material-icons">shopping_cart</i>Add to Cart</button>
+              <button class='waves-effect waves-light btn-small add-button' data-id=${this.params?.key}><i class="menu-cart material-icons">add_shopping_cart</i>Add</button>
+              <button class='waves-effect waves-light btn-small del-button'><i class="menu-cart material-icons">remove_shopping_cart</i>Del</button>
             </div>
         </div>
       </div>
@@ -188,6 +193,35 @@ export default class DetailedCard extends ComponentView {
   private createMainSlider(): HTMLDivElement {
     this.slider.innerHTML = this.createCarousel();
     return this.slider;
+  }
+
+  private async handleAddToCartButton(): Promise<void> {
+    const addBtn: HTMLButtonElement = document.querySelector('.add-button') as HTMLButtonElement;
+    const api: ApiServices = new ApiServices();
+    await api
+      .getActiveCart()
+      .then((res) => {
+        res.body.lineItems.forEach((item) => {
+          if (addBtn.dataset.id === item.productKey) addBtn.disabled = true;
+        });
+      })
+      .catch((error) => error);
+
+    addBtn?.addEventListener('click', async (): Promise<void> => {
+      const sku: string | undefined = this.params?.sku;
+      addBtn.disabled = true;
+      api
+        .getActiveCart()
+        .then(async (res): Promise<void> => {
+          await api
+            .updateCart(res.body.id, { version: res.body.version, actions: [{ action: 'addLineItem', sku: sku }] })
+            .catch((error) => error);
+        })
+        .catch(async (error) => {
+          await api.createCart({ currency: 'USD', lineItems: [{ sku: sku }] }).catch((error) => error);
+          return error;
+        });
+    });
   }
 
   private backToCatalog(): void {
