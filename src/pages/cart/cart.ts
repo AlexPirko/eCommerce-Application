@@ -24,7 +24,7 @@ export default class Cart extends ComponentView {
       text: 'cart',
     };
     const titleElementBuilder: ElementBuilder = new ElementBuilder(titleParams);
-    const cartMain = new CartMain();
+    const cartMain: CartMain = new CartMain();
     this.viewElementBuilder.addInnerElement(titleElementBuilder);
     this.viewElementBuilder.addInnerElement(cartMain.element);
   }

@@ -1,7 +1,7 @@
 import template from './cart-main.html';
 import './cart-main.scss';
 
-import { Cart, ClientResponse } from '@commercetools/platform-sdk';
+import { Cart, ClientResponse, LineItem } from '@commercetools/platform-sdk';
 import ApiServices from '@lib/api/api-services';
 import { CardParams, CartData } from '@lib/types/params-interface';
 import createElementFromHtml from '@lib/utils/create-element-from-html';
@@ -28,7 +28,9 @@ export default class CartMain {
       await this._api
         .getActiveCart()
         .then(async (res: ClientResponse<Cart>): Promise<void> => {
-          this._cartProductData = res.body.lineItems.map((item) => getCartResponseAsCardData(item));
+          this._cartProductData = res.body.lineItems.map(
+            (item: LineItem): CardParams => getCartResponseAsCardData(item)
+          );
           this._cartData = {
             totalPrice: res.body.totalPrice.centAmount,
             discountCodes: res.body.discountCodes,

@@ -77,8 +77,8 @@ export default class ProductCard {
     const button: HTMLButtonElement | null = this._element.querySelector('.button__add-to-cart');
     if (this._isInCart && button) button.disabled = true;
     button?.addEventListener('click', async (): Promise<void> => {
-      const api = new ApiServices();
-      const sku = this._element.dataset.sku;
+      const api: ApiServices = new ApiServices();
+      const sku: string | undefined = this._element.dataset.sku;
       button.disabled = true;
       api
         .getActiveCart()
