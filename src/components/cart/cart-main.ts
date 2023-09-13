@@ -1,9 +1,10 @@
+import CartItem from '@components/cart/cart-item/cart-item';
 import template from './cart-main.html';
 import './cart-main.scss';
 
 import { Cart, ClientResponse, LineItem } from '@commercetools/platform-sdk';
 import ApiServices from '@lib/api/api-services';
-import { CardParams, CartData } from '@lib/types/params-interface';
+import { CardParams, CartData, CartItemParams } from '@lib/types/params-interface';
 import createElementFromHtml from '@lib/utils/create-element-from-html';
 import { getCartResponseAsCardData } from '@lib/utils/get-product-data';
 
@@ -18,8 +19,44 @@ export default class CartMain {
     this._api = new ApiServices();
     this._cartProductData = [];
     this._cartData = null;
+    this.setCartList();
     this.setGetCartButtonEventHandler();
     this.setDeleteCartButtonEventHandler();
+  }
+
+  private async setCartList(): Promise<void> {
+    if (this._cartProductData.length === 0) {
+      await this._api
+        .getActiveCart()
+        .then(async (res: ClientResponse<Cart>): Promise<void> => {
+          this._cartProductData = res.body.lineItems.map(
+            (item: LineItem): CardParams => getCartResponseAsCardData(item)
+          );
+
+          this._cartData = {
+            totalPrice: res.body.totalPrice.centAmount,
+            discountCodes: res.body.discountCodes,
+            directDiscount: res.body.directDiscounts,
+          };
+
+          const cartTableElement: HTMLTableElement = this._element.querySelector(
+            '.cart__product-list'
+          ) as HTMLTableElement;
+          this._cartProductData.forEach((item: CardParams): void => {
+            const cartItem: CartItem = new CartItem(item as CartItemParams);
+            cartTableElement.append(cartItem.element);
+          });
+        })
+        .catch((error) => {
+          this._cartProductData = [];
+          this._cartData = null;
+          return error;
+        });
+      console.log('this._cartDat:');
+      console.log(this._cartData);
+      console.log('this._cartProductData:');
+      console.log(this._cartProductData);
+    }
   }
 
   private setGetCartButtonEventHandler(): void {

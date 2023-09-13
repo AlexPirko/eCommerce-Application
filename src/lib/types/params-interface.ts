@@ -42,3 +42,17 @@ export interface CartData {
   discountCodes: DiscountCodeInfo[];
   directDiscount: DirectDiscount[];
 }
+
+export interface CartItemParams extends CardParams {
+  imgUrls: string[];
+  name: string;
+  description: string;
+  type: string;
+  brand: string;
+  kind: string;
+  price: number;
+  discount: number;
+  key: string;
+  sku: string;
+  quantity?: number;
+}
