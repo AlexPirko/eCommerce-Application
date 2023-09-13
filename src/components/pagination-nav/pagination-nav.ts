@@ -36,7 +36,7 @@ export default class CatalogPaginationComponent {
     const nextButton: HTMLButtonElement | null = this._element.querySelector('.next__button');
 
     const allProduct: ClientResponse<ProductPagedQueryResponse> = await this._api
-      .getAllProducts(500, 0)
+      .getAllProducts(MAX_LIMIT_COUNT, 0)
       .catch((error) => error);
     const productCount: number = allProduct.body.count;
 

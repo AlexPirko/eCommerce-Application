@@ -6,23 +6,28 @@ import { CardParams } from '@lib/types/params-interface';
 import cardTemplate from './product-card.html';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
+import ApiServices from '@lib/api/api-services';
 
 export default class ProductCard {
   private _element: HTMLDivElement;
   private _cardParams: CardParams;
+  private _isInCart: boolean;
   public router: Router;
 
-  constructor(cardParams: CardParams) {
+  constructor(cardParams: CardParams, isInCart: boolean) {
     this.router = new Router(null);
     this._element = createElementFromHtml<HTMLDivElement>(cardTemplate);
     this._cardParams = cardParams;
+    this._isInCart = isInCart;
     this.setCard();
     this.setDeatailedButtonClickEventHandler();
-    this.changePriceStyle();
+    this.setAddToCartButtonClickHandler();
+    this.setPriceStyle();
   }
 
   private setCard(): void {
     this._element.dataset.key = this._cardParams.key;
+    this._element.dataset.sku = this._cardParams.sku;
     this.setImagesUrl();
 
     Object.keys(this._cardParams).forEach((key) => {
@@ -64,11 +69,32 @@ export default class ProductCard {
   private setDeatailedButtonClickEventHandler(): void {
     const button: HTMLButtonElement | null = this._element.querySelector('.button__detailed');
     button?.addEventListener('click', (): void => {
-      this.buttonClickHandler(`${Paths.CATALOG}/${this._cardParams.key}`);
+      this.detailButtonClickHandler(`${Paths.CATALOG}/${this._cardParams.key}`);
     });
   }
 
-  private changePriceStyle(): void {
+  private setAddToCartButtonClickHandler(): void {
+    const button: HTMLButtonElement | null = this._element.querySelector('.button__add-to-cart');
+    if (this._isInCart && button) button.disabled = true;
+    button?.addEventListener('click', async (): Promise<void> => {
+      const api: ApiServices = new ApiServices();
+      const sku: string | undefined = this._element.dataset.sku;
+      button.disabled = true;
+      api
+        .getActiveCart()
+        .then(async (res): Promise<void> => {
+          await api
+            .updateCart(res.body.id, { version: res.body.version, actions: [{ action: 'addLineItem', sku: sku }] })
+            .catch((error) => error);
+        })
+        .catch(async (error) => {
+          await api.createCart({ currency: 'USD', lineItems: [{ sku: sku }] }).catch((error) => error);
+          return error;
+        });
+    });
+  }
+
+  private setPriceStyle(): void {
     const discount: HTMLDivElement = this._element.querySelector('.discount') as HTMLDivElement;
     const price: HTMLDivElement = this._element.querySelector('.price') as HTMLDivElement;
     if (discount.innerText === '') {
@@ -76,7 +102,7 @@ export default class ProductCard {
     }
   }
 
-  private buttonClickHandler(path: string): void {
+  private detailButtonClickHandler(path: string): void {
     this.router.navigate(path);
   }
 

@@ -9,7 +9,7 @@ import createElementFromHtml from '@lib/utils/create-element-from-html';
 import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
 import { getFormFieldsAsFilterData } from '@lib/utils/get-form-fields';
 import { CardParams } from '@lib/types/params-interface';
-import { QueryArgs, SearchResult } from '@lib/types/query-args-interface';
+import { QueryArgs, SearchResult } from '@lib/types/filter-form-interface';
 import ProductListComponent from '@components/product-list/product-list';
 import { FilterCheckboxComponent } from './filter-checkbox/filter-checkbox';
 import { FacetResults, TermFacetResult } from '@commercetools/platform-sdk';

@@ -6,8 +6,6 @@ export default class HashRouter extends SetRouterHistory {
     super(cbRouter);
 
     this.event = 'hashchange';
-
-    window.addEventListener(this.event, this.handler as unknown as EventListenerOrEventListenerObject);
   }
 
   public setHistory(url: string): void {
