@@ -56,7 +56,9 @@ export function getCartResponseAsCardData(lineItem: LineItem): CardParams {
     key: lineItem.key as string,
     sku: lineItem.variant.sku as string,
     quantity: lineItem.quantity,
+    lineItemId: lineItem.id as string,
   };
+  console.log(cardParams.lineItemId);
 
   return cardParams;
 }

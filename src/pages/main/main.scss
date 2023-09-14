@@ -53,14 +53,18 @@
   padding: 0 2rem;
   margin: 1% 0;
   width: 45%;
+  height: 360px !important;
   @include desctop {
     width: 60%;
+    height: 400px !important;
   }
   @include laptop {
     width: 72%;
+    height: 360px !important;
   }
   @include tablet {
     width: 85%;
+    height: 240px !important;
   }
 }
 

@@ -9,6 +9,8 @@ import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 import M from 'materialize-css';
 import ApiServices from '@lib/api/api-services';
+import { LineItem } from '@commercetools/platform-sdk';
+import { getCartResponseAsCardData } from '@lib/utils/get-product-data';
 
 export default class DetailedCard extends ComponentView {
   protected detailedCardContainer: HTMLDivElement;
@@ -83,7 +85,7 @@ export default class DetailedCard extends ComponentView {
             </div>
             <div class='detail-buttons'>
               <button class='waves-effect waves-light btn-small add-button' data-id=${this.params?.key}><i class="menu-cart material-icons">add_shopping_cart</i>Add</button>
-              <button class='waves-effect waves-light btn-small del-button'><i class="menu-cart material-icons">remove_shopping_cart</i>Del</button>
+              <button class='waves-effect waves-light btn-small del-button' data-id=${this.params?.key}><i class="menu-cart material-icons">remove_shopping_cart</i>Del</button>
             </div>
         </div>
       </div>
@@ -148,7 +150,7 @@ export default class DetailedCard extends ComponentView {
     const carouselItem: HTMLCollection = carousel.children;
     for (const item of carouselItem) {
       if (item) {
-        item.addEventListener('click', (event: Event | MouseEvent) => {
+        item.addEventListener('click', (event: Event | MouseEvent): void => {
           event.preventDefault();
           if (event?.target) {
             this.toggleModal();
@@ -182,7 +184,7 @@ export default class DetailedCard extends ComponentView {
 
     document.body.prepend(this.imageModal);
 
-    closeBtn.addEventListener('click', () => {
+    closeBtn.addEventListener('click', (): void => {
       this.imageModal.style.display = 'none';
       document.body.style.overflow = '';
       backgroundElem.style.opacity = '1';
@@ -197,19 +199,24 @@ export default class DetailedCard extends ComponentView {
 
   private async handleAddToCartButton(): Promise<void> {
     const addBtn: HTMLButtonElement = document.querySelector('.add-button') as HTMLButtonElement;
+    const delBtn: HTMLButtonElement = document.querySelector('.del-button') as HTMLButtonElement;
+    const sku: string | undefined = this.params?.sku;
+
+    delBtn.disabled = true;
     const api: ApiServices = new ApiServices();
     await api
       .getActiveCart()
       .then((res) => {
-        res.body.lineItems.forEach((item) => {
+        res.body.lineItems.forEach((item: LineItem) => {
           if (addBtn.dataset.id === item.productKey) addBtn.disabled = true;
+          if (delBtn.dataset.id === item.productKey) delBtn.disabled = false;
         });
       })
       .catch((error) => error);
 
     addBtn?.addEventListener('click', async (): Promise<void> => {
-      const sku: string | undefined = this.params?.sku;
       addBtn.disabled = true;
+      delBtn.disabled = false;
       api
         .getActiveCart()
         .then(async (res): Promise<void> => {
@@ -219,6 +226,27 @@ export default class DetailedCard extends ComponentView {
         })
         .catch(async (error) => {
           await api.createCart({ currency: 'USD', lineItems: [{ sku: sku }] }).catch((error) => error);
+          return error;
+        });
+    });
+
+    delBtn?.addEventListener('click', async (): Promise<void> => {
+      delBtn.disabled = true;
+      addBtn.disabled = false;
+      api
+        .getActiveCart()
+        .then(async (res): Promise<void> => {
+          const { lineItemId } = res.body.lineItems
+            .map((item: LineItem): CardParams => getCartResponseAsCardData(item))
+            .filter((cartProductData) => cartProductData.sku === sku)[0];
+          await api
+            .updateCart(res.body.id, {
+              version: res.body.version,
+              actions: [{ action: 'removeLineItem', lineItemId: lineItemId }],
+            })
+            .catch((error) => error);
+        })
+        .catch(async (error) => {
           return error;
         });
     });
