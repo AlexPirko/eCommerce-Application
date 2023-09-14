@@ -2,6 +2,7 @@ import './detailed-card.scss';
 
 import createHTMLElement from '@lib/utils/create-html-element';
 import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
+import changeCartCount from '@layouts/header/header-link/header-cart-count';
 import { CardParams, Params } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
 import ProductServices from '@lib/services/data services/product-services';
@@ -222,6 +223,7 @@ export default class DetailedCard extends ComponentView {
         .then(async (res): Promise<void> => {
           await api
             .updateCart(res.body.id, { version: res.body.version, actions: [{ action: 'addLineItem', sku: sku }] })
+            .then(() => changeCartCount())
             .catch((error) => error);
         })
         .catch(async (error) => {
@@ -244,6 +246,7 @@ export default class DetailedCard extends ComponentView {
               version: res.body.version,
               actions: [{ action: 'removeLineItem', lineItemId: lineItemId }],
             })
+            .then(() => changeCartCount())
             .catch((error) => error);
         })
         .catch(async (error) => {
