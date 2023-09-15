@@ -32,7 +32,9 @@ export default class ProductServices {
         offset: offset,
         sort: 'price asc',
       })
-      .catch((error) => error);
+      .catch((error) => {
+        throw error;
+      });
 
     const results: ProductProjection[] = response.body.results;
 
@@ -42,7 +44,9 @@ export default class ProductServices {
   }
 
   public async getProductByKey(key: string): Promise<CardParams> {
-    const response: ClientResponse<ProductProjection> = await this.api.getProductByKey(key).catch((error) => error);
+    const response: ClientResponse<ProductProjection> = await this.api.getProductByKey(key).catch((error) => {
+      throw error;
+    });
 
     const cardParams: CardParams = getProductProjectionResponseAsCardData(response.body);
     return cardParams;
@@ -63,7 +67,9 @@ export default class ProductServices {
           'variants.attributes.kind as kind',
         ],
       })
-      .catch((error) => error);
+      .catch((error) => {
+        throw error;
+      });
     const results: ProductProjection[] = response.body.results;
     const pageCardParams: CardParams[] = results.map((product) => getProductProjectionResponseAsCardData(product));
     const facets: FacetResults = response.body.facets;
@@ -81,7 +87,9 @@ export default class ProductServices {
 
     const response: ClientResponse<ProductProjectionPagedSearchResponse> = await this.api
       .getProductsBySearch(queryArgs)
-      .catch((error) => error);
+      .catch((error) => {
+        throw error;
+      });
     const results: ProductProjection[] = response.body.results;
     const pageCardParams: CardParams[] = results.map((product) => getProductProjectionResponseAsCardData(product));
 
