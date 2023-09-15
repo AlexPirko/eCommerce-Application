@@ -15,28 +15,6 @@ div.top-bar {
   }
 }
 
-// div.col.breadcrumbs {
-//   padding: 3.5rem 0 3.5rem 20rem;
-//   @include laptop {
-//     padding: 3.5rem 0 3.5rem 3.5rem;
-//   }
-//   @include tablet {
-//     padding: 1rem 0 2rem 4.5rem;
-//     border-top: 1px solid rgba(0, 0, 0, 0.222);
-//     border-bottom: 1px solid rgba(0, 0, 0, 0.222);
-//   }
-// }
-
-// .breadcrumbs-list {
-//   display: flex;
-// }
-
-// .breadcrumb-item {
-//   color: $color-seven;
-//   font-size: 2rem;
-//   padding: 0 1rem;
-// }
-
 .button-to-catalog-container {
   text-align: center;
 }
@@ -73,12 +51,6 @@ div.top-bar {
 button.btn-small {
   border-radius: 20px;
   font-size: 1.7rem;
-  &:first-child {
-    margin-right: 2rem;
-  }
-  @include laptop {
-    font-size: 1.2rem;
-  }
   @include tablet {
     width: 75px;
   }
@@ -144,7 +116,9 @@ button.btn-small {
   margin-top: 4rem;
   text-align: justify;
   @include laptop {
-    font-size: 1.7rem;
+    font-size: 1.5rem;
+    line-height: 140%;
+    margin-top: 1rem;
   }
   @include tablet {
     margin-top: 2rem;
@@ -167,7 +141,7 @@ div.carousel.carousel-slider {
 div.carousel .indicators {
   bottom: 15%;
   @include desctop {
-    bottom: 30%;
+    bottom: 20%;
   }
 }
 
