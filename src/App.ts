@@ -1,6 +1,7 @@
 import '@assets/styles/global.scss';
 import handleVisibility from '@lib/utils/handle-visibility';
 import profileLinkGuard from '@lib/utils/profile-link-guard';
+import changeCartCount from '@layouts/header/header-link/header-cart-count';
 import { Paths, PRODUCT_SELECTOR } from '@components/router/paths';
 import Router from '@components/router/router';
 import Header from '@layouts/header/header';
@@ -37,6 +38,7 @@ export default class App {
 
     document.addEventListener('DOMContentLoaded', () => {
       handleVisibility();
+      changeCartCount();
     });
   }
 

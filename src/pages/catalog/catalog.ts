@@ -13,7 +13,6 @@ export default class Catalog extends ComponentView {
   private filterForm: ProductFilterForm;
   private productList: ProductListComponent;
   private pageNav: CatalogPaginationComponent;
-  // private detailedCard: DetailedCard;
 
   constructor(key: string = '') {
     const params: Params = {

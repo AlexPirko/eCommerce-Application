@@ -35,6 +35,7 @@ export interface CardParams {
   key: string;
   sku: string;
   quantity?: number;
+  lineItemId?: string | undefined;
 }
 
 export interface CartData {

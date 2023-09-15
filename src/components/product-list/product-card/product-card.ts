@@ -7,6 +7,7 @@ import cardTemplate from './product-card.html';
 import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 import ApiServices from '@lib/api/api-services';
+import changeCartCount from '@layouts/header/header-link/header-cart-count';
 
 export default class ProductCard {
   private _element: HTMLDivElement;
@@ -85,10 +86,14 @@ export default class ProductCard {
         .then(async (res): Promise<void> => {
           await api
             .updateCart(res.body.id, { version: res.body.version, actions: [{ action: 'addLineItem', sku: sku }] })
+            .then(() => changeCartCount())
             .catch((error) => error);
         })
         .catch(async (error) => {
-          await api.createCart({ currency: 'USD', lineItems: [{ sku: sku }] }).catch((error) => error);
+          await api
+            .createCart({ currency: 'USD', lineItems: [{ sku: sku }] })
+            .then(() => changeCartCount())
+            .catch((error) => error);
           return error;
         });
     });
