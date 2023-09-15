@@ -4,9 +4,10 @@ import createElementFromHtml from '@lib/utils/create-element-from-html';
 import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
 import { CartItemParams } from '@lib/types/params-interface';
 import cartItemTemplate from './cart-item.html';
-import { Paths } from '@components/router/paths';
 import Router from '@components/router/router';
 import ApiServices from '@lib/api/api-services';
+import { Cart, ClientResponse, LineItem } from '@commercetools/platform-sdk';
+import { getCartResponseAsCardData } from '@lib/utils/get-product-data';
 
 export default class CartItem {
   private _element: HTMLDivElement;
@@ -16,11 +17,11 @@ export default class CartItem {
   constructor(cartItemParams: CartItemParams) {
     this.router = new Router(null);
     this._element = createElementFromHtml<HTMLDivElement>(cartItemTemplate);
-    console.log(this._element);
     this._cartItemParams = cartItemParams;
     this.setCartItem();
-    this.setDeatailedButtonClickEventHandler();
-    this.setAddToCartButtonClickHandler();
+    this.setIncreaseItemQuantityButtonClickHandler();
+    this.setDecreaseItemQuantityButtonClickHandler();
+    this.setDeleteItemButtonEventHandler();
     this.setPriceStyle();
   }
 
@@ -45,7 +46,7 @@ export default class CartItem {
     const textElement: HTMLDivElement | null = this._element.querySelector(`.${textElementClass}`);
     type CartItemParamsKey = keyof typeof this._cartItemParams;
     if (textElement) {
-      if (textElementClass === 'price') {
+      if (textElementClass === 'price' || textElementClass === 'totalPrice') {
         const oldPrice: number = (this._cartItemParams[textElementClass as CartItemParamsKey] as number) / 100;
         textElement.innerHTML = changeCurrencyFormat(oldPrice);
       } else if (textElementClass === 'discount') {
@@ -61,29 +62,105 @@ export default class CartItem {
     }
   }
 
-  private setDeatailedButtonClickEventHandler(): void {
-    const button: HTMLButtonElement | null = this._element.querySelector('.button__detailed');
-    button?.addEventListener('click', (): void => {
-      this.detailButtonClickHandler(`${Paths.CATALOG}/$this._cartItemParams.key}`);
-    });
-  }
-
-  private setAddToCartButtonClickHandler(): void {
-    const button: HTMLButtonElement | null = this._element.querySelector('.button__add-item');
-    if (button) button.disabled = true;
+  private setIncreaseItemQuantityButtonClickHandler(): void {
+    const button: HTMLButtonElement | null = this._element.querySelector('.button__increase-quantity');
     button?.addEventListener('click', async (): Promise<void> => {
       const api: ApiServices = new ApiServices();
       const sku: string | undefined = this._element.dataset.sku;
-      button.disabled = true;
+      const removeButton: HTMLButtonElement = this._element.querySelector(
+        '.button__decrease-quantity'
+      ) as HTMLButtonElement;
+      const quantity: HTMLSpanElement = this._element.querySelector('.cart-item__quantity') as HTMLSpanElement;
+      const totalPrice: HTMLDivElement = this._element.querySelector('.cart-item__total-price') as HTMLDivElement;
+
       api
         .getActiveCart()
-        .then(async (res): Promise<void> => {
+        .then(async (res: ClientResponse<Cart>): Promise<void> => {
           await api
             .updateCart(res.body.id, { version: res.body.version, actions: [{ action: 'addLineItem', sku: sku }] })
+            .then((resUpdate: ClientResponse<Cart>): void => {
+              quantity.innerHTML = String(parseInt(quantity.innerHTML) + 1);
+              totalPrice.innerHTML = resUpdate.body.lineItems.reduce((acc: string, item: LineItem): string => {
+                const { sku: currenSku } = getCartResponseAsCardData(item);
+                if (currenSku === sku) {
+                  acc = changeCurrencyFormat(getCartResponseAsCardData(item).totalPrice / 100);
+                }
+                return acc;
+              }, '');
+              removeButton.disabled = false;
+            })
             .catch((error) => error);
         })
         .catch(async (error) => {
-          await api.createCart({ currency: 'USD', lineItems: [{ sku: sku }] }).catch((error) => error);
+          return error;
+        });
+    });
+  }
+
+  private setDecreaseItemQuantityButtonClickHandler(): void {
+    const button: HTMLButtonElement | null = this._element.querySelector('.button__decrease-quantity');
+    const quantity: HTMLSpanElement = this._element.querySelector('.cart-item__quantity') as HTMLSpanElement;
+    if (button && quantity.innerHTML === '1') button.disabled = true;
+    button?.addEventListener('click', async (): Promise<void> => {
+      const api: ApiServices = new ApiServices();
+      const sku: string | undefined = this._element.dataset.sku;
+      const quantity: HTMLSpanElement = this._element.querySelector('.cart-item__quantity') as HTMLSpanElement;
+      const totalPrice: HTMLDivElement = this._element.querySelector('.cart-item__total-price') as HTMLDivElement;
+      if (quantity.innerHTML === '1') button.disabled = true;
+
+      api
+        .getActiveCart()
+        .then(async (res: ClientResponse<Cart>): Promise<void> => {
+          const { lineItemId } = res.body.lineItems
+            .map((item: LineItem): CartItemParams => getCartResponseAsCardData(item))
+            .filter((cartProductData: CartItemParams): boolean => cartProductData.sku === sku)[0];
+          await api
+            .updateCart(res.body.id, {
+              version: res.body.version,
+              actions: [{ action: 'removeLineItem', lineItemId: lineItemId, quantity: 1 }],
+            })
+            .then((resUpdate: ClientResponse<Cart>): void => {
+              quantity.innerHTML = String(parseInt(quantity.innerHTML) - 1);
+              totalPrice.innerHTML = resUpdate.body.lineItems.reduce((acc: string, item: LineItem): string => {
+                const { lineItemId: currentItemId } = getCartResponseAsCardData(item);
+                if (currentItemId === lineItemId) {
+                  acc = changeCurrencyFormat(getCartResponseAsCardData(item).totalPrice / 100);
+                }
+                return acc;
+              }, '');
+              if (quantity.innerHTML === '1') button.disabled = true;
+            })
+            .catch((error) => error);
+        })
+        .catch(async (error) => {
+          return error;
+        });
+    });
+  }
+
+  private setDeleteItemButtonEventHandler(): void {
+    const button: HTMLButtonElement = this._element.querySelector('.delete-item__button') as HTMLButtonElement;
+    button.addEventListener('click', async (): Promise<void> => {
+      const api: ApiServices = new ApiServices();
+      const sku: string | undefined = this._element.dataset.sku;
+
+      api
+        .getActiveCart()
+        .then(async (res: ClientResponse<Cart>): Promise<void> => {
+          const { lineItemId, quantity } = res.body.lineItems
+            .map((item: LineItem): CartItemParams => getCartResponseAsCardData(item))
+            .filter((cartProductData: CartItemParams): boolean => cartProductData.sku === sku)[0];
+          await api
+            .updateCart(res.body.id, {
+              version: res.body.version,
+              actions: [{ action: 'removeLineItem', lineItemId: lineItemId, quantity: quantity }],
+            })
+            .then((): void => {
+              this._element.remove();
+            })
+            .catch((error) => error);
+        })
+        .catch(async (error) => {
           return error;
         });
     });
@@ -95,10 +172,6 @@ export default class CartItem {
     if (discount.innerText === '') {
       price.classList.add('without-discount');
     }
-  }
-
-  private detailButtonClickHandler(path: string): void {
-    this.router.navigate(path);
   }
 
   public get element(): HTMLDivElement {

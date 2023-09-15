@@ -52,7 +52,7 @@ export default class CartMain {
           this._cartData = null;
           return error;
         });
-      console.log('this._cartDat:');
+      console.log('this._cartData:');
       console.log(this._cartData);
       console.log('this._cartProductData:');
       console.log(this._cartProductData);

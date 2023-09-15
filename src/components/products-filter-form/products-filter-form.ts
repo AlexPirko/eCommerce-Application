@@ -72,7 +72,7 @@ export default class ProductFilterForm {
   private async createPriceSlider(): Promise<void> {
     const slider: noUiSlider.target = this._element.querySelector('.price-slider') as noUiSlider.target;
     noUiSlider.create(slider, {
-      start: [20000 / 100, this._allProductData[this._allProductData.length - 1].price / 100],
+      start: [13900 / 100, this._allProductData[this._allProductData.length - 1].price / 100],
       connect: true,
       step: 1,
       orientation: 'horizontal', // 'horizontal' or 'vertical'

@@ -44,15 +44,6 @@ export interface CartData {
 }
 
 export interface CartItemParams extends CardParams {
-  imgUrls: string[];
-  name: string;
-  description: string;
-  type: string;
-  brand: string;
-  kind: string;
-  price: number;
-  discount: number;
-  key: string;
-  sku: string;
-  quantity?: number;
+  lineItemId: string;
+  totalPrice: number;
 }

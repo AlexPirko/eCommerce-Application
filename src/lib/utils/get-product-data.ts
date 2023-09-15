@@ -1,5 +1,5 @@
 import { LineItem, Product, ProductData, ProductProjection } from '@commercetools/platform-sdk';
-import { CardParams } from '@lib/types/params-interface';
+import { CardParams, CartItemParams } from '@lib/types/params-interface';
 
 export function getProductResponseAsCardData(product: Product): CardParams {
   const productData: ProductData = product.masterData.current;
@@ -41,10 +41,10 @@ export function getProductProjectionResponseAsCardData(product: ProductProjectio
   return cardParams;
 }
 
-export function getCartResponseAsCardData(lineItem: LineItem): CardParams {
+export function getCartResponseAsCardData(lineItem: LineItem): CartItemParams {
   const imgUrls: string[] | undefined = lineItem.variant.images?.map((image) => image.url);
 
-  const cardParams: CardParams = {
+  const cartItemParams: CartItemParams = {
     imgUrls: imgUrls as string[],
     name: lineItem.name['en-US'],
     description: '',
@@ -56,7 +56,9 @@ export function getCartResponseAsCardData(lineItem: LineItem): CardParams {
     key: lineItem.key as string,
     sku: lineItem.variant.sku as string,
     quantity: lineItem.quantity,
+    lineItemId: lineItem.id,
+    totalPrice: lineItem.totalPrice.centAmount,
   };
 
-  return cardParams;
+  return cartItemParams;
 }

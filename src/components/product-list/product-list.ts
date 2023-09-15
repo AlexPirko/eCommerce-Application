@@ -42,13 +42,19 @@ export default class ProductListComponent {
 
     localStorage.removeItem('pageNumber');
     if (!this._cardsData) {
+      console.log(this._cardsData);
       const productServices: ProductServices = new ProductServices();
-      this._cardsData = await productServices
+      await productServices
         .getPageProductsData(this._cardsPerPage, this._pageNumber)
+        .then((result) => {
+          this._cardsData = result;
+          this._cardsData.forEach((item: CardParams): void => {
+            const productCard: ProductCard = new ProductCard(item, cartSku[item.sku]);
+            this._element.append(productCard.element);
+          });
+        })
         .catch((error) => error);
-    }
-
-    if (this._cardsData) {
+    } else {
       this._cardsData.forEach((item: CardParams): void => {
         const productCard: ProductCard = new ProductCard(item, cartSku[item.sku]);
         this._element.append(productCard.element);

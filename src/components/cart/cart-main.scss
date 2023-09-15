@@ -1,7 +1,12 @@
 .cart__product-list{
-  margin: 5% 10%;
-  width: 80%;
+  width: 100%;
   & thead {
     background-color: #bec19e;
   }
+}
+
+.cart-main {
+  display: flex;
+  flex-direction: column;
+  padding: 3% 10%;
 }
