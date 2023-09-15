@@ -32,7 +32,9 @@ export default class ProductServices {
         offset: offset,
         sort: 'price asc',
       })
-      .catch((error) => error);
+      .catch((error) => {
+        throw error;
+      });
 
     const results: ProductProjection[] = response.body.results;
 

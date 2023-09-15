@@ -191,7 +191,7 @@ export default class ApiServices {
     const myCustomerData: MyCustomerSignin = {
       email: customerData.email,
       password: customerData.password,
-      activeCartSignInMode: 'UseAsNewActiveCustomerCart',
+      activeCartSignInMode: 'MergeWithExistingCustomerCart',
     };
     if (!localStorage.getItem('anonymousId')) {
       this._tokenCache = new ClientTokenCache();
