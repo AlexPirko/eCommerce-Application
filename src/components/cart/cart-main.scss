@@ -1,4 +1,4 @@
-.cart__product-list{
+.cart__product-list {
   width: 100%;
   & thead {
     background-color: #bec19e;
@@ -7,6 +7,44 @@
 
 .cart-main {
   display: flex;
+  justify-content: space-between;
+  padding: 2% 5%;
+  margin: 0 auto;
+  max-width: 1600px;
+  min-height: 400px;
+}
+
+.cart__product-container {
+  display: flex;
+  justify-content: space-between;
   flex-direction: column;
-  padding: 3% 10%;
+  width: 100%;
+}
+
+.cart__info-container {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  padding: 0 2%;
+  margin-left: 5%;
+  width: 30%;
+  background-color: #eceddf;
+}
+
+.cart__info-title {
+  margin-top: -10px;
+  font-weight: 500;
+}
+
+.cart-subtitle {
+  font-weight: 600;
+}
+
+.cart__info-subcontainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.order-title {
+  text-align: start;
 }

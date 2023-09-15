@@ -8,6 +8,7 @@ import Router from '@components/router/router';
 import ApiServices from '@lib/api/api-services';
 import { Cart, ClientResponse, LineItem } from '@commercetools/platform-sdk';
 import { getCartResponseAsCardData } from '@lib/utils/get-product-data';
+import changeCartCount from '@layouts/header/header-link/header-cart-count';
 
 export default class CartItem {
   private _element: HTMLDivElement;
@@ -158,6 +159,7 @@ export default class CartItem {
             .then((): void => {
               this._element.remove();
             })
+            .then(() => changeCartCount())
             .catch((error) => error);
         })
         .catch(async (error) => {

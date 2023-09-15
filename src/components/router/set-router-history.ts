@@ -11,9 +11,11 @@ export default class SetRouterHistory {
     this.handler = this.navigate.bind(this);
 
     this.event = 'popstate';
+
+    window.addEventListener(this.event, this.handler as unknown as EventListenerOrEventListenerObject);
   }
 
-  public navigate(url: string): void {
+  public navigate(url: string | null): void {
     if (typeof url === 'string') {
       this.setHistory(url);
     }
