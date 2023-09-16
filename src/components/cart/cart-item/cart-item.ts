@@ -171,13 +171,13 @@ export default class CartItem {
     });
   }
 
-  async addTotalOrder() {
+  private async addTotalOrder(): Promise<void> {
     const subtotal: HTMLSpanElement = document.querySelector('.subtotal-info') as HTMLSpanElement;
     const api: ApiServices = new ApiServices();
     await api
       .getActiveCart()
-      .then((res) => {
-        const subtotalPrice = changeCurrencyFormat(res.body.totalPrice.centAmount / 100);
+      .then((res: ClientResponse<Cart>) => {
+        const subtotalPrice: string = changeCurrencyFormat(res.body.totalPrice.centAmount / 100);
         subtotal.innerHTML = `${subtotalPrice}`;
       })
       .catch((error) => error);
