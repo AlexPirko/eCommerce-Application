@@ -21,7 +21,7 @@ export default class Cart extends ComponentView {
     const titleParams: Params = {
       tagName: 'h2',
       classNames: ['cart-title'],
-      text: 'cart',
+      text: 'Cart',
     };
     const titleElementBuilder: ElementBuilder = new ElementBuilder(titleParams);
     const cartMain: CartMain = new CartMain();

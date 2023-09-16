@@ -5,7 +5,7 @@ import ProductCard from './product-card/product-card';
 import ProductServices from '@lib/services/data services/product-services';
 import { CardParams } from '@lib/types/params-interface';
 import { FIRST_PAGE_NUMBER, PRODUCTS_PER_PAGE } from '@lib/constants/product-list-constants';
-import { LineItem } from '@commercetools/platform-sdk';
+import { Cart, ClientResponse, LineItem } from '@commercetools/platform-sdk';
 import ApiServices from '@lib/api/api-services';
 
 export default class ProductListComponent {
@@ -28,7 +28,7 @@ export default class ProductListComponent {
     let cartSku: Record<string, boolean> = {};
     await this._api
       .getActiveCart()
-      .then((res) => {
+      .then((res: ClientResponse<Cart>): void => {
         cartSku = res.body.lineItems.reduce(
           (acc: Record<string, boolean>, item: LineItem): Record<string, boolean> => {
             const currentSku: string = item.variant.sku as string;
@@ -42,14 +42,20 @@ export default class ProductListComponent {
 
     // localStorage.removeItem('pageNumber');
     if (!this._cardsData) {
+      console.log(this._cardsData);
       const productServices: ProductServices = new ProductServices();
-      this._cardsData = await productServices
+      await productServices
         .getPageProductsData(this._cardsPerPage, this._pageNumber)
+        .then((result) => {
+          this._cardsData = result;
+          this._cardsData.forEach((item: CardParams): void => {
+            const productCard: ProductCard = new ProductCard(item, cartSku[item.sku]);
+            this._element.append(productCard.element);
+          });
+        })
         .catch((error) => error);
-    }
-
-    if (this._cardsData) {
-      this._cardsData.forEach((item): void => {
+    } else {
+      this._cardsData.forEach((item: CardParams): void => {
         const productCard: ProductCard = new ProductCard(item, cartSku[item.sku]);
         this._element.append(productCard.element);
       });

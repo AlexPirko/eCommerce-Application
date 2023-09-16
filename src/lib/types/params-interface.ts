@@ -43,3 +43,8 @@ export interface CartData {
   discountCodes: DiscountCodeInfo[];
   directDiscount: DirectDiscount[];
 }
+
+export interface CartItemParams extends CardParams {
+  lineItemId: string;
+  totalPrice: number;
+}
