@@ -90,8 +90,7 @@ export default class CatalogPaginationComponent {
         const prevPageNumber: string = (parseInt(pageNumberElement?.innerHTML, 10) - 1).toString();
         localStorage.setItem('pageNumber', prevPageNumber);
         const filterData: QueryArgs = this._filterForm.filterData;
-
-        await this._productServices
+        this._productServices
           .getProductsDataBySearch(filterData, parseInt(prevPageNumber) - 1, PRODUCTS_PER_PAGE)
           .then(async (pageProducts: SearchResult): Promise<void> => {
             const allProduct: SearchResult = await this._productServices
@@ -128,7 +127,7 @@ export default class CatalogPaginationComponent {
         const nextPageNumber: string = (parseInt(pageNumberElement?.innerHTML, 10) + 1).toString();
         localStorage.setItem('pageNumber', nextPageNumber);
         const filterData: QueryArgs = this._filterForm.filterData;
-        await this._productServices
+        this._productServices
           .getProductsDataBySearch(filterData, parseInt(nextPageNumber) - 1, PRODUCTS_PER_PAGE)
           .then(async (pageProducts: SearchResult): Promise<void> => {
             const allProduct: SearchResult = await this._productServices
