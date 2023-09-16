@@ -7,6 +7,8 @@ import ApiServices from '@lib/api/api-services';
 import { CardParams, CartData, CartItemParams } from '@lib/types/params-interface';
 import createElementFromHtml from '@lib/utils/create-element-from-html';
 import { getCartResponseAsCardData } from '@lib/utils/get-product-data';
+import changeCartCount from '@layouts/header/header-link/header-cart-count';
+import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
 
 export default class CartMain {
   private _element: HTMLDivElement;
@@ -22,6 +24,7 @@ export default class CartMain {
     this.setCartList();
     this.setGetCartButtonEventHandler();
     this.setDeleteCartButtonEventHandler();
+    this.addTotalOrder();
   }
 
   private async setCartList(): Promise<void> {
@@ -90,9 +93,24 @@ export default class CartMain {
     const button: HTMLButtonElement = this._element.querySelector('.button__delete-cart') as HTMLButtonElement;
     button.addEventListener('click', async (): Promise<void> => {
       const res: ClientResponse<Cart> = await this._api.getActiveCart().catch((error) => error);
-      await this._api.deleteCart(res.body.id, res.body.version).catch((error) => error);
+      await this._api
+        .deleteCart(res.body.id, res.body.version)
+        .then(() => changeCartCount())
+        .catch((error) => error);
     });
   }
+
+  async addTotalOrder() {
+    const subtotal: HTMLSpanElement = this._element.querySelector('.subtotal-info') as HTMLSpanElement;
+    await this._api
+      .getActiveCart()
+      .then((res) => {
+        const subtotalPrice = changeCurrencyFormat(res.body.totalPrice.centAmount / 100);
+        subtotal.innerHTML = `${subtotalPrice}`;
+      })
+      .catch((error) => error);
+  }
+
   public get element(): HTMLDivElement {
     return this._element;
   }

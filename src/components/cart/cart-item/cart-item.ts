@@ -2,12 +2,12 @@ import './cart-item.scss';
 
 import createElementFromHtml from '@lib/utils/create-element-from-html';
 import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
+import { getCartResponseAsCardData } from '@lib/utils/get-product-data';
 import { CartItemParams } from '@lib/types/params-interface';
 import cartItemTemplate from './cart-item.html';
 import Router from '@components/router/router';
 import ApiServices from '@lib/api/api-services';
 import { Cart, ClientResponse, LineItem } from '@commercetools/platform-sdk';
-import { getCartResponseAsCardData } from '@lib/utils/get-product-data';
 import changeCartCount from '@layouts/header/header-link/header-cart-count';
 
 export default class CartItem {
@@ -24,6 +24,7 @@ export default class CartItem {
     this.setDecreaseItemQuantityButtonClickHandler();
     this.setDeleteItemButtonEventHandler();
     this.setPriceStyle();
+    this.addTotalOrder();
   }
 
   private setCartItem(): void {
@@ -90,6 +91,7 @@ export default class CartItem {
               }, '');
               removeButton.disabled = false;
             })
+            .then(() => this.addTotalOrder())
             .catch((error) => error);
         })
         .catch(async (error) => {
@@ -131,6 +133,7 @@ export default class CartItem {
               }, '');
               if (quantity.innerHTML === '1') button.disabled = true;
             })
+            .then(() => this.addTotalOrder())
             .catch((error) => error);
         })
         .catch(async (error) => {
@@ -166,6 +169,18 @@ export default class CartItem {
           return error;
         });
     });
+  }
+
+  async addTotalOrder() {
+    const subtotal: HTMLSpanElement = document.querySelector('.subtotal-info') as HTMLSpanElement;
+    const api: ApiServices = new ApiServices();
+    await api
+      .getActiveCart()
+      .then((res) => {
+        const subtotalPrice = changeCurrencyFormat(res.body.totalPrice.centAmount / 100);
+        subtotal.innerHTML = `${subtotalPrice}`;
+      })
+      .catch((error) => error);
   }
 
   private setPriceStyle(): void {

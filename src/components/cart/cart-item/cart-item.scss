@@ -16,12 +16,11 @@
   // }
 }
 
-
 .item-image {
   height: 10rem;
 }
 
-.cart-item__info{
+.cart-item__info {
   display: flex;
   column-gap: 10%;
   margin: 1%;
@@ -42,7 +41,7 @@
   width: 3rem;
   border: none;
   background-color: inherit;
-  display:flex;
+  display: flex;
   align-self: center;
   align-items: center;
 
@@ -83,7 +82,8 @@
   align-items: center;
 }
 
-.button__increase-quantity, .button__decrease-quantity {
+.button__increase-quantity,
+.button__decrease-quantity {
   display: flex;
   justify-content: space-around;
   height: 2rem;
@@ -123,7 +123,7 @@
 
 .discount {
   font-weight: 900;
-  color: #40bfff;
+  color: black;
 }
 
 .price {
@@ -139,10 +139,10 @@
   color: #40bfff;
   text-decoration: none;
   line-height: 3.6rem;
-
 }
 
 .without-discount {
   font-weight: 900;
   text-decoration: none;
+  color: black;
 }
