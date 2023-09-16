@@ -40,7 +40,7 @@ export default class ProductListComponent {
       })
       .catch((error) => error);
 
-    localStorage.removeItem('pageNumber');
+    // localStorage.removeItem('pageNumber');
     if (!this._cardsData) {
       console.log(this._cardsData);
       const productServices: ProductServices = new ProductServices();

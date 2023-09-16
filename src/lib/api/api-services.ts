@@ -210,6 +210,11 @@ export default class ApiServices {
     if (localStorage.getItem('anonymousId')) {
       this._tokenCache = new ClientTokenCache();
       this.setApiClient(customerData.email, customerData.password, '');
+      await this._apiRoot
+        .me()
+        .get()
+        .execute()
+        .catch((error) => error);
     }
     const refreshToken: string | undefined = this.getTokenCache().get().refreshToken;
     if (refreshToken) localStorage.setItem('refreshToken', `${refreshToken}`);
@@ -238,7 +243,6 @@ export default class ApiServices {
 
     const isLogin: boolean = localStorage.getItem('isLogin') === 'true';
     if (!isLogin) {
-      console.log('HEARE');
       this.setApiClient('', '', anonymousId);
       localStorage.setItem('anonymousId', `${anonymousId}`);
     }
