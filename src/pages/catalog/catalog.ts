@@ -42,7 +42,8 @@ export default class Catalog extends ComponentView {
       text: 'Catalog',
     };
     const productListContainer: HTMLDivElement = createHTMLElement<HTMLDivElement>('div', ['product-list__container']);
-    productListContainer.append(this.filterForm.element, this.productList.element, this.pageNav.element);
+    productListContainer.append(this.pageNav.element);
+    productListContainer.prepend(this.filterForm.element);
 
     const titleElementBuilder: ElementBuilder = new ElementBuilder(titleParams);
 

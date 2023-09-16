@@ -81,9 +81,13 @@ export default class ProductServices {
     return searchResult;
   }
 
-  public async getProductsDataBySearch(queryArgs: QueryArgs): Promise<SearchResult> {
-    queryArgs.limit = 500;
-    queryArgs.offset = 0;
+  public async getProductsDataBySearch(
+    queryArgs: QueryArgs,
+    offset?: number,
+    limit: number | null = null
+  ): Promise<SearchResult> {
+    if (offset || offset === 0) queryArgs.offset = offset;
+    if (limit) queryArgs.limit = limit;
 
     const response: ClientResponse<ProductProjectionPagedSearchResponse> = await this.api
       .getProductsBySearch(queryArgs)

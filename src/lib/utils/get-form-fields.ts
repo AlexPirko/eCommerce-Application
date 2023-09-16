@@ -2,6 +2,7 @@ import { CustomerDraft } from '@commercetools/platform-sdk';
 import { FilterData, QueryArgs, SortData } from '@lib/types/filter-form-interface';
 import { getAttributeFilterData } from './attribute-filter-data';
 import { getFacetData } from './get-facet-data';
+import { PRODUCTS_PER_PAGE } from '@lib/constants/product-list-constants';
 
 export function getFormFieldsAsCustomerDraft(form: HTMLFormElement): CustomerDraft {
   const formData: FormData = new FormData(form);
@@ -61,6 +62,7 @@ export function getFormFieldsAsFilterData(form: HTMLFormElement, price: string[]
   const facetData: string[] = getFacetData(formData);
 
   const filterParams: QueryArgs = {
+    limit: PRODUCTS_PER_PAGE,
     fuzzy: true,
     filter: Object.values(filterData),
     sort: Object.values(sortData),

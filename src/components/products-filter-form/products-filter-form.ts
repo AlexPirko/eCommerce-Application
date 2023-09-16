@@ -10,24 +10,30 @@ import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
 import { getFormFieldsAsFilterData } from '@lib/utils/get-form-fields';
 import { CardParams } from '@lib/types/params-interface';
 import { QueryArgs, SearchResult } from '@lib/types/filter-form-interface';
-import ProductListComponent from '@components/product-list/product-list';
 import { FilterCheckboxComponent } from './filter-checkbox/filter-checkbox';
 import { FacetResults, TermFacetResult } from '@commercetools/platform-sdk';
 
 export default class ProductFilterForm {
-  private _element: HTMLFormElement;
-  private _productServices: ProductServices;
-  private _priceSlider: noUiSlider.target;
-  private _allProductData: CardParams[];
-  private _facets: FacetResults;
+  private static _instance: ProductFilterForm;
+  private _element!: HTMLFormElement;
+  private _productServices!: ProductServices;
+  private _priceSlider!: noUiSlider.target;
+  private _allProductData!: CardParams[];
+  private _facets!: FacetResults;
+  private _queryArgs!: QueryArgs;
 
   constructor() {
+    if (ProductFilterForm._instance) {
+      return ProductFilterForm._instance;
+    }
     this._element = createElementFromHtml<HTMLFormElement>(teamplate);
     this._productServices = new ProductServices();
     this._priceSlider = {} as noUiSlider.target;
     this._allProductData = [];
     this._facets = {} as FacetResults;
     this.setProductFilterForm();
+    this._queryArgs = {} as QueryArgs;
+    ProductFilterForm._instance = this;
   }
 
   private async setProductFilterForm(): Promise<void> {
@@ -41,25 +47,19 @@ export default class ProductFilterForm {
     this.setKindFilter();
     this.setResetButton();
     this.setSortingTypeSelect();
+    this._queryArgs = getFormFieldsAsFilterData(this._element, this._priceSlider.noUiSlider?.get() as string[]);
     this.setFormSubmitEventHandler();
     this.createMobileFilterBar();
   }
 
   private setFormSubmitEventHandler(): void {
     const backgroundElem: HTMLDivElement = document.querySelector('.background-element') as HTMLDivElement;
+    this.dispatchUpdateFormEvent();
     this._element.addEventListener('submit', async (e: SubmitEvent): Promise<void> => {
       e.preventDefault();
       const priceRange: string[] = this._priceSlider.noUiSlider?.get() as string[];
-      const queryArgs: QueryArgs = getFormFieldsAsFilterData(this._element, priceRange);
-      this._productServices
-        .getProductsDataBySearch(queryArgs)
-        .then((res: SearchResult): void => {
-          const productList: HTMLDivElement = this._element.nextElementSibling as HTMLDivElement;
-          productList.remove();
-          const newProductList: HTMLDivElement = new ProductListComponent(res.pageCardParams).element;
-          this._element.insertAdjacentElement('afterend', newProductList);
-        })
-        .catch((error: Error): Error => error);
+      this._queryArgs = getFormFieldsAsFilterData(this._element, priceRange);
+      this.dispatchUpdateFormEvent();
 
       if (window.innerWidth <= 600) {
         this._element.classList.remove('active');
@@ -69,10 +69,16 @@ export default class ProductFilterForm {
     });
   }
 
+  private dispatchUpdateFormEvent(): void {
+    const paginationNav: HTMLDivElement = document.querySelector('.catalog-nav') as HTMLDivElement;
+    const event = new Event('update-form');
+    paginationNav.dispatchEvent(event);
+  }
+
   private async createPriceSlider(): Promise<void> {
     const slider: noUiSlider.target = this._element.querySelector('.price-slider') as noUiSlider.target;
     noUiSlider.create(slider, {
-      start: [20000 / 100, this._allProductData[this._allProductData.length - 1].price / 100],
+      start: [13900 / 100, this._allProductData[this._allProductData.length - 1].price / 100],
       connect: true,
       step: 1,
       orientation: 'horizontal', // 'horizontal' or 'vertical'
@@ -188,5 +194,9 @@ export default class ProductFilterForm {
 
   public get element(): HTMLFormElement {
     return this._element;
+  }
+
+  public get filterData(): QueryArgs {
+    return this._queryArgs;
   }
 }
