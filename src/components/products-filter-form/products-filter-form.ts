@@ -54,7 +54,6 @@ export default class ProductFilterForm {
 
   private setFormSubmitEventHandler(): void {
     const backgroundElem: HTMLDivElement = document.querySelector('.background-element') as HTMLDivElement;
-    this.dispatchUpdateFormEvent();
     this._element.addEventListener('submit', async (e: SubmitEvent): Promise<void> => {
       e.preventDefault();
       const priceRange: string[] = this._priceSlider.noUiSlider?.get() as string[];

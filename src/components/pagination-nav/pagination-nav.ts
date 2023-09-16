@@ -34,41 +34,46 @@ export default class CatalogPaginationComponent {
 
   private async setElement(): Promise<void> {
     this.setUpdateFilterDataEventHandler();
+    await this.UpdateFilterDataEventHandler();
   }
 
   private setUpdateFilterDataEventHandler() {
     this._element.addEventListener('update-form', async (): Promise<void> => {
-      const filterData: QueryArgs = this._filterForm.filterData;
-      await this._productServices
-        .getProductsDataBySearch(filterData, FIRST_PAGE_NUMBER - 1)
-        .then((res: SearchResult): void => {
-          const productList: HTMLDivElement | null = document.querySelector('.product-list');
-          if (productList) productList.remove();
-          const newProductList: HTMLDivElement = new ProductListComponent(res.pageCardParams).element;
-          this._element.insertAdjacentElement('afterend', newProductList);
-
-          const pageNumberElement: HTMLButtonElement = this._element.querySelector(
-            '.catalog-nav__page-number'
-          ) as HTMLButtonElement;
-          pageNumberElement.innerHTML = FIRST_PAGE_NUMBER.toString();
-          localStorage.setItem('pageNumber', FIRST_PAGE_NUMBER.toString());
-
-          const prevButton: HTMLButtonElement | null = this._element.querySelector('.prev__button');
-          prevButton?.setAttribute('disabled', 'true');
-
-          const nextButton: HTMLButtonElement | null = this._element.querySelector('.next__button');
-          this._productServices
-            .getProductsDataBySearch(filterData, 0, MAX_LIMIT_COUNT)
-            .then((res: SearchResult): void => {
-              const productCount: number = res.pageCardParams.length;
-              if (productCount > this._cardsPerPage) {
-                nextButton?.removeAttribute('disabled');
-              } else {
-                nextButton?.setAttribute('disabled', 'true');
-              }
-            });
-        });
+      await this.UpdateFilterDataEventHandler();
     });
+  }
+
+  private async UpdateFilterDataEventHandler() {
+    const filterData: QueryArgs = this._filterForm.filterData;
+    this._productServices
+      .getProductsDataBySearch(filterData, FIRST_PAGE_NUMBER - 1, PRODUCTS_PER_PAGE)
+      .then((searchResult: SearchResult): void => {
+        const productList: HTMLDivElement | null = document.querySelector('.product-list');
+        if (productList) productList.remove();
+        const newProductList: HTMLDivElement = new ProductListComponent(searchResult.pageCardParams).element;
+        this._element.insertAdjacentElement('afterend', newProductList);
+
+        const pageNumberElement: HTMLButtonElement = this._element.querySelector(
+          '.catalog-nav__page-number'
+        ) as HTMLButtonElement;
+        pageNumberElement.innerHTML = FIRST_PAGE_NUMBER.toString();
+        localStorage.setItem('pageNumber', FIRST_PAGE_NUMBER.toString());
+
+        const prevButton: HTMLButtonElement | null = this._element.querySelector('.prev__button');
+        prevButton?.setAttribute('disabled', 'true');
+
+        const nextButton: HTMLButtonElement | null = this._element.querySelector('.next__button');
+        this._productServices
+          .getProductsDataBySearch(filterData, 0, MAX_LIMIT_COUNT)
+          .then((res: SearchResult): void => {
+            const productCount: number = res.pageCardParams.length;
+            if (productCount > this._cardsPerPage) {
+              nextButton?.removeAttribute('disabled');
+            } else {
+              nextButton?.setAttribute('disabled', 'true');
+            }
+          });
+      });
   }
 
   private addPrevButtonEventHandler(): void {
