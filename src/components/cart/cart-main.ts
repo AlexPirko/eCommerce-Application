@@ -54,10 +54,6 @@ export default class CartMain {
           this._cartData = null;
           return error;
         });
-      console.log('this._cartData:');
-      console.log(this._cartData);
-      console.log('this._cartProductData:');
-      console.log(this._cartProductData);
     }
   }
 
@@ -74,15 +70,13 @@ export default class CartMain {
     const cartItem: HTMLDivElement = this._element.querySelector('.cart__product-list') as HTMLDivElement;
     const subtotal: HTMLSpanElement = this._element.querySelector('.subtotal-info') as HTMLSpanElement;
     const cartCount: HTMLDivElement = document.querySelector('.cart-count') as HTMLDivElement;
-    const emptyCart: HTMLDivElement = document.querySelector('.empty-cart__info') as HTMLDivElement;
-    console.log(emptyCart);
     button.addEventListener('click', async (): Promise<void> => {
       const res: ClientResponse<Cart> = await this._api.getActiveCart().catch((error) => error);
       await this._api
         .deleteCart(res.body.id, res.body.version)
-        .then(() => (cartCount.innerHTML = '0'))
-        .then(() => (subtotal.innerHTML = ''))
-        .then(() => cartItem.remove())
+        .then((): string => (cartCount.innerHTML = '0'))
+        .then((): string => (subtotal.innerHTML = ''))
+        .then((): void => cartItem.remove())
         .catch((error) => error);
     });
   }
