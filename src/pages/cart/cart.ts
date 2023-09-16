@@ -17,19 +17,18 @@ export default class MainCart extends ComponentView {
     };
     super(params);
     this.getCartData();
-    this.configureView();
   }
 
   private async getCartData(): Promise<void> {
-    const mainFooterContainer: HTMLDivElement = createHTMLElement('div', ['empty-cart__info']);
-    mainFooterContainer.innerHTML = `Your shopping cart is empty! You can push <a href='http://${window.location.host}/catalog'>here</a> and buy your own dream:)))`;
-    this.viewElementBuilder.addInnerElement(mainFooterContainer);
+    const emptyCart: HTMLDivElement = createHTMLElement('div', ['empty-cart__info']);
+    emptyCart.innerHTML = `Your shopping cart is empty! You can push <a href='http://${window.location.host}/catalog'>here</a> and buy your own dream:)))`;
+    this.viewElementBuilder.addInnerElement(emptyCart);
     const api: ApiServices = new ApiServices();
     await api
       .getActiveCart()
       .then(async (res: ClientResponse<Cart>): Promise<void> => {
-        mainFooterContainer.remove();
         if (res.body.lineItems.length) {
+          emptyCart.remove();
           const cartMain: CartMain = new CartMain();
           this.viewElementBuilder.addInnerElement(cartMain.element);
         }
@@ -38,6 +37,4 @@ export default class MainCart extends ComponentView {
         return error;
       });
   }
-
-  private async configureView(): Promise<void> {}
 }

@@ -74,6 +74,8 @@ export default class CartMain {
     const cartItem: HTMLDivElement = this._element.querySelector('.cart__product-list') as HTMLDivElement;
     const subtotal: HTMLSpanElement = this._element.querySelector('.subtotal-info') as HTMLSpanElement;
     const cartCount: HTMLDivElement = document.querySelector('.cart-count') as HTMLDivElement;
+    const emptyCart: HTMLDivElement = document.querySelector('.empty-cart__info') as HTMLDivElement;
+    console.log(emptyCart);
     button.addEventListener('click', async (): Promise<void> => {
       const res: ClientResponse<Cart> = await this._api.getActiveCart().catch((error) => error);
       await this._api
