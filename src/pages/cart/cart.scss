@@ -1,3 +1,5 @@
+@import '../../assets/styles/constants';
+
 .cart-page {
   display: block;
   width: 100%;
@@ -5,4 +7,16 @@
 
 .cart-title {
   text-align: center;
+}
+
+.empty-cart__info {
+  padding: 3% 5%;
+  font-size: 2.6rem;
+  font-weight: 500;
+  line-height: 160%;
+  @include tablet {
+    height: 300px;
+    font-size: 2rem;
+    line-height: 130%;
+  }
 }

@@ -1,18 +1,42 @@
 <div class="cart-main">
-  <table class="cart__product-list">
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Unit Price</th>
-        <th>Quantity</th>
-        <th>Total Price</th>
-      </tr>
-    </thead>
-  </table>
-  <button class="button__get-cart btn waves-effect waves-light">
-    Get Cart
-  </button>
-  <button class="button__delete-cart btn waves-effect waves-light">
-    Delete Cart
-  </button>
+  <div class="cart__product-container">
+    <table class="cart__product-list">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Unit Price</th>
+          <th>Quantity</th>
+          <th>Total Price</th>
+        </tr>
+      </thead>
+    </table>
+    <div class="button__container-cart">
+      <button class="button__continue btn waves-effect waves-light">
+        Continue Shopping
+      </button>
+      <button class="button__delete-cart btn waves-effect waves-light">
+        Clear Shopping Cart
+      </button>
+    </div>
+  </div>
+  <div class="cart__info-container">
+    <h3 class="cart__info-title">Summary</h3>
+    <div class="promo-container">
+      <h5 class="cart-subtitle promo-title">Apply Promocode</h5>
+      <input class="promo-input" type="text" placeholder="Your promocode">
+    </div>
+    <div class="cart__info-subcontainer subtotal-container">
+      <h6 class="cart-subtitle subtotal-title">Subtotal:</h6>
+      <span class="cart__info-order subtotal-info"></span>
+    </div>
+    <div class="cart__info-subcontainer discount-container">
+      <h6 class="cart-subtitle discount-title">Discount:</h6>
+      <span class="cart__info-order discount-info"></span>
+    </div>
+    <div class="cart__info-subcontainer order-container">
+      <h4 class="order-title">Order Total:</h4>
+      <span class="cart__info-order order-info"></span>
+    </div>
+    <button class="button__buy-cart btn waves-effect waves-light">BUY</button>
+  </div>
 </div>

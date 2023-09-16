@@ -2,10 +2,12 @@ import './cart.scss';
 
 import { Params } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
-import ElementBuilder from '@lib/services/element-builder';
 import CartMain from '@components/cart/cart-main';
+import ApiServices from '@lib/api/api-services';
+import { ClientResponse, Cart } from '@commercetools/platform-sdk';
+import createHTMLElement from '@lib/utils/create-html-element';
 
-export default class Cart extends ComponentView {
+export default class MainCart extends ComponentView {
   constructor() {
     const params: Params = {
       tagName: 'section',
@@ -14,18 +16,25 @@ export default class Cart extends ComponentView {
       callback: null,
     };
     super(params);
-    this.configureView();
+    this.getCartData();
   }
 
-  private async configureView(): Promise<void> {
-    const titleParams: Params = {
-      tagName: 'h2',
-      classNames: ['cart-title'],
-      text: 'Cart',
-    };
-    const titleElementBuilder: ElementBuilder = new ElementBuilder(titleParams);
-    const cartMain: CartMain = new CartMain();
-    this.viewElementBuilder.addInnerElement(titleElementBuilder);
-    this.viewElementBuilder.addInnerElement(cartMain.element);
+  private async getCartData(): Promise<void> {
+    const emptyCart: HTMLDivElement = createHTMLElement('div', ['empty-cart__info']);
+    emptyCart.innerHTML = `Your shopping cart is empty! You can push <a href='http://${window.location.host}/catalog'>here</a> and buy your own dream:)))`;
+    this.viewElementBuilder.addInnerElement(emptyCart);
+    const api: ApiServices = new ApiServices();
+    await api
+      .getActiveCart()
+      .then(async (res: ClientResponse<Cart>): Promise<void> => {
+        if (res.body.lineItems.length) {
+          emptyCart.remove();
+          const cartMain: CartMain = new CartMain();
+          this.viewElementBuilder.addInnerElement(cartMain.element);
+        }
+      })
+      .catch((error) => {
+        return error;
+      });
   }
 }

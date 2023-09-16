@@ -23,13 +23,13 @@ export default class Router {
     this.setHashHandler();
 
     document.addEventListener('DOMContentLoaded', () => {
-      this.handler?.navigate('');
+      this.handler?.navigate(null);
     });
 
     Router._instance = this;
   }
 
-  public navigate(url: string): void {
+  public navigate(url: string | null): void {
     this.handler?.navigate(url);
   }
 

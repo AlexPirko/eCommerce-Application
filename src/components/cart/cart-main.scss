@@ -1,4 +1,6 @@
-.cart__product-list{
+@import '../../assets/styles/constants';
+
+.cart__product-list {
   width: 100%;
   & thead {
     background-color: #bec19e;
@@ -7,6 +9,77 @@
 
 .cart-main {
   display: flex;
+  justify-content: space-between;
+  padding: 2% 5%;
+  margin: 0 auto;
+  max-width: 1600px;
+  min-height: 400px;
+  @include desctop {
+    padding: 2%;
+  }
+  @include tablet {
+    flex-direction: column;
+  }
+}
+
+.cart__product-container {
+  display: flex;
+  justify-content: space-between;
   flex-direction: column;
-  padding: 3% 10%;
+  width: 100%;
+}
+
+.cart__info-container {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  padding: 1% 2%;
+  margin-left: 5%;
+  width: 30%;
+  background-color: #eceddf;
+  @include desctop {
+    margin-left: 1%;
+  }
+  @include tablet {
+    width: 96%;
+    padding: 5%;
+  }
+}
+
+.cart__info-title {
+  margin-top: -10px;
+  font-weight: 500;
+}
+
+.cart-subtitle {
+  font-weight: 600;
+}
+
+.cart__info-order {
+  font-weight: 700;
+  color: #40bfff;
+  font-size: 1.6rem;
+  line-height: 3rem;
+}
+
+.order-info {
+  font-weight: 900;
+  font-size: 2rem;
+  line-height: 3.6rem;
+}
+
+.cart__info-subcontainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-title {
+  text-align: start;
+}
+
+.button__container-cart {
+  @include tablet {
+    padding: 5% 0;
+  }
 }

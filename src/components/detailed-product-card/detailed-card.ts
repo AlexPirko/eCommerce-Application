@@ -203,7 +203,7 @@ export default class DetailedCard extends ComponentView {
     const delBtn: HTMLButtonElement = document.querySelector('.del-button') as HTMLButtonElement;
     const sku: string | undefined = this.params?.sku;
 
-    delBtn.disabled = true;
+    if (delBtn) delBtn.disabled = true;
     const api: ApiServices = new ApiServices();
     await api
       .getActiveCart()

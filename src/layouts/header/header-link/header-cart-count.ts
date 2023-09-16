@@ -7,7 +7,7 @@ export default async function changeCartCount() {
   await api
     .getActiveCart()
     .then((res: ClientResponse<Cart>) => {
-      const count = res.body.totalLineItemQuantity as number;
+      const count = res.body.lineItems.length as number;
       if (count === undefined) {
         cartCount.innerHTML = '0';
       } else {
