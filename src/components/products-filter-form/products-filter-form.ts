@@ -53,6 +53,7 @@ export default class ProductFilterForm {
   }
 
   private setFormSubmitEventHandler(): void {
+    this.dispatchUpdateFormEvent();
     const backgroundElem: HTMLDivElement = document.querySelector('.background-element') as HTMLDivElement;
     this._element.addEventListener('submit', async (e: SubmitEvent): Promise<void> => {
       e.preventDefault();

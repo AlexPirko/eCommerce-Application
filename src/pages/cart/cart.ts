@@ -20,20 +20,25 @@ export default class MainCart extends ComponentView {
   }
 
   private async getCartData(): Promise<void> {
-    const emptyCart: HTMLDivElement = createHTMLElement('div', ['empty-cart__info']);
-    emptyCart.innerHTML = `Your shopping cart is empty! You can push <a href='http://${window.location.host}/catalog'>here</a> and buy your own dream:)))`;
-    this.viewElementBuilder.addInnerElement(emptyCart);
     const api: ApiServices = new ApiServices();
     await api
       .getActiveCart()
       .then(async (res: ClientResponse<Cart>): Promise<void> => {
         if (res.body.lineItems.length) {
-          emptyCart.remove();
+          const emptyCart: HTMLDivElement | null = document.querySelector('.empty-cart__info');
+          if (emptyCart) emptyCart.remove();
           const cartMain: CartMain = new CartMain();
           this.viewElementBuilder.addInnerElement(cartMain.element);
+        } else {
+          const emptyCart: HTMLDivElement = createHTMLElement('div', ['empty-cart__info']);
+          emptyCart.innerHTML = `Your shopping cart is empty! You can push <a href='http://${window.location.host}/catalog'>here</a> and buy your own dream:)))`;
+          this.viewElementBuilder.addInnerElement(emptyCart);
         }
       })
       .catch((error) => {
+        const emptyCart: HTMLDivElement = createHTMLElement('div', ['empty-cart__info']);
+        emptyCart.innerHTML = `Your shopping cart is empty! You can push <a href='http://${window.location.host}/catalog'>here</a> and buy your own dream:)))`;
+        this.viewElementBuilder.addInnerElement(emptyCart);
         return error;
       });
   }
