@@ -6,6 +6,8 @@ import CartMain from '@components/cart/cart-main';
 import ApiServices from '@lib/api/api-services';
 import { ClientResponse, Cart } from '@commercetools/platform-sdk';
 import createHTMLElement from '@lib/utils/create-html-element';
+import Router from '@components/router/router';
+import { Paths } from '@components/router/paths';
 
 export default class MainCart extends ComponentView {
   constructor() {
@@ -20,8 +22,27 @@ export default class MainCart extends ComponentView {
   }
 
   private async getCartData(): Promise<void> {
+    const createEmptyCart = (): void => {
+      const emptyCart: HTMLDivElement = createHTMLElement('div', ['empty-cart__info']);
+      const button: HTMLButtonElement = createHTMLElement('button', [
+        'button__continue',
+        'btn',
+        'waves-effect',
+        'waves-light',
+      ]) as HTMLButtonElement;
+      const router: Router = new Router(null);
+
+      button.textContent = 'Continue Shopping';
+      button.addEventListener('click', (): void => {
+        router.navigate(`${Paths.CATALOG}`);
+      });
+      emptyCart.innerHTML = `<p>Your shopping cart is empty! You can turn to Catalog and buy your own dream:)))</p>`;
+      emptyCart.append(button);
+      this.viewElementBuilder.addInnerElement(emptyCart);
+    };
+
     const api: ApiServices = new ApiServices();
-    await api
+    api
       .getActiveCart()
       .then(async (res: ClientResponse<Cart>): Promise<void> => {
         if (res.body.lineItems.length) {
@@ -30,15 +51,11 @@ export default class MainCart extends ComponentView {
           const cartMain: CartMain = new CartMain();
           this.viewElementBuilder.addInnerElement(cartMain.element);
         } else {
-          const emptyCart: HTMLDivElement = createHTMLElement('div', ['empty-cart__info']);
-          emptyCart.innerHTML = `Your shopping cart is empty! You can push <a href='http://${window.location.host}/catalog'>here</a> and buy your own dream:)))`;
-          this.viewElementBuilder.addInnerElement(emptyCart);
+          createEmptyCart();
         }
       })
       .catch((error) => {
-        const emptyCart: HTMLDivElement = createHTMLElement('div', ['empty-cart__info']);
-        emptyCart.innerHTML = `Your shopping cart is empty! You can push <a href='http://${window.location.host}/catalog'>here</a> and buy your own dream:)))`;
-        this.viewElementBuilder.addInnerElement(emptyCart);
+        createEmptyCart();
         return error;
       });
   }

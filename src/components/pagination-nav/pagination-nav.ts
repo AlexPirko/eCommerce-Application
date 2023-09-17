@@ -40,7 +40,7 @@ export default class CatalogPaginationComponent {
     });
   }
 
-  private setUpdateFilterDataEventHandler() {
+  private setUpdateFilterDataEventHandler(): void {
     this._element.addEventListener('update-form', async (): Promise<void> => {
       await this.updateFilterDataEventHandler();
     });

@@ -38,10 +38,6 @@ export default class SetRouterHistory {
     this.cb(result);
   }
 
-  public disable(): void {
-    window.removeEventListener(this.event, this.handler as unknown as EventListenerOrEventListenerObject);
-  }
-
   public setHistory(url: string): void {
     window.history.pushState(null, '', `/${url}`);
   }
