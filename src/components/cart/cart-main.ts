@@ -2,6 +2,7 @@ import CartItem from '@components/cart/cart-item/cart-item';
 import template from './cart-main.html';
 import { promos } from '@lib/constants/promo';
 import './cart-main.scss';
+import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
 
 import { Cart, ClientResponse, DiscountCode, LineItem } from '@commercetools/platform-sdk';
 import ApiServices from '@lib/api/api-services';
@@ -36,12 +37,10 @@ export default class CartMain {
         const promoInput: Element | null = document.querySelector('.promo-input');
         promoBtn?.addEventListener('click', () => {
           const userPromo = (<HTMLInputElement>promoInput).value;
-          console.log(userPromo);
           if (
             promoInput !== null &&
             (userPromo === promos.PR1 || userPromo === promos.PR2 || userPromo === promos.PR3)
           ) {
-            console.log('click');
             (<HTMLButtonElement>promoBtn).disabled = true;
             const curCode: DiscountCode | undefined = result.find(
               (code: DiscountCode): boolean => code.code === userPromo
@@ -61,9 +60,13 @@ export default class CartMain {
                           },
                         ],
                       })
-                      .then(() => {
+                      .then((res) => {
                         (<HTMLInputElement>promoInput).value = '';
                         (<HTMLButtonElement>promoBtn).disabled = false;
+                        const totalPrices: NodeListOf<Element> = document.querySelectorAll('.cart-item__total-price');
+                        res.body.lineItems.forEach((item, index) => {
+                          totalPrices[index].innerHTML = changeCurrencyFormat(item.totalPrice.centAmount / 100);
+                        });
                       })
                       .catch((er) => console.log(er));
                   });
