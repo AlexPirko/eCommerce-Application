@@ -83,3 +83,14 @@
     padding: 5% 0;
   }
 }
+
+.promo-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+}
+
+.promo-btn {
+  flex-shrink: 0;
+}

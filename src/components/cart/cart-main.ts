@@ -1,8 +1,10 @@
 import CartItem from '@components/cart/cart-item/cart-item';
 import template from './cart-main.html';
+import { promos } from '@lib/constants/promo';
 import './cart-main.scss';
+import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
 
-import { Cart, ClientResponse, LineItem } from '@commercetools/platform-sdk';
+import { Cart, ClientResponse, DiscountCode, LineItem } from '@commercetools/platform-sdk';
 import ApiServices from '@lib/api/api-services';
 import { CardParams, CartData, CartItemParams } from '@lib/types/params-interface';
 import createElementFromHtml from '@lib/utils/create-element-from-html';
@@ -24,6 +26,60 @@ export default class CartMain {
     this.setCartList();
     this.setGetCartButtonEventHandler();
     this.setDeleteCartButtonEventHandler();
+    this.usePromo();
+  }
+
+  async usePromo(): Promise<void> {
+    this._api
+      .getDiscounts()
+      .then((result: DiscountCode[]): void => {
+        const promoBtn: Element | null = document.querySelector('.promo-btn');
+        const promoInput: Element | null = document.querySelector('.promo-input');
+        promoBtn?.addEventListener('click', (): void => {
+          const userPromo: string = (<HTMLInputElement>promoInput).value;
+          if (
+            promoInput !== null &&
+            (userPromo === promos.PR1 || userPromo === promos.PR2 || userPromo === promos.PR3)
+          ) {
+            (<HTMLButtonElement>promoBtn).disabled = true;
+            const curCode: DiscountCode | undefined = result.find(
+              (code: DiscountCode): boolean => code.code === userPromo
+            );
+            if (curCode !== undefined) {
+              this._api
+                .getDiscount(curCode.id)
+                .then(() => {
+                  this._api.getActiveCart().then((res: ClientResponse<Cart>): void => {
+                    this._api
+                      .updateCart(res.body.id, {
+                        version: res.body.version,
+                        actions: [
+                          {
+                            action: 'addDiscountCode',
+                            code: userPromo,
+                          },
+                        ],
+                      })
+                      .then((res: ClientResponse<Cart>) => {
+                        (<HTMLInputElement>promoInput).value = '';
+                        (<HTMLButtonElement>promoBtn).disabled = false;
+                        const totalPrices: NodeListOf<Element> = document.querySelectorAll('.cart-item__total-price');
+                        const orderInfo: Element | null = document.querySelector('.order-info');
+                        if (orderInfo !== null)
+                          orderInfo.innerHTML = changeCurrencyFormat(res.body.totalPrice.centAmount);
+                        res.body.lineItems.forEach((item, index) => {
+                          totalPrices[index].innerHTML = changeCurrencyFormat(item.totalPrice.centAmount / 100);
+                        });
+                      })
+                      .catch((er) => console.log(er));
+                  });
+                })
+                .catch((er) => console.log(er));
+            }
+          }
+        });
+      })
+      .catch((er) => console.log(er));
   }
 
   private async setCartList(): Promise<void> {
