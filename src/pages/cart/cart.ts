@@ -22,7 +22,7 @@ export default class MainCart extends ComponentView {
   }
 
   private async getCartData(): Promise<void> {
-    const createEmptyCart = (): void => {
+    const createEmptyCart: () => void = (): void => {
       const emptyCart: HTMLDivElement = createHTMLElement('div', ['empty-cart__info']);
       const button: HTMLButtonElement = createHTMLElement('button', [
         'button__continue',
