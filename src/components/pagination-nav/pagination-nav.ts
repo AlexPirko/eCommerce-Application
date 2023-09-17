@@ -34,16 +34,19 @@ export default class CatalogPaginationComponent {
 
   private async setElement(): Promise<void> {
     this.setUpdateFilterDataEventHandler();
-    await this.UpdateFilterDataEventHandler();
-  }
-
-  private setUpdateFilterDataEventHandler() {
-    this._element.addEventListener('update-form', async (): Promise<void> => {
-      await this.UpdateFilterDataEventHandler();
+    await this.updateFilterDataEventHandler().catch((error) => {
+      console.log(error);
+      return error;
     });
   }
 
-  private async UpdateFilterDataEventHandler() {
+  private setUpdateFilterDataEventHandler(): void {
+    this._element.addEventListener('update-form', async (): Promise<void> => {
+      await this.updateFilterDataEventHandler();
+    });
+  }
+
+  private async updateFilterDataEventHandler() {
     const filterData: QueryArgs = this._filterForm.filterData;
     this._productServices
       .getProductsDataBySearch(filterData, FIRST_PAGE_NUMBER - 1, PRODUCTS_PER_PAGE)
@@ -73,6 +76,10 @@ export default class CatalogPaginationComponent {
               nextButton?.setAttribute('disabled', 'true');
             }
           });
+      })
+      .catch((error) => {
+        console.log(error);
+        return error;
       });
   }
 

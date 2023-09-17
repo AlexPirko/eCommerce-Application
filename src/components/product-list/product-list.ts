@@ -42,7 +42,6 @@ export default class ProductListComponent {
 
     // localStorage.removeItem('pageNumber');
     if (!this._cardsData) {
-      console.log(this._cardsData);
       const productServices: ProductServices = new ProductServices();
       await productServices
         .getPageProductsData(this._cardsPerPage, this._pageNumber)
