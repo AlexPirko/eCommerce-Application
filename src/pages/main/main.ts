@@ -88,12 +88,12 @@ export default class Main extends ComponentView {
       </div>
       <div class="carousel-item white-text" href="#two!">
         <h2 class="main-slider_title">Promocode:</h2>
-        <h4 class="main-slider_subtitle">code-2 (7%) FOR CHINA'S CAMERAS</h4>
+        <h4 class="main-slider_subtitle">code-2 (7%) FOR CANON CAMERAS</h4>
         <img class="main-slider_image" src=${promo2}>
       </div>
       <div class="carousel-item white-text" href="#three!">
         <h2 class="main-slider_title">Promocode:</h2>
-        <h4 class="main-slider_subtitle">PR-3 (10%) FOR JAPAN'S CAMERAS</h4>
+        <h4 class="main-slider_subtitle">PR-3 (10%) FOR ROOKIE CAMERAS</h4>
         <img class="main-slider_image" src=${nikonPromo}>
       </div>
     </div>`;

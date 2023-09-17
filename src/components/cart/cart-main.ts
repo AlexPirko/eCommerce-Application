@@ -32,11 +32,11 @@ export default class CartMain {
   async usePromo(): Promise<void> {
     this._api
       .getDiscounts()
-      .then((result) => {
+      .then((result: DiscountCode[]): void => {
         const promoBtn: Element | null = document.querySelector('.promo-btn');
         const promoInput: Element | null = document.querySelector('.promo-input');
-        promoBtn?.addEventListener('click', () => {
-          const userPromo = (<HTMLInputElement>promoInput).value;
+        promoBtn?.addEventListener('click', (): void => {
+          const userPromo: string = (<HTMLInputElement>promoInput).value;
           if (
             promoInput !== null &&
             (userPromo === promos.PR1 || userPromo === promos.PR2 || userPromo === promos.PR3)
@@ -49,7 +49,7 @@ export default class CartMain {
               this._api
                 .getDiscount(curCode.id)
                 .then(() => {
-                  this._api.getActiveCart().then((res) => {
+                  this._api.getActiveCart().then((res: ClientResponse<Cart>): void => {
                     this._api
                       .updateCart(res.body.id, {
                         version: res.body.version,
@@ -60,10 +60,13 @@ export default class CartMain {
                           },
                         ],
                       })
-                      .then((res) => {
+                      .then((res: ClientResponse<Cart>) => {
                         (<HTMLInputElement>promoInput).value = '';
                         (<HTMLButtonElement>promoBtn).disabled = false;
                         const totalPrices: NodeListOf<Element> = document.querySelectorAll('.cart-item__total-price');
+                        const orderInfo: Element | null = document.querySelector('.order-info');
+                        if (orderInfo !== null)
+                          orderInfo.innerHTML = changeCurrencyFormat(res.body.totalPrice.centAmount);
                         res.body.lineItems.forEach((item, index) => {
                           totalPrices[index].innerHTML = changeCurrencyFormat(item.totalPrice.centAmount / 100);
                         });
