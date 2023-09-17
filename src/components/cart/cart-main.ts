@@ -35,32 +35,40 @@ export default class CartMain {
         const promoBtn: Element | null = document.querySelector('.promo-btn');
         const promoInput: Element | null = document.querySelector('.promo-input');
         promoBtn?.addEventListener('click', () => {
-          if (promoInput !== null) {
-            const userPromo = (<HTMLInputElement>promoInput).value;
-            if (userPromo === promos.PR1 || userPromo === promos.PR2 || userPromo === promos.PR3) {
-              const curCode: DiscountCode | undefined = result.find(
-                (code: DiscountCode): boolean => code.code === userPromo
-              );
-              if (curCode !== undefined) {
-                this._api.getDiscount(curCode.id).then((r) => {
-                  console.log('g');
-                  console.log(r);
-
+          const userPromo = (<HTMLInputElement>promoInput).value;
+          console.log(userPromo);
+          if (
+            promoInput !== null &&
+            (userPromo === promos.PR1 || userPromo === promos.PR2 || userPromo === promos.PR3)
+          ) {
+            console.log('click');
+            (<HTMLButtonElement>promoBtn).disabled = true;
+            const curCode: DiscountCode | undefined = result.find(
+              (code: DiscountCode): boolean => code.code === userPromo
+            );
+            if (curCode !== undefined) {
+              this._api
+                .getDiscount(curCode.id)
+                .then(() => {
                   this._api.getActiveCart().then((res) => {
-                    console.log('final');
-                    console.log(res);
-                    this._api.updateCart(res.body.id, {
-                      version: res.body.version,
-                      actions: [
-                        {
-                          action: 'addDiscountCode',
-                          code: userPromo,
-                        },
-                      ],
-                    });
+                    this._api
+                      .updateCart(res.body.id, {
+                        version: res.body.version,
+                        actions: [
+                          {
+                            action: 'addDiscountCode',
+                            code: userPromo,
+                          },
+                        ],
+                      })
+                      .then(() => {
+                        (<HTMLInputElement>promoInput).value = '';
+                        (<HTMLButtonElement>promoBtn).disabled = false;
+                      })
+                      .catch((er) => console.log(er));
                   });
-                });
-              }
+                })
+                .catch((er) => console.log(er));
             }
           }
         });
