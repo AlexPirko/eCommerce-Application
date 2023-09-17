@@ -16,6 +16,10 @@ export default class SignUp extends ComponentView {
   }
 
   private configureView(): void {
+    const title = document.createElement('h1');
+    title.innerHTML = 'TEXT';
+    this.viewElementBuilder.addInnerElement(title);
+    console.log(title);
     this.viewElementBuilder.addInnerElement(
       new RegisterForm({
         titleText: 'Register',
