@@ -70,9 +70,9 @@ export default class ProductFilterForm {
   }
 
   private dispatchUpdateFormEvent(): void {
-    const paginationNav: HTMLDivElement = document.querySelector('.catalog-nav') as HTMLDivElement;
+    const paginationNav: HTMLDivElement | null = document.querySelector('.catalog-nav');
     const event: Event = new Event('update-form');
-    paginationNav.dispatchEvent(event);
+    if (paginationNav) paginationNav.dispatchEvent(event);
   }
 
   private async createPriceSlider(): Promise<void> {
