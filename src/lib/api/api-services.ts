@@ -18,6 +18,8 @@ import {
   MyCartDraft,
   Cart,
   MyCartUpdate,
+  DiscountCodePagedQueryResponse,
+  DiscountCode,
 } from '@commercetools/platform-sdk';
 import CtpClientBuilder from './api-client-builder';
 import { ctpParams } from './client-credentials';
@@ -297,6 +299,32 @@ export default class ApiServices {
           version: version,
         },
       })
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+    return response;
+  }
+
+  public async getDiscounts(): Promise<DiscountCode[]> {
+    const response: ClientResponse<DiscountCodePagedQueryResponse> = await this._apiRoot
+      .discountCodes()
+      .get()
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+    const {
+      body: { results },
+    } = response;
+    return results;
+  }
+
+  public async getDiscount(id: string): Promise<ClientResponse<DiscountCode>> {
+    const response: ClientResponse<DiscountCode> = await this._apiRoot
+      .discountCodes()
+      .withId({ ID: id })
+      .get()
       .execute()
       .catch((error) => {
         throw error;

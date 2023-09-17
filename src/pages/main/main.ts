@@ -83,17 +83,17 @@ export default class Main extends ComponentView {
     return `<div class="carousel carousel-slider center">
       <div class="carousel-item white-text" href="#one!">
         <h2 class="main-slider_title">Promocode:</h2>
-        <h4 class="main-slider_subtitle">PR-1 (5%)</h4>
+        <h4 class="main-slider_subtitle">PR-1 (5%) FOR INSTANT CATEGORY CAMERAS</h4>
         <img class="main-slider_image" src=${promo}>
       </div>
       <div class="carousel-item white-text" href="#two!">
         <h2 class="main-slider_title">Promocode:</h2>
-        <h4 class="main-slider_subtitle">PR-2 (7%)</h4>
+        <h4 class="main-slider_subtitle">code-2 (7%) FOR CHINA'S CAMERAS</h4>
         <img class="main-slider_image" src=${promo2}>
       </div>
       <div class="carousel-item white-text" href="#three!">
         <h2 class="main-slider_title">Promocode:</h2>
-        <h4 class="main-slider_subtitle">PR-3 (10%)</h4>
+        <h4 class="main-slider_subtitle">PR-3 (10%) FOR JAPAN'S CAMERAS</h4>
         <img class="main-slider_image" src=${nikonPromo}>
       </div>
     </div>`;
