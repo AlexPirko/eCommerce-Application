@@ -162,6 +162,7 @@ export default class CartItem {
             .then((): void => {
               this._element.remove();
             })
+            .then(() => this.addTotalOrder())
             .then(() => changeCartCount())
             .catch((error) => error);
         })
