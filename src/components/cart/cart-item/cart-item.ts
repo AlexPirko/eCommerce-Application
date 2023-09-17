@@ -78,7 +78,7 @@ export default class CartItem {
       api
         .getActiveCart()
         .then(async (res: ClientResponse<Cart>): Promise<void> => {
-          await api
+          api
             .updateCart(res.body.id, { version: res.body.version, actions: [{ action: 'addLineItem', sku: sku }] })
             .then((resUpdate: ClientResponse<Cart>): void => {
               quantity.innerHTML = String(parseInt(quantity.innerHTML) + 1);
@@ -117,7 +117,7 @@ export default class CartItem {
           const { lineItemId } = res.body.lineItems
             .map((item: LineItem): CartItemParams => getCartResponseAsCardData(item))
             .filter((cartProductData: CartItemParams): boolean => cartProductData.sku === sku)[0];
-          await api
+          api
             .updateCart(res.body.id, {
               version: res.body.version,
               actions: [{ action: 'removeLineItem', lineItemId: lineItemId, quantity: 1 }],
@@ -154,7 +154,7 @@ export default class CartItem {
           const { lineItemId, quantity } = res.body.lineItems
             .map((item: LineItem): CartItemParams => getCartResponseAsCardData(item))
             .filter((cartProductData: CartItemParams): boolean => cartProductData.sku === sku)[0];
-          await api
+          api
             .updateCart(res.body.id, {
               version: res.body.version,
               actions: [{ action: 'removeLineItem', lineItemId: lineItemId, quantity: quantity }],
@@ -175,7 +175,7 @@ export default class CartItem {
   private async addTotalOrder(): Promise<void> {
     const subtotal: HTMLSpanElement = document.querySelector('.subtotal-info') as HTMLSpanElement;
     const api: ApiServices = new ApiServices();
-    await api
+    api
       .getActiveCart()
       .then((res: ClientResponse<Cart>) => {
         const subtotalPrice: string = changeCurrencyFormat(res.body.totalPrice.centAmount / 100);

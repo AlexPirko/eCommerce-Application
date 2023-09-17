@@ -8,6 +8,7 @@ import ProductListComponent from '@components/product-list/product-list';
 import CatalogPaginationComponent from '@components/pagination-nav/pagination-nav';
 import DetailedCard from '@components/detailed-product-card/detailed-card';
 import createHTMLElement from '@lib/utils/create-html-element';
+import { FIRST_PAGE_NUMBER } from '@lib/constants/product-list-constants';
 
 export default class Catalog extends ComponentView {
   private filterForm: ProductFilterForm;
@@ -25,7 +26,7 @@ export default class Catalog extends ComponentView {
 
     this.productList = new ProductListComponent();
     this.filterForm = new ProductFilterForm();
-    this.pageNav = new CatalogPaginationComponent(1);
+    this.pageNav = new CatalogPaginationComponent(FIRST_PAGE_NUMBER);
 
     if (key) {
       const detailedCard: DetailedCard = new DetailedCard(key);
@@ -42,8 +43,7 @@ export default class Catalog extends ComponentView {
       text: 'Catalog',
     };
     const productListContainer: HTMLDivElement = createHTMLElement<HTMLDivElement>('div', ['product-list__container']);
-    productListContainer.append(this.pageNav.element);
-    productListContainer.prepend(this.filterForm.element);
+    productListContainer.append(this.filterForm.element, this.pageNav.element);
 
     const titleElementBuilder: ElementBuilder = new ElementBuilder(titleParams);
 

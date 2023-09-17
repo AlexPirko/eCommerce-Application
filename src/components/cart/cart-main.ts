@@ -28,7 +28,7 @@ export default class CartMain {
 
   private async setCartList(): Promise<void> {
     if (this._cartProductData.length === 0) {
-      await this._api
+      this._api
         .getActiveCart()
         .then(async (res: ClientResponse<Cart>): Promise<void> => {
           this._cartProductData = res.body.lineItems.map(
@@ -72,11 +72,13 @@ export default class CartMain {
     const cartCount: HTMLDivElement = document.querySelector('.cart-count') as HTMLDivElement;
     button.addEventListener('click', async (): Promise<void> => {
       const res: ClientResponse<Cart> = await this._api.getActiveCart().catch((error) => error);
-      await this._api
+      this._api
         .deleteCart(res.body.id, res.body.version)
-        .then((): string => (cartCount.innerHTML = '0'))
-        .then((): string => (subtotal.innerHTML = ''))
-        .then((): void => cartItem.remove())
+        .then((): void => {
+          cartCount.innerHTML = '0';
+          subtotal.innerHTML = '';
+          cartItem.remove();
+        })
         .catch((error) => error);
     });
   }

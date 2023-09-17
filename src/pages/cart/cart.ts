@@ -22,35 +22,40 @@ export default class MainCart extends ComponentView {
   }
 
   private async getCartData(): Promise<void> {
-    const emptyCart: HTMLDivElement = createHTMLElement('div', ['empty-cart__info']);
-    const button: HTMLButtonElement = createHTMLElement('button', [
-      'button__continue',
-      'btn',
-      'waves-effect',
-      'waves-light',
-    ]) as HTMLButtonElement;
-    const router: Router = new Router(null);
+    const createEmptyCart: () => void = (): void => {
+      const emptyCart: HTMLDivElement = createHTMLElement('div', ['empty-cart__info']);
+      const button: HTMLButtonElement = createHTMLElement('button', [
+        'button__continue',
+        'btn',
+        'waves-effect',
+        'waves-light',
+      ]) as HTMLButtonElement;
+      const router: Router = new Router(null);
 
-    button.textContent = 'Continue Shopping';
-    button.addEventListener('click', (): void => {
-      router.navigate(`${Paths.CATALOG}`);
-    });
-    emptyCart.innerHTML = `<p>Your shopping cart is empty! You can turn to Catalog and buy your own dream:)))</p>
-    `;
-    emptyCart.append(button);
+      button.textContent = 'Continue Shopping';
+      button.addEventListener('click', (): void => {
+        router.navigate(`${Paths.CATALOG}`);
+      });
+      emptyCart.innerHTML = `<p>Your shopping cart is empty! You can turn to Catalog and buy your own dream:)))</p>`;
+      emptyCart.append(button);
+      this.viewElementBuilder.addInnerElement(emptyCart);
+    };
 
-    this.viewElementBuilder.addInnerElement(emptyCart);
     const api: ApiServices = new ApiServices();
-    await api
+    api
       .getActiveCart()
       .then(async (res: ClientResponse<Cart>): Promise<void> => {
         if (res.body.lineItems.length) {
-          emptyCart.remove();
+          const emptyCart: HTMLDivElement | null = document.querySelector('.empty-cart__info');
+          if (emptyCart) emptyCart.remove();
           const cartMain: CartMain = new CartMain();
           this.viewElementBuilder.addInnerElement(cartMain.element);
+        } else {
+          createEmptyCart();
         }
       })
       .catch((error) => {
+        createEmptyCart();
         return error;
       });
   }

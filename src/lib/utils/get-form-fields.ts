@@ -63,6 +63,7 @@ export function getFormFieldsAsFilterData(form: HTMLFormElement, price: string[]
 
   const filterParams: QueryArgs = {
     limit: PRODUCTS_PER_PAGE,
+    offset: 0,
     fuzzy: true,
     filter: Object.values(filterData),
     sort: Object.values(sortData),
