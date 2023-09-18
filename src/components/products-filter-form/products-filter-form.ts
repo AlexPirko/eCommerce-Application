@@ -49,7 +49,6 @@ export default class ProductFilterForm {
     this.setSortingTypeSelect();
     this._queryArgs = getFormFieldsAsFilterData(this._element, this._priceSlider?.noUiSlider?.get() as string[]);
     this.setFormSubmitEventHandler();
-    this.createMobileFilterBar();
   }
 
   private setFormSubmitEventHandler(): void {
@@ -174,7 +173,6 @@ export default class ProductFilterForm {
     const filterBtn: NodeListOf<HTMLButtonElement> | null = document.querySelectorAll('.button__filter');
     const productList: HTMLDivElement = document.querySelector('.product-list') as HTMLDivElement;
     const backgroundElem: HTMLDivElement = document.querySelector('.background-element') as HTMLDivElement;
-
     filterBtn.forEach((btn: HTMLButtonElement): void =>
       btn.addEventListener('click', (): void => {
         productList.style.display = 'none';

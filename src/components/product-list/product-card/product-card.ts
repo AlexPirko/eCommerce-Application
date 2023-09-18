@@ -84,13 +84,13 @@ export default class ProductCard {
       api
         .getActiveCart()
         .then(async (res): Promise<void> => {
-          await api
+          api
             .updateCart(res.body.id, { version: res.body.version, actions: [{ action: 'addLineItem', sku: sku }] })
             .then(() => changeCartCount())
             .catch((error) => error);
         })
         .catch(async (error) => {
-          await api
+          api
             .createCart({ currency: 'USD', lineItems: [{ sku: sku }] })
             .then(() => changeCartCount())
             .catch((error) => error);
