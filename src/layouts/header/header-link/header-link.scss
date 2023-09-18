@@ -37,6 +37,7 @@ nav i.menu-cart {
 .nav-login,
 .nav-logout {
   display: block;
+  z-index: 50;
 }
 
 .cart-container {
