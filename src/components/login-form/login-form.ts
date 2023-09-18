@@ -8,6 +8,7 @@ import createHTMLElement from '@lib/utils/create-html-element';
 import ApiServices from '@lib/api/api-services';
 import Router from '@components/router/router';
 import { Paths } from '@components/router/paths';
+import changeCartCount from '@layouts/header/header-link/header-cart-count';
 
 export class LoginForm {
   protected form: HTMLFormElement;
@@ -102,6 +103,7 @@ export class LoginForm {
 
   public setFormSubmitEventHandler() {
     this.form.addEventListener('submit', async (ev: SubmitEvent): Promise<void> => {
+      setTimeout(changeCartCount, 1000);
       ev.preventDefault();
       this.submitForm(this.form);
     });
@@ -121,6 +123,7 @@ export class LoginForm {
         api
           .customerLogin({ email, password })
           .then(() => {
+            localStorage.removeItem('anonymousId');
             this.onSubmit();
             handleVisibility();
             router.navigate(`${Paths.MAIN}`);
@@ -134,7 +137,6 @@ export class LoginForm {
   }
 
   protected registerLink(redirectText: string): HTMLParagraphElement {
-    console.log(redirectText);
     const text: HTMLParagraphElement = document.createElement('p');
     text.textContent = this.linkText;
     const link: HTMLAnchorElement = document.createElement('a');

@@ -1,5 +1,9 @@
 @import '../../assets/styles/constants';
 
+// .page-container {
+//   margin-bottom: 15%;
+// }
+
 .catalog-title {
   display: block;
   width: 100%;
@@ -22,5 +26,7 @@
 
   @include tablet {
     grid-template-columns: 5% 90%;
+    gap: 5px;
+    justify-items: start;
   }
 }

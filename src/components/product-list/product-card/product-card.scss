@@ -3,6 +3,17 @@
 .card {
   display: flex;
   width: 100%;
+  &:hover {
+    box-shadow:
+      0 7px 7px 0 rgba(30, 61, 93, 0.398),
+      0 7px 5px -2px rgba(0, 0, 0, 0.12),
+      0 5px 10px 0 rgba(0, 0, 0, 0.2);
+    transform: scale(1.01);
+  }
+  @include tablet {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .card-image {
@@ -10,13 +21,9 @@
   margin-bottom: 3%;
   width: 40%;
   box-sizing: border-box;
-  & img {
-    height: 170px;
-    width: auto !important;
-    margin: 0 auto;
-    @include laptop {
-      height: 100px;
-    }
+  cursor: default !important;
+  @include tablet {
+    padding-top: 10px;
   }
 }
 
@@ -26,6 +33,9 @@
   row-gap: 1.8rem;
   padding: 1rem !important;
   width: 60%;
+  @include tablet {
+    width: 84%;
+  }
 }
 
 .card__product-name {
@@ -61,6 +71,7 @@
   padding: 2%;
   align-items: center;
   color: #33a0ff;
+  cursor: pointer;
   @include tablet {
     width: 4rem;
   }
@@ -69,6 +80,18 @@
     text-align: center;
     @include tablet {
       display: none;
+    }
+  }
+
+  &:disabled {
+    color: grey;
+
+    &:hover {
+      cursor: default;
+    }
+
+    & .cart-icon {
+      fill: rgba(179, 177, 177, 0.9) !important;
     }
   }
 }
@@ -87,6 +110,7 @@
 
 .button__detailed {
   padding: 0 1rem;
+  cursor: pointer;
 }
 
 .discount {

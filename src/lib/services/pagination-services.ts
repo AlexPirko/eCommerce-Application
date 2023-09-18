@@ -1,4 +1,5 @@
-import ProductCard from '@components/product-list/product-card/product-card';
+import ProductListComponent from '@components/product-list/product-list';
+import ProductFilterForm from '@components/products-filter-form/products-filter-form';
 import { FIRST_PAGE_NUMBER, PRODUCTS_PER_PAGE, SECOND_PAGE_NUMBER } from '@lib/constants/product-list-constants';
 import { CardParams } from '@lib/types/params-interface';
 
@@ -8,14 +9,10 @@ export async function preventMultipleClickService(target: HTMLButtonElement): Pr
 
 export async function updateViewService(pageProducts: CardParams[]): Promise<void> {
   const productList: HTMLDivElement | null = document.querySelector('.product-list ');
-
-  const currentProductList: NodeListOf<HTMLDivElement> = document.querySelectorAll('.card');
-  currentProductList.forEach((card) => card.remove());
-
-  pageProducts.forEach((cardData) => {
-    const productCardComponent: ProductCard = new ProductCard(cardData);
-    productList?.append(productCardComponent.element);
-  });
+  const filterForm: HTMLFormElement = new ProductFilterForm().element;
+  if (productList) productList.remove();
+  const newProductList: HTMLDivElement = new ProductListComponent(pageProducts).element;
+  filterForm.insertAdjacentElement('afterend', newProductList);
 }
 
 export function nextButtonHandlerService(
@@ -28,7 +25,6 @@ export function nextButtonHandlerService(
 
   const pageCount: number = Math.ceil(allProductsCount / PRODUCTS_PER_PAGE);
   const currentPageNumber: number = +pageNumberElement.innerHTML;
-
   if (currentPageNumber === pageCount - 1) {
     pageNumberElement.innerHTML = pageCount.toString();
     nextButton.setAttribute('disabled', 'true');

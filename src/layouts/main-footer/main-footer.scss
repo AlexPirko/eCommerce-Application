@@ -2,6 +2,10 @@
 
 .main-footer {
   background-color: $color-six;
+  margin-top: 10rem;
+  @include tablet {
+    margin-top: 20px;
+  }
 }
 
 .container {

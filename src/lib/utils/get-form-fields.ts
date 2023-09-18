@@ -1,6 +1,8 @@
 import { CustomerDraft } from '@commercetools/platform-sdk';
-import { FilterData, QueryArgs, SortData } from '@lib/types/query-args-interface';
+import { FilterData, QueryArgs, SortData } from '@lib/types/filter-form-interface';
 import { getAttributeFilterData } from './attribute-filter-data';
+import { getFacetData } from './get-facet-data';
+import { PRODUCTS_PER_PAGE } from '@lib/constants/product-list-constants';
 
 export function getFormFieldsAsCustomerDraft(form: HTMLFormElement): CustomerDraft {
   const formData: FormData = new FormData(form);
@@ -33,14 +35,8 @@ export function getFormFieldsAsCustomerDraft(form: HTMLFormElement): CustomerDra
 }
 
 export function getFormFieldsAsFilterData(form: HTMLFormElement, price: string[]): QueryArgs {
-  // const queryArgs: {} = {
-  //   'text.en-US':'name: "Canon"',
-  //   facet: 'variants.price.centAmount:45900',
-  // }
   const formData: FormData = new FormData(form);
-  for (const key of formData.keys()) {
-    console.log(key);
-  }
+
   const filterData: FilterData = {
     price: `variants.price.centAmount:range (${Number(price[0]) * 100} to ${Number(price[1]) * 100})`,
     brands: getAttributeFilterData(formData, 'brand'),
@@ -55,9 +51,30 @@ export function getFormFieldsAsFilterData(form: HTMLFormElement, price: string[]
     sortData.price = `price ${formData.get('sort-type')}`;
   }
 
+  const searchString: string = `${formData.get('search')}`;
+  // let fuzzyLevel = 0;
+  // if (searchString.length > 2 && searchString.length < 5) {
+  //   fuzzyLevel = 1;
+  // } else if(searchString.length > 5) {
+  //   fuzzyLevel = 2;
+  // }
+
+  const facetData: string[] = getFacetData(formData);
+
   const filterParams: QueryArgs = {
+    limit: PRODUCTS_PER_PAGE,
+    offset: 0,
+    fuzzy: true,
     filter: Object.values(filterData),
     sort: Object.values(sortData),
+    'filter.facets': Object.values(filterData),
+    facet: facetData,
+    fuzzyLevel: 0,
   };
+
+  if (searchString) {
+    filterParams['text.en-US'] = searchString;
+  }
+
   return filterParams;
 }

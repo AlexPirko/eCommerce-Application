@@ -12,9 +12,9 @@
 }
 
 .burger__wrapper {
-  position: fixed;
-  top: 3%;
-  right: 16%;
+  position: relative;
+  top: -40px;
+  left: 80%;
   cursor: pointer;
   z-index: 30;
   transition: all 1.2s;

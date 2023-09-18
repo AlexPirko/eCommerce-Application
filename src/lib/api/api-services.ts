@@ -10,16 +10,22 @@ import {
   MyCustomerSignin,
   ProductPagedQueryResponse,
   ProductProjection,
-  ProductProjectionPagedQueryResponse,
   createApiBuilderFromCtpClient,
   MyCustomerUpdate,
   CustomerChangePassword,
   SuggestionResult,
+  ProductProjectionPagedSearchResponse,
+  MyCartDraft,
+  Cart,
+  MyCartUpdate,
+  DiscountCodePagedQueryResponse,
+  DiscountCode,
 } from '@commercetools/platform-sdk';
 import CtpClientBuilder from './api-client-builder';
 import { ctpParams } from './client-credentials';
 import ClientTokenCache from './token-cache';
-import { QueryArgs } from '@lib/types/query-args-interface';
+import { QueryArgs } from '@lib/types/filter-form-interface';
+import { generateAnonymousId } from '@lib/utils/create-random-id';
 
 export default class ApiServices {
   private static _instance: ApiServices;
@@ -32,16 +38,20 @@ export default class ApiServices {
       return ApiServices._instance;
     }
     this._tokenCache = new ClientTokenCache();
-    this._ctpClient = new CtpClientBuilder().createCtpClient('', '', this._tokenCache);
+    this._ctpClient = new CtpClientBuilder().createCtpClient('', '', '', this._tokenCache);
     this._apiRoot = createApiBuilderFromCtpClient(this._ctpClient).withProjectKey({
       projectKey: ctpParams.CTP_PROJECT_KEY,
     });
     ApiServices._instance = this;
   }
 
-  public setApiClient(email: string | null = null, password: string | null = null): ApiServices {
+  public setApiClient(
+    email: string | null = null,
+    password: string | null = null,
+    anonymousId: string | null
+  ): ApiServices {
     const ctpClientBuilder: CtpClientBuilder = new CtpClientBuilder();
-    this._ctpClient = ctpClientBuilder.createCtpClient(email, password, this._tokenCache);
+    this._ctpClient = ctpClientBuilder.createCtpClient(email, password, anonymousId, this._tokenCache);
     this._apiRoot = createApiBuilderFromCtpClient(this._ctpClient).withProjectKey({
       projectKey: ctpParams.CTP_PROJECT_KEY,
     });
@@ -109,7 +119,9 @@ export default class ApiServices {
       });
   }
 
-  public async getProductsBySearch(queryArgs: QueryArgs): Promise<ClientResponse<ProductProjectionPagedQueryResponse>> {
+  public async getProductsBySearch(
+    queryArgs: QueryArgs
+  ): Promise<ClientResponse<ProductProjectionPagedSearchResponse>> {
     return this._apiRoot
       .productProjections()
       .search()
@@ -178,33 +190,145 @@ export default class ApiServices {
   }
 
   public async customerLogin(customerData: MyCustomerSignin): Promise<ClientResponse<CustomerSignInResult>> {
-    this._tokenCache = new ClientTokenCache();
-    this.setApiClient(customerData.email, customerData.password);
+    const myCustomerData: MyCustomerSignin = {
+      email: customerData.email,
+      password: customerData.password,
+      activeCartSignInMode: 'MergeWithExistingCustomerCart',
+    };
+    if (!localStorage.getItem('anonymousId')) {
+      this._tokenCache = new ClientTokenCache();
+      this.setApiClient(customerData.email, customerData.password, '');
+    }
+
     const response: ClientResponse<CustomerSignInResult> = await this._apiRoot
       .me()
       .login()
-      .post({ body: customerData })
+      .post({ body: myCustomerData })
       .execute()
       .catch((error) => {
         throw error;
       });
+
+    if (localStorage.getItem('anonymousId')) {
+      this._tokenCache = new ClientTokenCache();
+      this.setApiClient(customerData.email, customerData.password, '');
+      await this._apiRoot
+        .me()
+        .get()
+        .execute()
+        .catch((error) => error);
+    }
     const refreshToken: string | undefined = this.getTokenCache().get().refreshToken;
     if (refreshToken) localStorage.setItem('refreshToken', `${refreshToken}`);
     return response;
   }
 
-  public async changePassword(passwordData: CustomerChangePassword): Promise<Customer> {
-    const response: Response = await fetch(`${ctpParams.CTP_API_URL}/ecommerce-app/customers/password`, {
-      method: 'POST',
-      body: JSON.stringify(passwordData),
-      headers: {
-        Authorization: `Bearer ${this._tokenCache.get().token}`,
-        ContentType: 'application/json',
-      },
-    });
-    if (response.status === 400) {
-      throw new Error();
+  public customerLogout(): void {
+    this._tokenCache = new ClientTokenCache();
+    this.setApiClient('', '', '');
+  }
+
+  public async changePassword(passwordData: CustomerChangePassword) {
+    return this._apiRoot
+      .me()
+      .password()
+      .post({
+        body: passwordData,
+      })
+      .execute()
+      .catch((er) => er);
+  }
+
+  public async createCart(cartData: MyCartDraft): Promise<ClientResponse<Cart>> {
+    const anonymousId: string = generateAnonymousId();
+    this._tokenCache = new ClientTokenCache();
+
+    const isLogin: boolean = localStorage.getItem('isLogin') === 'true';
+    if (!isLogin) {
+      this.setApiClient('', '', anonymousId);
+      localStorage.setItem('anonymousId', `${anonymousId}`);
     }
-    return response.json();
+
+    const response: ClientResponse<Cart> = await this._apiRoot
+      .me()
+      .carts()
+      .post({ body: cartData })
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+
+    const refreshToken: string | undefined = this.getTokenCache().get().refreshToken;
+    if (refreshToken) localStorage.setItem('refreshToken', `${refreshToken}`);
+
+    return response;
+  }
+
+  public async updateCart(id: string, updateCartData: MyCartUpdate): Promise<ClientResponse<Cart>> {
+    const response: ClientResponse<Cart> = await this._apiRoot
+      .me()
+      .carts()
+      .withId({ ID: id })
+      .post({ body: updateCartData })
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+    return response;
+  }
+
+  public async getActiveCart(): Promise<ClientResponse<Cart>> {
+    const response: ClientResponse<Cart> = await this._apiRoot
+      .me()
+      .activeCart()
+      .get()
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+    return response;
+  }
+
+  public async deleteCart(id: string, version: number): Promise<ClientResponse<Cart>> {
+    const response: ClientResponse<Cart> = await this._apiRoot
+      .me()
+      .carts()
+      .withId({ ID: id })
+      .delete({
+        queryArgs: {
+          version: version,
+        },
+      })
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+    return response;
+  }
+
+  public async getDiscounts(): Promise<DiscountCode[]> {
+    const response: ClientResponse<DiscountCodePagedQueryResponse> = await this._apiRoot
+      .discountCodes()
+      .get()
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+    const {
+      body: { results },
+    } = response;
+    return results;
+  }
+
+  public async getDiscount(id: string): Promise<ClientResponse<DiscountCode>> {
+    const response: ClientResponse<DiscountCode> = await this._apiRoot
+      .discountCodes()
+      .withId({ ID: id })
+      .get()
+      .execute()
+      .catch((error) => {
+        throw error;
+      });
+    return response;
   }
 }

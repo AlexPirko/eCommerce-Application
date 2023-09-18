@@ -1,4 +1,5 @@
-import { QueryParam } from '@commercetools/platform-sdk';
+import { FacetResults, QueryParam } from '@commercetools/platform-sdk';
+import { CardParams } from './params-interface';
 
 export interface QueryArgs {
   fuzzy?: boolean;
@@ -33,4 +34,9 @@ export interface FilterData {
 export interface SortData {
   price?: string;
   name?: string;
+}
+
+export interface SearchResult {
+  pageCardParams: CardParams[];
+  facets: FacetResults;
 }

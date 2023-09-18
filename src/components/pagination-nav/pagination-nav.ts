@@ -3,46 +3,84 @@ import teaplate from './pagination-nav.html';
 
 import createElementFromHtml from '@lib/utils/create-element-from-html';
 import ProductServices from '@lib/services/data services/product-services';
-import { ClientResponse, ProductPagedQueryResponse } from '@commercetools/platform-sdk';
-import ApiServices from '@lib/api/api-services';
 import {
   nextButtonHandlerService,
   prevButtonHandlerService,
   preventMultipleClickService,
   updateViewService,
 } from '@lib/services/pagination-services';
-import { CardParams } from '@lib/types/params-interface';
-import { MAX_LIMIT_COUNT, PRODUCTS_PER_PAGE } from '@lib/constants/product-list-constants';
+import { FIRST_PAGE_NUMBER, MAX_LIMIT_COUNT, PRODUCTS_PER_PAGE } from '@lib/constants/product-list-constants';
+import ProductFilterForm from '@components/products-filter-form/products-filter-form';
+import { QueryArgs, SearchResult } from '@lib/types/filter-form-interface';
+import ProductListComponent from '@components/product-list/product-list';
 
 export default class CatalogPaginationComponent {
   private _element: HTMLDivElement;
   private _cardsPerPage: number;
   private _pageNumber: number;
   private _productServices: ProductServices;
-  private _api: ApiServices;
+  private _filterForm: ProductFilterForm;
 
   constructor(pageNumber: number) {
     this._element = createElementFromHtml<HTMLDivElement>(teaplate);
     this._cardsPerPage = PRODUCTS_PER_PAGE;
     this._pageNumber = pageNumber;
     this._productServices = new ProductServices();
-    this._api = new ApiServices();
+    this._filterForm = new ProductFilterForm();
     this.setElement();
     this.addPrevButtonEventHandler();
     this.addNextButtonEventHandler();
   }
 
   private async setElement(): Promise<void> {
-    const nextButton: HTMLButtonElement | null = this._element.querySelector('.next__button');
+    this.setUpdateFilterDataEventHandler();
+    await this.updateFilterDataEventHandler().catch((error) => {
+      console.log(error);
+      return error;
+    });
+  }
 
-    const allProduct: ClientResponse<ProductPagedQueryResponse> = await this._api
-      .getAllProducts(500, 0)
-      .catch((error) => error);
-    const productCount: number = allProduct.body.count;
+  private setUpdateFilterDataEventHandler(): void {
+    this._element.addEventListener('update-form', async (): Promise<void> => {
+      await this.updateFilterDataEventHandler();
+    });
+  }
 
-    if (productCount > this._cardsPerPage) {
-      nextButton?.removeAttribute('disabled');
-    }
+  private async updateFilterDataEventHandler() {
+    const filterData: QueryArgs = this._filterForm.filterData;
+    this._productServices
+      .getProductsDataBySearch(filterData, FIRST_PAGE_NUMBER - 1, PRODUCTS_PER_PAGE)
+      .then((searchResult: SearchResult): void => {
+        const productList: HTMLDivElement | null = document.querySelector('.product-list');
+        if (productList) productList.remove();
+        const newProductList: HTMLDivElement = new ProductListComponent(searchResult.pageCardParams).element;
+        this._element.insertAdjacentElement('afterend', newProductList);
+
+        const pageNumberElement: HTMLButtonElement = this._element.querySelector(
+          '.catalog-nav__page-number'
+        ) as HTMLButtonElement;
+        pageNumberElement.innerHTML = FIRST_PAGE_NUMBER.toString();
+        localStorage.setItem('pageNumber', FIRST_PAGE_NUMBER.toString());
+
+        const prevButton: HTMLButtonElement | null = this._element.querySelector('.prev__button');
+        prevButton?.setAttribute('disabled', 'true');
+
+        const nextButton: HTMLButtonElement | null = this._element.querySelector('.next__button');
+        this._productServices
+          .getProductsDataBySearch(filterData, 0, MAX_LIMIT_COUNT)
+          .then((res: SearchResult): void => {
+            const productCount: number = res.pageCardParams.length;
+            if (productCount > this._cardsPerPage) {
+              nextButton?.removeAttribute('disabled');
+            } else {
+              nextButton?.setAttribute('disabled', 'true');
+            }
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        return error;
+      });
   }
 
   private addPrevButtonEventHandler(): void {
@@ -57,22 +95,27 @@ export default class CatalogPaginationComponent {
           '.catalog-nav__page-number'
         ) as HTMLButtonElement;
         const prevPageNumber: string = (parseInt(pageNumberElement?.innerHTML, 10) - 1).toString();
-
         localStorage.setItem('pageNumber', prevPageNumber);
+        const filterData: QueryArgs = this._filterForm.filterData;
+        this._productServices
+          .getProductsDataBySearch(filterData, parseInt(prevPageNumber) - 1, PRODUCTS_PER_PAGE)
+          .then(async (pageProducts: SearchResult): Promise<void> => {
+            const allProduct: SearchResult = await this._productServices
+              .getProductsDataBySearch(filterData, 0, MAX_LIMIT_COUNT)
+              .catch((error) => error);
 
-        const pageProducts: CardParams[] = await this._productServices
-          .getPageProductsData(this._cardsPerPage, +prevPageNumber)
-          .catch((error) => error);
+            const allProductsCount: number = allProduct.pageCardParams.length;
 
-        const allProduct: ClientResponse<ProductPagedQueryResponse> = await this._api
-          .getAllProducts(MAX_LIMIT_COUNT, 0)
-          .catch((error) => error);
-
-        const allProductsCount: number = allProduct.body.count;
-
-        prevButtonHandlerService(this._element, event.target, pageNumberElement, allProductsCount);
-        await updateViewService(pageProducts);
-        await preventMultipleClickService(event.target);
+            prevButtonHandlerService(
+              this._element,
+              event.target as HTMLButtonElement,
+              pageNumberElement,
+              allProductsCount
+            );
+            await updateViewService(pageProducts.pageCardParams);
+            await preventMultipleClickService(event.target as HTMLButtonElement);
+          })
+          .catch((error: Error): Error => error);
       }
     });
   }
@@ -89,22 +132,29 @@ export default class CatalogPaginationComponent {
           '.catalog-nav__page-number'
         ) as HTMLButtonElement;
         const nextPageNumber: string = (parseInt(pageNumberElement?.innerHTML, 10) + 1).toString();
-
         localStorage.setItem('pageNumber', nextPageNumber);
+        const filterData: QueryArgs = this._filterForm.filterData;
+        this._productServices
+          .getProductsDataBySearch(filterData, parseInt(nextPageNumber) - 1, PRODUCTS_PER_PAGE)
+          .then(async (pageProducts: SearchResult): Promise<void> => {
+            const allProduct: SearchResult = await this._productServices
+              .getProductsDataBySearch(filterData, 0, MAX_LIMIT_COUNT)
+              .catch((error) => error);
+            const allProductsCount: number = allProduct.pageCardParams.length;
 
-        const pageProducts: CardParams[] = await this._productServices
-          .getPageProductsData(this._cardsPerPage, +nextPageNumber)
-          .catch((error) => error);
-
-        const allProduct: ClientResponse<ProductPagedQueryResponse> = await this._api
-          .getAllProducts(MAX_LIMIT_COUNT, 0)
-          .catch((error) => error);
-
-        const allProductsCount: number = allProduct.body.count;
-
-        nextButtonHandlerService(this._element, event.target, pageNumberElement, allProductsCount);
-        await updateViewService(pageProducts);
-        await preventMultipleClickService(event.target);
+            nextButtonHandlerService(
+              this._element,
+              event.target as HTMLButtonElement,
+              pageNumberElement,
+              allProductsCount
+            );
+            await updateViewService(pageProducts.pageCardParams);
+            await preventMultipleClickService(event.target as HTMLButtonElement);
+          })
+          .catch((error: Error): Error => {
+            console.log(error);
+            return error;
+          });
       }
     });
   }

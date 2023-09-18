@@ -2,9 +2,16 @@ import './detailed-card.scss';
 
 import createHTMLElement from '@lib/utils/create-html-element';
 import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
+import changeCartCount from '@layouts/header/header-link/header-cart-count';
 import { CardParams, Params } from '@lib/types/params-interface';
 import ComponentView from '@lib/services/component-view';
 import ProductServices from '@lib/services/data services/product-services';
+import { Paths } from '@components/router/paths';
+import Router from '@components/router/router';
+import M from 'materialize-css';
+import ApiServices from '@lib/api/api-services';
+import { LineItem } from '@commercetools/platform-sdk';
+import { getCartResponseAsCardData } from '@lib/utils/get-product-data';
 
 export default class DetailedCard extends ComponentView {
   protected detailedCardContainer: HTMLDivElement;
@@ -15,6 +22,7 @@ export default class DetailedCard extends ComponentView {
   protected data: CardParams[] | undefined;
   protected key: string;
   protected params: CardParams | undefined;
+  public _isInCart: boolean;
 
   constructor(key: string) {
     const params: Params = {
@@ -28,6 +36,7 @@ export default class DetailedCard extends ComponentView {
     this._cardsPerPage = 500;
     this._pageNumber = 1;
     this.key = key;
+    this._isInCart = false;
 
     this.detailedCardContainer = createHTMLElement('div', ['detailed-cart', 'row']);
     this.slider = createHTMLElement('div', ['slider']);
@@ -51,6 +60,7 @@ export default class DetailedCard extends ComponentView {
     this.data = cardsParams;
     this.params = this.data?.find((item) => item.key === this.key);
     this.configureView();
+    this.handleAddToCartButton();
   }
 
   private createDetailedCardHtml(): string {
@@ -66,14 +76,8 @@ export default class DetailedCard extends ComponentView {
 
     return `
       <div class='row top-bar'>
-        <div class='col s12 m6 l7 breadcrumbs'>
-          <ul class='breadcrumbs-list'>
-            <li><a href="#!" class="breadcrumb-item">First</a></li>
-            <li>>></li>
-            <li><a href="#!" class="breadcrumb-item">Second</a></li>
-            <li>>></li>
-            <li><a href="#!" class="breadcrumb-item">Third</a></li>
-          </ul>
+        <div class='col s12 m6 l7 button-to-catalog-container'>
+          <button class='waves-effect waves-light btn-small button-to-catalog'><i class="menu-cart material-icons">subdirectory_arrow_left</i>Back</button>
         </div>
         <div class='btn-container col s12 m6 l5'>
             <div class='price-container'>
@@ -81,7 +85,8 @@ export default class DetailedCard extends ComponentView {
               <div class='detail-old-price'>${oldPrice}</div>
             </div>
             <div class='detail-buttons'>
-              <button class='waves-effect waves-light btn-small add-button'><i class="menu-cart material-icons">shopping_cart</i>Add to Cart</button>
+              <button class='waves-effect waves-light btn-small add-button' data-id=${this.params?.key}><i class="menu-cart material-icons">add_shopping_cart</i>Add</button>
+              <button class='waves-effect waves-light btn-small del-button' data-id=${this.params?.key}><i class="menu-cart material-icons">remove_shopping_cart</i>Del</button>
             </div>
         </div>
       </div>
@@ -92,7 +97,7 @@ export default class DetailedCard extends ComponentView {
           <p class='detail-description'>${this.params?.description}</p>
         </div>
       </div>
-      <div class='col s6 l5 product-images'></div>
+      <div class='col s12 m6 l5 product-images'></div>
     `;
   }
 
@@ -123,18 +128,21 @@ export default class DetailedCard extends ComponentView {
     const carousel: NodeListOf<HTMLElement> = document.querySelectorAll('.carousel') as NodeListOf<HTMLElement>;
     this.imageModalInit(carousel[0]);
     this.mainSliderInit(carousel[1]);
+    this.backToCatalog();
   }
 
   private mainSliderInit(el: HTMLElement): void {
     M.AutoInit();
     M.Carousel.init(el, {
       indicators: true,
+      duration: 400,
     });
   }
 
   private modalSliderInit(el: HTMLElement): void {
     M.Carousel.init(el, {
       indicators: true,
+      duration: 200,
     });
   }
 
@@ -142,13 +150,15 @@ export default class DetailedCard extends ComponentView {
     const carousel: HTMLElement = this.slider.firstElementChild as HTMLElement;
     const carouselItem: HTMLCollection = carousel.children;
     for (const item of carouselItem) {
-      item.addEventListener('click', (event: Event) => {
-        event.preventDefault();
-        if (event?.target) {
-          this.toggleModal();
-          this.modalSliderInit(el);
-        }
-      });
+      if (item) {
+        item.addEventListener('click', (event: Event | MouseEvent): void => {
+          event.preventDefault();
+          if (event?.target) {
+            this.toggleModal();
+            this.modalSliderInit(el);
+          }
+        });
+      }
     }
   }
 
@@ -175,7 +185,7 @@ export default class DetailedCard extends ComponentView {
 
     document.body.prepend(this.imageModal);
 
-    closeBtn.addEventListener('click', () => {
+    closeBtn.addEventListener('click', (): void => {
       this.imageModal.style.display = 'none';
       document.body.style.overflow = '';
       backgroundElem.style.opacity = '1';
@@ -186,6 +196,73 @@ export default class DetailedCard extends ComponentView {
   private createMainSlider(): HTMLDivElement {
     this.slider.innerHTML = this.createCarousel();
     return this.slider;
+  }
+
+  private async handleAddToCartButton(): Promise<void> {
+    const addBtn: HTMLButtonElement = document.querySelector('.add-button') as HTMLButtonElement;
+    const delBtn: HTMLButtonElement = document.querySelector('.del-button') as HTMLButtonElement;
+    const sku: string | undefined = this.params?.sku;
+
+    if (delBtn) delBtn.disabled = true;
+    const api: ApiServices = new ApiServices();
+    await api
+      .getActiveCart()
+      .then((res) => {
+        res.body.lineItems.forEach((item: LineItem) => {
+          if (addBtn.dataset.id === item.productKey) addBtn.disabled = true;
+          if (delBtn.dataset.id === item.productKey) delBtn.disabled = false;
+        });
+      })
+      .catch((error) => error);
+
+    addBtn?.addEventListener('click', async (): Promise<void> => {
+      addBtn.disabled = true;
+      delBtn.disabled = false;
+      api
+        .getActiveCart()
+        .then(async (res): Promise<void> => {
+          await api
+            .updateCart(res.body.id, { version: res.body.version, actions: [{ action: 'addLineItem', sku: sku }] })
+            .then(() => changeCartCount())
+            .catch((error) => error);
+        })
+        .catch(async (error) => {
+          await api.createCart({ currency: 'USD', lineItems: [{ sku: sku }] }).catch((error) => error);
+          return error;
+        });
+    });
+
+    delBtn?.addEventListener('click', async (): Promise<void> => {
+      delBtn.disabled = true;
+      addBtn.disabled = false;
+      api
+        .getActiveCart()
+        .then(async (res): Promise<void> => {
+          const { lineItemId } = res.body.lineItems
+            .map((item: LineItem): CardParams => getCartResponseAsCardData(item))
+            .filter((cartProductData) => cartProductData.sku === sku)[0];
+          await api
+            .updateCart(res.body.id, {
+              version: res.body.version,
+              actions: [{ action: 'removeLineItem', lineItemId: lineItemId }],
+            })
+            .then(() => changeCartCount())
+            .catch((error) => error);
+        })
+        .catch(async (error) => {
+          return error;
+        });
+    });
+  }
+
+  private backToCatalog(): void {
+    const router: Router = new Router(null);
+    const btnToCatalog: HTMLButtonElement = document.querySelector('.button-to-catalog') as HTMLButtonElement;
+    if (btnToCatalog) {
+      btnToCatalog.addEventListener('click', (): void => {
+        router.navigate(`${Paths.CATALOG}`);
+      });
+    }
   }
 
   public getElement(): HTMLDivElement {

@@ -9,31 +9,14 @@ div.top-bar {
   display: flex;
   align-items: center;
   margin-bottom: 0;
+  padding: 2rem 0;
   @include tablet {
     flex-direction: column;
   }
 }
 
-div.col.breadcrumbs {
-  padding: 3.5rem 0 3.5rem 20rem;
-  @include laptop {
-    padding: 3.5rem 0 3.5rem 3.5rem;
-  }
-  @include tablet {
-    padding: 1rem 0 2rem 4.5rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.222);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.222);
-  }
-}
-
-.breadcrumbs-list {
-  display: flex;
-}
-
-.breadcrumb-item {
-  color: $color-seven;
-  font-size: 2rem;
-  padding: 0 1rem;
+.button-to-catalog-container {
+  text-align: center;
 }
 
 .btn-container {
@@ -68,12 +51,6 @@ div.col.breadcrumbs {
 button.btn-small {
   border-radius: 20px;
   font-size: 1.7rem;
-  &:first-child {
-    margin-right: 2rem;
-  }
-  @include laptop {
-    font-size: 1.2rem;
-  }
   @include tablet {
     width: 75px;
   }
@@ -139,7 +116,9 @@ button.btn-small {
   margin-top: 4rem;
   text-align: justify;
   @include laptop {
-    font-size: 1.7rem;
+    font-size: 1.5rem;
+    line-height: 140%;
+    margin-top: 1rem;
   }
   @include tablet {
     margin-top: 2rem;
@@ -149,49 +128,20 @@ button.btn-small {
 
 div.slider,
 div.carousel.carousel-slider {
-  height: 460px;
+  height: 400px;
   width: 100%;
   top: 20%;
-  @include desctop {
-    top: 30%;
-  }
-  @include tablet {
-    height: 400px;
-    width: 110%;
-  }
-}
-
-div.carousel.carousel-slider {
-  @include large-desctop {
-    left: 5%;
-  }
-  @include desctop {
-    left: 8%;
-  }
-  @include laptop {
-    top: 40%;
-  }
-  @include tablet {
-    top: 25%;
-    left: 40%;
-  }
 }
 
 .carousel .carousel-item img {
   width: auto !important;
   height: 70%;
-  @include large-desctop {
-    height: 58%;
-  }
-  @include desctop {
-    height: 40%;
-  }
 }
 
 div.carousel .indicators {
   bottom: 15%;
   @include desctop {
-    bottom: 30%;
+    bottom: 20%;
   }
 }
 

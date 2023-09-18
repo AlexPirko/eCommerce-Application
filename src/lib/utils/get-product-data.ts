@@ -1,9 +1,8 @@
-import { Product, ProductData, ProductProjection } from '@commercetools/platform-sdk';
-import { CardParams } from '@lib/types/params-interface';
+import { LineItem, Product, ProductData, ProductProjection } from '@commercetools/platform-sdk';
+import { CardParams, CartItemParams } from '@lib/types/params-interface';
 
 export function getProductResponseAsCardData(product: Product): CardParams {
   const productData: ProductData = product.masterData.current;
-  console.log(productData);
 
   const imgUrls: string[] | undefined = productData.masterVariant.images?.map((image) => image.url);
 
@@ -17,6 +16,7 @@ export function getProductResponseAsCardData(product: Product): CardParams {
     price: productData.masterVariant.prices?.[0].value.centAmount as number,
     discount: productData.masterVariant.prices?.[0].discounted?.value.centAmount as number,
     key: product.key as string,
+    sku: productData.masterVariant.sku as string,
   };
 
   return cardParams;
@@ -35,7 +35,30 @@ export function getProductProjectionResponseAsCardData(product: ProductProjectio
     price: product.masterVariant.prices?.[0].value.centAmount as number,
     discount: product.masterVariant.prices?.[0].discounted?.value.centAmount as number,
     key: product.key as string,
+    sku: product.masterVariant.sku as string,
   };
 
   return cardParams;
+}
+
+export function getCartResponseAsCardData(lineItem: LineItem): CartItemParams {
+  const imgUrls: string[] | undefined = lineItem.variant.images?.map((image) => image.url);
+
+  const cartItemParams: CartItemParams = {
+    imgUrls: imgUrls as string[],
+    name: lineItem.name['en-US'],
+    description: '',
+    type: lineItem.variant.attributes?.[0].value as string,
+    brand: lineItem.variant.attributes?.[1].value as string,
+    kind: lineItem.variant.attributes?.[2].value as string,
+    price: lineItem.variant.prices?.[0].value.centAmount as number,
+    discount: lineItem.variant.prices?.[0].discounted?.value.centAmount as number,
+    key: lineItem.key as string,
+    sku: lineItem.variant.sku as string,
+    quantity: lineItem.quantity,
+    lineItemId: lineItem.id,
+    totalPrice: lineItem.totalPrice.centAmount,
+  };
+
+  return cartItemParams;
 }

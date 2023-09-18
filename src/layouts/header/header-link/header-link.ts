@@ -29,7 +29,7 @@ export default class HeaderLink extends ComponentView {
     element.classList.remove('nav-item__selected');
   }
 
-  private configureView(): void {
+  private async configureView(): Promise<void> {
     const element: HTMLElement = this.viewElementBuilder.getElement();
     element.addEventListener('click', this.setSelected.bind(this));
 
@@ -37,7 +37,7 @@ export default class HeaderLink extends ComponentView {
       element.innerHTML = '<i class="menu-logo material-icons">camera</i>';
     }
     if (element.className.includes('nav-cart')) {
-      element.innerHTML = '<i class="menu-cart material-icons">local_grocery_store</i>';
+      element.innerHTML = `<div class="cart-container"><i class="menu-cart material-icons">local_grocery_store</i><div class="cart-count">0</div></div>`;
     }
     if (element.className.includes('nav-signup')) {
       element.innerHTML = '<a class="waves-effect waves-light btn">Sign Up</a>';

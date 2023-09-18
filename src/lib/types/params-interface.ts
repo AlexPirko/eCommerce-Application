@@ -1,3 +1,5 @@
+import { DirectDiscount, DiscountCodeInfo } from '@commercetools/platform-sdk';
+
 export interface Params {
   tagName: string;
   classNames: string[];
@@ -31,4 +33,18 @@ export interface CardParams {
   price: number;
   discount: number;
   key: string;
+  sku: string;
+  quantity?: number;
+  lineItemId?: string | undefined;
+}
+
+export interface CartData {
+  totalPrice: number;
+  discountCodes: DiscountCodeInfo[];
+  directDiscount: DirectDiscount[];
+}
+
+export interface CartItemParams extends CardParams {
+  lineItemId: string;
+  totalPrice: number;
 }

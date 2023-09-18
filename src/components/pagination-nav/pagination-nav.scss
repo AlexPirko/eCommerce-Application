@@ -1,8 +1,9 @@
+@import '../../assets/styles/constants';
+
 .catalog-nav {
   display: flex;
   justify-content: space-around;
   height: 2.5rem;
-  margin-top: 3rem;
   margin-left: 24%;
   margin-bottom: 5%;
   grid-area: D;
@@ -21,6 +22,10 @@
   border-radius: 50%;
   font-size: 2.6rem;
   text-align: center;
+  @include tablet {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
 }
 
 .next__button {
