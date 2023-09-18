@@ -82,18 +82,13 @@ export default class Main extends ComponentView {
 
     return `<div class="carousel carousel-slider center">
       <div class="carousel-item white-text" href="#one!">
-        <h2 class="main-slider_title">Promocode:</h2>
-        <h4 class="main-slider_subtitle">PR-1 (5%) FOR INSTANT CATEGORY CAMERAS</h4>
+        <h4 class="main-slider_subtitle black-text"> 5% DISCOUNT FOR ALL INSTANT'S CAMERAS!</h4>
+        <h2 class="main-slider_title black-text">Promocode: PR-1</h2>
         <img class="main-slider_image" src=${promo}>
       </div>
-      <div class="carousel-item white-text" href="#two!">
-        <h2 class="main-slider_title">Promocode:</h2>
-        <h4 class="main-slider_subtitle">code-2 (7%) FOR CANON CAMERAS</h4>
-        <img class="main-slider_image" src=${promo2}>
-      </div>
       <div class="carousel-item white-text" href="#three!">
-        <h2 class="main-slider_title">Promocode:</h2>
-        <h4 class="main-slider_subtitle">PR-3 (10%) FOR ROOKIE CAMERAS</h4>
+        <h4 class="main-slider_subtitle">10% FOR ALL ROOKIE'S CAMERAS</h4>
+        <h2 class="main-slider_title">Promocode: PR-3</h2>
         <img class="main-slider_image" src=${nikonPromo}>
       </div>
     </div>`;

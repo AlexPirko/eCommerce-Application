@@ -17,7 +17,7 @@
   @include desctop {
     padding: 2%;
   }
-  @include tablet {
+  @media (max-width: 700px) {
     flex-direction: column;
   }
 }
@@ -40,7 +40,7 @@
   @include desctop {
     margin-left: 1%;
   }
-  @include tablet {
+  @media (max-width: 700px) {
     width: 96%;
     padding: 5%;
   }
@@ -79,7 +79,7 @@
 }
 
 .button__container-cart {
-  @include tablet {
+  @media (max-width: 700px) {
     padding: 5% 0;
   }
 }
@@ -88,7 +88,12 @@
   display: flex;
   align-items: center;
   gap: 5px;
-
+  @include desctop {
+    flex-direction: column;
+  }
+  @media (max-width: 700px) {
+    flex-direction: row;
+  }
 }
 
 .promo-btn {

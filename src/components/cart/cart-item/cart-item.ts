@@ -9,6 +9,7 @@ import Router from '@components/router/router';
 import ApiServices from '@lib/api/api-services';
 import { Cart, ClientResponse, LineItem } from '@commercetools/platform-sdk';
 import changeCartCount from '@layouts/header/header-link/header-cart-count';
+import addTotalOrder from './add-total-order';
 
 export default class CartItem {
   private _element: HTMLDivElement;
@@ -24,7 +25,7 @@ export default class CartItem {
     this.setDecreaseItemQuantityButtonClickHandler();
     this.setDeleteItemButtonEventHandler();
     this.setPriceStyle();
-    this.addTotalOrder();
+    addTotalOrder();
   }
 
   private setCartItem(): void {
@@ -91,7 +92,7 @@ export default class CartItem {
               }, '');
               removeButton.disabled = false;
             })
-            .then(() => this.addTotalOrder())
+            .then(() => addTotalOrder())
             .catch((error) => error);
         })
         .catch(async (error) => {
@@ -133,7 +134,7 @@ export default class CartItem {
               }, '');
               if (quantity.innerHTML === '1') button.disabled = true;
             })
-            .then(() => this.addTotalOrder())
+            .then(() => addTotalOrder())
             .catch((error) => error);
         })
         .catch(async (error) => {
@@ -162,7 +163,7 @@ export default class CartItem {
             .then((): void => {
               this._element.remove();
             })
-            .then(() => this.addTotalOrder())
+            .then(() => addTotalOrder())
             .then(() => changeCartCount())
             .catch((error) => error);
         })
@@ -170,28 +171,6 @@ export default class CartItem {
           return error;
         });
     });
-  }
-
-  private async addTotalOrder(): Promise<void> {
-    const subtotal: HTMLSpanElement = document.querySelector('.subtotal-info') as HTMLSpanElement;
-    const orderInfo: HTMLSpanElement = document.querySelector('.order-info') as HTMLSpanElement;
-    const discountInfo: HTMLSpanElement = document.querySelector('.discount-info') as HTMLSpanElement;
-    const api: ApiServices = new ApiServices();
-    api
-      .getActiveCart()
-      .then((res: ClientResponse<Cart>) => {
-        const orderPrice: string = changeCurrencyFormat(res.body.totalPrice.centAmount / 100);
-        orderInfo.innerHTML = `${orderPrice}`;
-
-        let subtotalPrice: number = 0;
-        res.body.lineItems.forEach((el: LineItem): void => {
-          subtotalPrice += el.price.value.centAmount * el.quantity;
-        });
-        subtotal.innerHTML = changeCurrencyFormat(subtotalPrice / 100);
-        const discount: number = (res.body.totalPrice.centAmount - subtotalPrice) / 100;
-        discountInfo.innerHTML = changeCurrencyFormat(discount);
-      })
-      .catch((error) => error);
   }
 
   private setPriceStyle(): void {

@@ -85,6 +85,10 @@
     font-size: 1.6rem;
     width: 100%;
   }
+  @include laptop {
+    line-height: 1.8rem;
+    font-size: 1.4rem;
+  }
 }
 
 .cart-item__quantity-controls {
@@ -154,7 +158,7 @@
     margin-right: 2rem;
   }
   @include tablet {
-    margin-right: 1rem;
+    margin-right: 0.5rem;
   }
 }
 
@@ -169,6 +173,10 @@
     line-height: 2rem;
     font-size: 1.6rem;
     margin-right: 1rem;
+  }
+  @include laptop {
+    line-height: 1.8rem;
+    font-size: 1.4rem;
   }
 }
 
