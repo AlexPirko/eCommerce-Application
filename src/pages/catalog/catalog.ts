@@ -11,7 +11,6 @@ import { FIRST_PAGE_NUMBER } from '@lib/constants/product-list-constants';
 
 export default class Catalog extends ComponentView {
   private filterForm: ProductFilterForm;
-  //private productList: ProductListComponent;
   private pageNav: CatalogPaginationComponent;
 
   constructor(key: string = '') {
@@ -23,7 +22,6 @@ export default class Catalog extends ComponentView {
     };
     super(params);
 
-    //this.productList = new ProductListComponent();
     this.filterForm = new ProductFilterForm();
     this.pageNav = new CatalogPaginationComponent(FIRST_PAGE_NUMBER);
 
