@@ -2,8 +2,7 @@ import CartItem from '@components/cart/cart-item/cart-item';
 import template from './cart-main.html';
 import { promos } from '@lib/constants/promo';
 import './cart-main.scss';
-import { changeCurrencyFormat } from '@lib/utils/change-currency-format';
-
+import addTotalOrder from './cart-item/add-total-order';
 import { Cart, ClientResponse, DiscountCode, LineItem } from '@commercetools/platform-sdk';
 import ApiServices from '@lib/api/api-services';
 import { CardParams, CartData, CartItemParams } from '@lib/types/params-interface';
@@ -60,16 +59,10 @@ export default class CartMain {
                           },
                         ],
                       })
-                      .then((res: ClientResponse<Cart>) => {
+                      .then(() => {
                         (<HTMLInputElement>promoInput).value = '';
-                        (<HTMLButtonElement>promoBtn).disabled = false;
-                        const totalPrices: NodeListOf<Element> = document.querySelectorAll('.cart-item__total-price');
-                        const orderInfo: Element | null = document.querySelector('.order-info');
-                        if (orderInfo !== null)
-                          orderInfo.innerHTML = changeCurrencyFormat(res.body.totalPrice.centAmount);
-                        res.body.lineItems.forEach((item, index) => {
-                          totalPrices[index].innerHTML = changeCurrencyFormat(item.totalPrice.centAmount / 100);
-                        });
+                        (<HTMLButtonElement>promoBtn).disabled = true;
+                        addTotalOrder();
                       })
                       .catch((er) => console.log(er));
                   });
@@ -125,6 +118,8 @@ export default class CartMain {
     const button: HTMLButtonElement = this._element.querySelector('.button__delete-cart') as HTMLButtonElement;
     const cartItem: HTMLDivElement = this._element.querySelector('.cart__product-list') as HTMLDivElement;
     const subtotal: HTMLSpanElement = this._element.querySelector('.subtotal-info') as HTMLSpanElement;
+    const orderInfo: HTMLSpanElement = this._element.querySelector('.order-info') as HTMLSpanElement;
+    const discountInfo: HTMLSpanElement = this._element.querySelector('.discount-info') as HTMLSpanElement;
     const cartCount: HTMLDivElement = document.querySelector('.cart-count') as HTMLDivElement;
     button.addEventListener('click', async (): Promise<void> => {
       const res: ClientResponse<Cart> = await this._api.getActiveCart().catch((error) => error);
@@ -133,6 +128,8 @@ export default class CartMain {
         .then((): void => {
           cartCount.innerHTML = '0';
           subtotal.innerHTML = '';
+          orderInfo.innerHTML = '';
+          discountInfo.innerHTML = '0';
           cartItem.remove();
         })
         .catch((error) => error);
