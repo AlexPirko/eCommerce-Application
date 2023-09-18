@@ -40,28 +40,34 @@ export default class ProductListComponent {
           },
           {} as Record<string, boolean>
         );
-        if (!this._cardsData) {
-          const productServices: ProductServices = new ProductServices();
-          productServices
-            .getPageProductsData(this._cardsPerPage, this._pageNumber)
-            .then((result) => {
-              this._cardsData = result;
-              this._cardsData.forEach((item: CardParams): void => {
-                const productCard: ProductCard = new ProductCard(item, cartSku[item.sku]);
-                this._element.append(productCard.element);
-              });
-            })
-            .then(async () => await this.createMobileFilterBar())
-            .catch((error) => error);
-        } else {
-          this._cardsData.forEach((item: CardParams): void => {
-            const productCard: ProductCard = new ProductCard(item, cartSku[item.sku]);
-            this._element.append(productCard.element);
-          });
-          await this.createMobileFilterBar();
-        }
+        feeedProductList();
       })
-      .catch((error) => error);
+      .catch((error) => {
+        feeedProductList();
+        error;
+      });
+    const feeedProductList: () => Promise<void> = async (): Promise<void> => {
+      if (!this._cardsData) {
+        const productServices: ProductServices = new ProductServices();
+        productServices
+          .getPageProductsData(this._cardsPerPage, this._pageNumber)
+          .then((result) => {
+            this._cardsData = result;
+            this._cardsData.forEach((item: CardParams): void => {
+              const productCard: ProductCard = new ProductCard(item, cartSku[item.sku]);
+              this._element.append(productCard.element);
+            });
+          })
+          .then(async () => await this.createMobileFilterBar())
+          .catch((error) => error);
+      } else {
+        this._cardsData.forEach((item: CardParams): void => {
+          const productCard: ProductCard = new ProductCard(item, cartSku[item.sku]);
+          this._element.append(productCard.element);
+        });
+        await this.createMobileFilterBar();
+      }
+    };
   }
 
   public async createMobileFilterBar(): Promise<void> {
