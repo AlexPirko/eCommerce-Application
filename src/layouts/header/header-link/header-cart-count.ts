@@ -14,5 +14,8 @@ export default async function changeCartCount() {
         cartCount.innerHTML = `${count}`;
       }
     })
-    .catch((error) => error);
+    .catch((error) => {
+      cartCount.innerHTML = '0';
+      return error;
+    });
 }
