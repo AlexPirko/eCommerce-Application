@@ -28,9 +28,9 @@
   border-radius: 30px;
   align-items: center;
   padding: 10px 15px;
+  position: relative;
 
   @media (max-width: 1430px) {
-    position: relative;
     flex-direction: column;
     max-width: 350px;
     align-content: center;
