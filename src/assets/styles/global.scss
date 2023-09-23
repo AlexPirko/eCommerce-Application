@@ -52,3 +52,7 @@ h6 {
   padding: 0 15px;
   margin: auto;
 }
+
+button:focus {
+  background-color: darkgray;
+}
