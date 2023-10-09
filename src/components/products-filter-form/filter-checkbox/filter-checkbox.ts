@@ -23,7 +23,7 @@ export class FilterCheckboxComponent {
     span.innerHTML = attributeValue;
 
     const countSpan: HTMLSpanElement = this._element.querySelector('.facet-count') as HTMLSpanElement;
-    const count: number = facet.terms.filter((item) => item.term === attributeValue)[0].count;
+    const count: number = facet.terms.filter((item) => item.term === attributeValue)[0]?.count;
     countSpan.innerHTML = `(${count})`;
   }
 
