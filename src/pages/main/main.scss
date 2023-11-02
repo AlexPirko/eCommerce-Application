@@ -1,0 +1,87 @@
+@import '../../assets/styles/constants';
+
+.main-page {
+  display: flex;
+  justify-content: space-evenly;
+  @include tablet {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.main-title {
+  color: #0a435f;
+  font-size: 3rem;
+  padding-right: 1.5rem;
+  margin-top: 18%;
+  @include laptop {
+    font-size: 2.2rem;
+  }
+  @include tablet {
+    margin-top: 0;
+  }
+}
+
+.signup-title,
+.login-title {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.main-icons {
+  color: #039be5;
+  font-size: 2.8rem;
+  padding-right: 1.5rem;
+  @include laptop {
+    font-size: 1.8rem;
+  }
+}
+
+.main-link {
+  font-size: 2.6rem;
+  &:hover {
+    color: $color-three;
+  }
+  @include laptop {
+    font-size: 1.8rem;
+    padding-right: 1rem;
+  }
+}
+
+.main_page-slider {
+  padding: 0 2rem;
+  margin: 1% 0;
+  width: 45%;
+  height: 360px !important;
+  @include desctop {
+    width: 60%;
+    height: 400px !important;
+  }
+  @include laptop {
+    width: 72%;
+    height: 360px !important;
+  }
+  @include tablet {
+    width: 85%;
+    height: 240px !important;
+  }
+}
+
+.main-slider_title {
+  margin: 0;
+  position: absolute;
+  top: 4%;
+  left: 5%;
+}
+
+.main-slider_subtitle {
+  margin: 0;
+  position: absolute;
+  top: 15%;
+  left: 5%;
+}
+
+div.carousel-item img.main-slider_image {
+  height: auto;
+}

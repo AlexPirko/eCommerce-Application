@@ -1,0 +1,35 @@
+//color
+$color-one: #f5f7ff;
+$color-three: #0156ff;
+$color-four: #01a4ff;
+$color-five: #a2a6b0;
+$color-six: #dddde1;
+$color-seven: #000;
+$color-eight: #c94d3f;
+$color-nine: #2557d6;
+$color-selected: #25a1d6;
+
+//media
+@mixin large-desctop {
+  @media (max-width: 1500px) {
+    @content;
+  }
+}
+
+@mixin desctop {
+  @media (max-width: 1280px) {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media (max-width: 980px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 600px) {
+    @content;
+  }
+}

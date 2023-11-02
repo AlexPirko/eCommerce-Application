@@ -1,0 +1,58 @@
+@import 'constants';
+
+html {
+  font-size: 10px !important;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-size: 1.5rem;
+  font-family: Arial, sans-serif;
+  font-style: normal;
+  line-height: 160%;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+nav ul a {
+  color: $color-seven;
+  font-size: 2rem;
+}
+
+h4 {
+  font-size: 1.8rem !important;
+  font-weight: 700 !important;
+  text-align: center;
+}
+
+h5 {
+  font-size: 1.3rem !important;
+}
+
+h6 {
+  font-size: 1.2rem !important;
+}
+
+.btn,
+.btn-small {
+  background-color: $color-three !important;
+  &:hover {
+    background-color: $color-four !important;
+  }
+}
+
+.container {
+  max-width: 1600px;
+  padding: 0 15px;
+  margin: auto;
+}
+
+button:focus {
+  background-color: darkgray;
+}

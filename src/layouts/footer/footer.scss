@@ -1,0 +1,18 @@
+.footer {
+  background-color: #020203;
+}
+
+footer .container {
+  padding-top: 1rem;
+  @media only screen and (min-width: 1080px) {
+    width: 90%;
+  }
+}
+
+footer ul.footer-list {
+  padding-left: 0.8rem;
+}
+
+.footer-copyright {
+  font-size: 1.2rem;
+}
