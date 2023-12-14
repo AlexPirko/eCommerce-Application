@@ -4,7 +4,7 @@
 
 ## Deploy
 
-https://team-pirko-ecommerce.netlify.app/
+https://team-pirko-ecommerce.netlify.app/ The backend part does not work because of the end of the trial period API commercetools
 
 ## Description
 
